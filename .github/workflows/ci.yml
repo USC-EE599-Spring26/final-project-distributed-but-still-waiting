@@ -1,0 +1,63 @@
+name: ci
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+    CI_XCODE: '/Applications/Xcode_26.1.app/Contents/Developer'
+
+concurrency:
+   group: ${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: macos-26
+    strategy:
+      matrix:
+        destination: ['-destination platform\=iOS\ Simulator,OS=26.1,name\=iPhone\ 17\ Pro\ Max test', 'CODE_SIGNING_ALLOWED="NO"', '-destination platform\=visionOS\ Simulator,OS=26.1,name\=Apple\ Vision\ Pro']
+        scheme: ['OCKSample', 'OCKWatchSample', 'OCKVisionSample']
+        exclude:
+        - destination: '-destination platform\=iOS\ Simulator,OS=26.1,name\=iPhone\ 17\ Pro\ Max test'
+          scheme: 'OCKWatchSample'
+        - destination: '-destination platform\=visionOS\ Simulator,OS=26.1,name\=Apple\ Vision\ Pro'
+          scheme: 'OCKWatchSample'
+        - destination: 'CODE_SIGNING_ALLOWED="NO"'
+          scheme: 'OCKSample'
+        - destination: '-destination platform\=visionOS\ Simulator,OS=26.1,name\=Apple\ Vision\ Pro'
+          scheme: 'OCKSample'
+        - destination: '-destination platform\=iOS\ Simulator,OS=26.1,name\=iPhone\ 17\ Pro\ Max test'
+          scheme: 'OCKVisionSample'
+        - destination: 'CODE_SIGNING_ALLOWED="NO"'
+          scheme: 'OCKVisionSample'
+    name: ${{ matrix.scheme }} Unit Tests
+    steps:
+    - uses: actions/checkout@v6
+    - name: Install SwiftLint
+      run: brew install swiftlint
+    - name: Build-Test
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project OCKSample.xcodeproj -scheme ${{ matrix.scheme }} ${{ matrix.destination }} -derivedDataPath DerivedData 2>&1 | xcbeautify --renderer github-actions
+      env:
+          DEVELOPER_DIR: ${{ env.CI_XCODE }}
+    - name: Upload codecov yml
+      run: |
+        cat .codecov.yml | curl --data-binary @- https://codecov.io/validate
+    - name: Prepare codecov
+      uses: sersoft-gmbh/swift-coverage-action@v5
+      id: coverage-files
+      with:
+        format: lcov
+        search-paths: ./DerivedData
+        ignore-conversion-failures: true
+      env:
+          DEVELOPER_DIR: ${{ env.CI_XCODE }}
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        files: ${{join(fromJSON(steps.coverage-files.outputs.files), ',')}}
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+      env:
+          DEVELOPER_DIR: ${{ env.CI_XCODE }}

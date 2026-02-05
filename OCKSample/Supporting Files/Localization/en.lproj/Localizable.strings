@@ -1,0 +1,136 @@
+/*
+Copyright (c) 2019, Apple Inc. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1.  Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
+
+2.  Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+3. Neither the name of the copyright holder(s) nor the names of any contributors
+may be used to endorse or promote products derived from this software without
+specific prior written permission. No license is granted to the trademarks of
+the copyright holders even if such marks are included in this software.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+"ADDRESS" = "Address";
+"ANNOUNCE_EVENT_DELETED" = "Logged event was deleted";
+"CANCEL" = "Cancel";
+"CALL" = "Call";
+"COMPLETED" = "Completed";
+"CONTACTS" = "Contacts";
+"DELETE" = "Delete";
+"DONE" = "Done";
+"DOUBLE_TAP_MAP" = "Double-tap to open directions in Maps";
+"DOUBLE_TAP_TO_COMPLETE" = "Double-tap to mark as completed";
+"DOUBLE_TAP_TO_INCOMPLETE" = "Double-tap to mark as incomplete";
+"DOUBLE_TAP_TO_RECORD_EVENT" = "Double-tap to record an event";
+"DOUBLE_TAP_TO_REMOVE_EVENT" = "Double-tap to removed logged event";
+"EMAIL" = "E-mail";
+"EVENT" = "Event";
+"GOAL" = "Goal";
+"HIGH" = "High";
+"INCOMPLETE" = "Incomplete";
+"LOG" = "Log";
+"LOG_ENTRY" = "Log Entry";
+"LOGGING" = "Logging";
+"LOW" = "Low";
+"MARK_COMPLETE" = "Mark as Completed";
+"MESSAGE" = "Message";
+"NO_TASKS" = "No Tasks";
+"NO_EVENTS" = "No Events";
+"PROGRESS" = "Progress";
+"SEARCH" = "Search";
+"SELECTED" = "Selected";
+"TASKS" = "Tasks";
+"THREE_FINGER_SWIPE_DAY" = "Three-finger swipe to go to next or previous day";
+"THREE_FINGER_SWIPE_WEEK" = "Three-finger swipe to go to next or previous week";
+"TODAY" = "Today";
+"START_SURVEY" = "Start Survey";
+
+// MARK: Login
+"APP_NAME" = "CareKit Sample App";
+"LOGIN_PICKER" = "Login Picker";
+"LOGIN" = "Login";
+"LOGIN_ANONYMOUSLY" = "Login Anonymously";
+"SIGN_UP" = "Sign Up";
+"USERNAME" = "Username";
+"PASSWORD" = "Password";
+"GIVEN_NAME" = "First Name";
+"FAMILY_NAME" = "Last Name";
+"ERROR" = "Error";
+"OPEN_APP_IPHONE" = "Please open the app on your iPhone";
+
+// MARK: Care View
+"NAUSEA_DOXYLAMINE_INTAKE" = "Nausea & Doxylamine Intake";
+"THIS_WEEK" = "This Week";
+"NAUSEA" = "Nausea";
+"DOXYLAMINE" = "Doxylamine";
+
+// MARK: Profile
+"BIRTHDAY" = "Birthday";
+"SAVE_PROFILE" = "Save Profile";
+"LOG_OUT" = "Log Out";
+
+// MARK: TASKS
+"TAKE_DOXYLAMINE" = "Take Doxylamine";
+"DOXYLAMINE_INSTRUCTIONS" = "Take 25mg of doxylamine when you experience nausea";
+"ANYTIME_DURING_DAY" = "Anytime throughout the day";
+"TRACK_NAUSEA" = "Track your nausea";
+"NAUSEA_INSTRUCTIONS" = "Tap the button below anytime you experience nausea";
+"KEGEL_EXERCISES" = "Kegel Exercises";
+"KEGEL_INSTRUCTIONS" = "Perform kegel exercises";
+"STRETCH" = "Stretch";
+"STEPS" = "Steps";
+"OVULATION_TEST_RESULT" = "Ovulation Test Result";
+
+// MARK: Charts
+"CHOOSE_DATE_INTERVAL" = "Chose date interval";
+"TOTAL" = "Total";
+"DATE" = "Date";
+"VALUE" = "Value";
+"DATA_SERIES" = "Data Series";
+"VALUE_DISPLAY" = "Value: %.2F";
+"MEAN" = "Mean";
+"AVERAGE" = "Average";
+"MEDIAN" = "Median";
+"SUM" = "SUM";
+"AVERAGE_VALUE" = "Average: %.2F";
+"MEDIAN_VALUE" = "Median: %.2F";
+"DAY" = "Day";
+"WEEK" = "Week";
+"MONTH" = "Month";
+"YEAR" = "Year";
+"SELECTED_DATE" = "Selected Date:";
+"PERIOD" = "Period";
+"DATE_RANGE" = "Date Range";
+"START_DATE" = "Start date";
+"END_DATE" = "End date";
+"CHOOSE_PERIOD" = "Choose period";
+
+"CHOOSE_CHART_TYPE" = "Choose chart type";
+"CHART_TYPE" = "Chart type";
+"AREA" = "Area";
+"BAR" = "Bar";
+"LINE" = "Line";
+"POINT" = "Point";
+"DATA_STRATEGY" = "Data strategy";
+"META_DATA" = "Meta data";
+"SHOW_HIGHLIGHTED" = "Show highlighted annotation";
+"SHOW_MEAN" = "Show mean annotation";
+"SHOW_MEDIAN" = "Show median annotation";
