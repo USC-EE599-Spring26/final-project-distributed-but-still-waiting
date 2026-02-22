@@ -162,17 +162,18 @@ struct HeatmapBar: View {
         let height = totalHeight()
         let stops = gradientStops(totalHeight: height)
 
-        Rectangle()
+        Capsule(style: .continuous)
             .fill(
                 LinearGradient(
-                    gradient: Gradient(stops: stops),
+                    gradient: Gradient(stops: stops),   // your computed Gradient
                     startPoint: .top,
                     endPoint: .bottom
                 )
             )
-            .frame(width: TimelineMetrics.barWidth, height: height)
+            .frame(width: TimelineMetrics.barWidth)
+            .frame(height: height)
             .padding(.leading, TimelineMetrics.barLeading)
-            .clipShape(Capsule())
+            .drawingGroup(opaque: false)   // forces proper edge smoothing
     }
 }
 
