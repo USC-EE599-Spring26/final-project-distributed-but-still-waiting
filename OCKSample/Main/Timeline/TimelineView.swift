@@ -2,9 +2,9 @@ import SwiftUI
 import CareKit
 
 private enum TimelineMetrics {
-    static let barWidth: CGFloat = 10
+    static let barWidth: CGFloat = 15
     static let barLeading: CGFloat = 28
-    static let rowHeight: CGFloat = 72
+    static let rowHeight: CGFloat = 100
 
     static let pointsPerDay: CGFloat = 6   // time scale
 
@@ -165,15 +165,46 @@ struct HeatmapBar: View {
         Capsule(style: .continuous)
             .fill(
                 LinearGradient(
-                    gradient: Gradient(stops: stops),   // your computed Gradient
+                    gradient: Gradient(stops: stops),
                     startPoint: .top,
                     endPoint: .bottom
                 )
             )
+
+            // 🔹 subtle inner light — makes it feel rounded
+            .overlay {
+                Capsule(style: .continuous)
+                    .stroke(Color.white.opacity(0.18), lineWidth: 0.5)
+                    .blendMode(.softLight)
+            }
+
+            // 🔹 micro edge shading — removes “cut” look
+            .overlay {
+                Capsule(style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.black.opacity(0.08),
+                                Color.clear,
+                                Color.black.opacity(0.06)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .blendMode(.overlay)
+            }
+
+            // 🔹 soft shadow for separation from background
+            .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 2)
+
             .frame(width: TimelineMetrics.barWidth)
             .frame(height: height)
             .padding(.leading, TimelineMetrics.barLeading)
-            .drawingGroup(opaque: false)   // forces proper edge smoothing
+
+            // important for smooth gradient rasterization
+            .compositingGroup()
+            .drawingGroup(opaque: false)
     }
 }
 
@@ -186,21 +217,30 @@ struct TimelineRow: View {
 
             TimelineMarker(value: item.normalizedValue)
 
-            VStack(alignment: .leading, spacing: 6) {
-                Spacer(minLength: 10)
+            VStack(alignment: .leading, spacing: 4) {
 
-                Text(item.title).font(.headline)
+                // Title
+                Text(item.title)
+                    .font(.body.weight(.semibold))
 
-                Text(item.date, style: .date)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                // Date
+                Text(item.date, format: .dateTime.month().day().year())
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
 
+                // Value
                 Text(item.outcomeText)
-                    .font(.subheadline)
+                    .font(.title3.monospacedDigit())
+                    .foregroundStyle(.primary)
 
-                Spacer(minLength: 10)
+                // Clinical interpretation
+                Text(TimelineInsight.message(for: item.normalizedValue))
+                    .font(.footnote)
+                    .foregroundStyle(.tertiary)
+                    .padding(.top, 2)
             }
             .padding(.leading, TimelineMetrics.contentLeading)
+            .padding(.vertical, 10)
         }
         .frame(height: TimelineMetrics.rowHeight)
     }
@@ -214,18 +254,11 @@ struct TimelineMarker: View {
         ZStack {
             Circle()
                 .fill(TimelineColor.color(for: value))
-                .frame(width: 22, height: 22)
-                .blur(radius: 2)
-                .opacity(0.55)
-
-            Circle()
-                .fill(TimelineColor.color(for: value))
-                .frame(width: 14, height: 14)
-
-            Circle()
-                .stroke(Color.white.opacity(0.35), lineWidth: 1)
-                .frame(width: 14, height: 14)
-                .blendMode(.softLight)
+                .frame(width: 12, height: 12)
+                .overlay(
+                    Circle()
+                        .stroke(.white, lineWidth: 2)
+                )
         }
         .position(x: TimelineMetrics.markerCenterX, y: TimelineMetrics.rowHeight / 2)
     }
