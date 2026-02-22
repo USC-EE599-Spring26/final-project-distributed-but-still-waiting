@@ -93,46 +93,86 @@ struct TimelineGap: View {
 struct HeatmapBar: View {
     let items: [TimelineViewModel.Item]
 
-    var body: some View {
-        VStack(spacing: 0) {
-            ForEach(items.indices, id: \.self) { index in
+    private struct Stop: Identifiable {
+        let id = UUID()
+        let location: CGFloat   // 0 → 1 along entire bar
+        let color: Color
+    }
 
-                if index > 0 {
-                    TimelineGap(
-                        from: items[index - 1].date,
-                        to: items[index].date
-                    )
-                    .overlay {
-                        GradientSegment(
-                            from: items[index - 1].normalizedValue,
-                            to: items[index].normalizedValue
-                        )
-                    }
-                }
+    private func gradientStops(totalHeight: CGFloat) -> [Gradient.Stop] {
+        guard items.count > 0 else { return [] }
 
-                Rectangle()
-                    .fill(TimelineColor.color(for: items[index].normalizedValue))
-                    .frame(height: TimelineMetrics.rowHeight)
+        var yCursor: CGFloat = 0
+        var stops: [Gradient.Stop] = []
+
+        for i in 0..<items.count {
+
+            let item = items[i]
+
+            // Add stop at the TOP of this row
+            let location = yCursor / totalHeight
+            stops.append(.init(
+                color: TimelineColor.color(for: item.normalizedValue),
+                location: location
+            ))
+
+            // Advance by row height
+            yCursor += TimelineMetrics.rowHeight
+
+            // Add gap if needed
+            if i < items.count - 1 {
+                let gap = TimelineMetrics.gapHeight(
+                    from: item.date,
+                    to: items[i + 1].date
+                )
+                yCursor += gap
             }
         }
-        .frame(width: TimelineMetrics.barWidth)
-        .padding(.leading, TimelineMetrics.barLeading)
-    }
-}
 
-struct GradientSegment: View {
-    let from: Double
-    let to: Double
+        // Ensure final stop reaches bottom
+        stops.append(.init(
+            color: TimelineColor.color(for: items.last!.normalizedValue),
+            location: 1.0
+        ))
+
+        return stops
+    }
+
+    private func totalHeight() -> CGFloat {
+        guard items.count > 0 else { return 0 }
+
+        var height: CGFloat = 0
+
+        for i in 0..<items.count {
+            height += TimelineMetrics.rowHeight
+
+            if i < items.count - 1 {
+                height += TimelineMetrics.gapHeight(
+                    from: items[i].date,
+                    to: items[i + 1].date
+                )
+            }
+        }
+
+        return height
+    }
 
     var body: some View {
-        LinearGradient(
-            colors: [
-                TimelineColor.color(for: from),
-                TimelineColor.color(for: to)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+
+        let height = totalHeight()
+        let stops = gradientStops(totalHeight: height)
+
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(stops: stops),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .frame(width: TimelineMetrics.barWidth, height: height)
+            .padding(.leading, TimelineMetrics.barLeading)
+            .clipShape(Capsule())
     }
 }
 
