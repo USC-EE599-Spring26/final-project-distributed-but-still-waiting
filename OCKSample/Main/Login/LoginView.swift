@@ -74,6 +74,11 @@ struct LoginView: View {
 
                 switch signupLoginSegmentValue {
                 case 1:
+                    TextField("EMAIL", text: $email)
+                        .padding()
+                        .background(.white)
+                        .cornerRadius(20.0)
+                        .shadow(radius: 10.0, x: 20, y: 10)
                     TextField("GIVEN_NAME", text: $firstName)
                         .padding()
                         .background(.white)
@@ -81,11 +86,6 @@ struct LoginView: View {
                         .shadow(radius: 10.0, x: 20, y: 10)
 
                     TextField("FAMILY_NAME", text: $lastName)
-                        .padding()
-                        .background(.white)
-                        .cornerRadius(20.0)
-                        .shadow(radius: 10.0, x: 20, y: 10)
-                    TextField("EMAIL", text: $email)
                         .padding()
                         .background(.white)
                         .cornerRadius(20.0)
@@ -106,8 +106,8 @@ struct LoginView: View {
                     Task {
                         await viewModel.signup(
 							.patient,
-                            email: email,
 							username: usersname,
+                            email: email,
 							password: password,
 							firstName: firstName,
 							lastName: lastName
