@@ -192,7 +192,8 @@ class LoginViewModel: ObservableObject {
             Logger.login.info("Parse signup successful: \(user)")
             let patient = try await savePatientAfterSignUp(type,
                                                            firstName: firstName,
-                                                           lastName: lastName)
+                                                           lastName: lastName,
+                                                           email: email)
             try? await finishCompletingSignIn(patient)
         } catch {
             Logger.login.error("Error details: \(error)")
@@ -262,7 +263,8 @@ class LoginViewModel: ObservableObject {
             // Only allow annonymous users to be patients.
             let patient = try await savePatientAfterSignUp(.patient,
                                                            firstName: "Anonymous",
-                                                           lastName: "Login")
+                                                           lastName: "Login",
+                                                           email: "Anonymous")
             try? await finishCompletingSignIn(patient)
         } catch {
             // swiftlint:disable:next line_length
