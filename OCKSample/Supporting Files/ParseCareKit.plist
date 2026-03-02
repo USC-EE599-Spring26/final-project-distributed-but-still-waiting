@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>ApplicationID</key>
-	<string>E036A0C5-6829-4B40-9B3B-3E05F6DF32B2</string>
+	<string>a1c7e53dd822f9a57e976de97fb3740dcf7cbe87bdf1addb39c4484e3c8ed632</string>
 	<key>Server</key>
-	<string>http://localhost:1337/parse</string>
+	<string>https://ee599-midterm-21cf872042d8.herokuapp.com/parse</string>
 	<key>LiveQueryServer</key>
 	<string></string>
 	<key>UseTransactions</key>
