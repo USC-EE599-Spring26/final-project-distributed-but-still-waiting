@@ -13,6 +13,8 @@ import ParseSwift
 import os.log
 import WatchConnectivity
 
+// swiftlint:disable function_parameter_count
+
 @MainActor
 class LoginViewModel: ObservableObject {
 
@@ -107,7 +109,8 @@ class LoginViewModel: ObservableObject {
     private func savePatientAfterSignUp(
 		_ type: UserType,
 		firstName: String,
-		lastName: String
+		lastName: String,
+        email: String
 	) async throws -> OCKPatient {
 
         let remoteUUID = UUID()
@@ -161,6 +164,7 @@ class LoginViewModel: ObservableObject {
      Signs up the user *asynchronously*.
 
      This will also enforce that the username is not already taken.
+     - parameter email: The email the person signing up.
      - parameter username: The username the person signing up.
      - parameter password: The password the person signing up.
      - parameter firstName: The first name of the person signing up.
@@ -168,6 +172,7 @@ class LoginViewModel: ObservableObject {
     */
     func signup(
 		_ type: UserType,
+        email: String,
 		username: String,
 		password: String,
 		firstName: String,
@@ -182,6 +187,7 @@ class LoginViewModel: ObservableObject {
             // Set any properties you want saved on the user befor logging in.
             newUser.username = username.lowercased()
             newUser.password = password
+            newUser.email = email.lowercased()
             let user = try await newUser.signup()
             Logger.login.info("Parse signup successful: \(user)")
             let patient = try await savePatientAfterSignUp(type,
