@@ -19,7 +19,7 @@ struct ColorStyler: OCKColorStyler {
 		UIColor(Color.accentColor)
     }
     var secondaryLabel: UIColor {
-        UIColor(red: 0.42, green: 0.54, blue: 0.65, alpha: 1) // brandSteel
+        UIColor(red: 0.42, green: 0.54, blue: 0.65, alpha: 1)
     }
     var customGroupedBackground: UIColor {
         UIColor(red: 0.74, green: 0.87, blue: 0.99, alpha: 1)
