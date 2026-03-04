@@ -327,19 +327,11 @@
 			);
 			target = 707D29272DCBE5E500980253 /* OCKVisionSample */;
 		};
-		914E8CD72F4A635D001829C7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				TimelineView.swift,
-			);
-			target = 707D29272DCBE5E500980253 /* OCKVisionSample */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		707D29292DCBE5E500980253 /* OCKVisionSample */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (707D29432DCBE5E600980253 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = OCKVisionSample; sourceTree = "<group>"; };
 		707D293C2DCBE5E600980253 /* OCKVisionSampleTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OCKVisionSampleTests; sourceTree = "<group>"; };
-		914E8CD52F4A634F001829C7 /* Timeline */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (914E8CD72F4A635D001829C7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Timeline; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -440,7 +432,6 @@
 				7030887E2582731300FFABB6 /* Login */,
 				7030887C258272E700FFABB6 /* Profile */,
 				91693819271B64CB00A634ED /* Stylers */,
-				914E8CD52F4A634F001829C7 /* Timeline */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -769,7 +760,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				707D29292DCBE5E500980253 /* OCKVisionSample */,
-				914E8CD52F4A634F001829C7 /* Timeline */,
 			);
 			name = OCKVisionSample;
 			packageProductDependencies = (
@@ -815,9 +805,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				914E8CD52F4A634F001829C7 /* Timeline */,
-			);
 			name = OCKWatchSample;
 			packageProductDependencies = (
 			);
@@ -840,9 +827,6 @@
 			);
 			dependencies = (
 				91AD924A24A4C42E00925D4D /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				914E8CD52F4A634F001829C7 /* Timeline */,
 			);
 			name = OCKSample;
 			packageProductDependencies = (
