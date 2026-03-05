@@ -38,7 +38,7 @@ struct LoginView: View {
                 .foregroundColor(.white)
                 .padding()
             // Change this image to something that represents your application
-            Image("exercise.jpg")
+            Image("NeuroMallea")
                 .resizable()
                 .frame(width: 150, height: 150, alignment: .center)
                 .clipShape(Circle())
@@ -137,7 +137,7 @@ struct LoginView: View {
                         .frame(width: 300)
                 }
             })
-            .background(Color(.green))
+            .background(Color(tintColorFlip))
             .cornerRadius(15)
 
             Button(action: {
@@ -156,7 +156,7 @@ struct LoginView: View {
                     EmptyView()
                 }
             })
-            .background(Color(.lightGray))
+            .background(Color.accentColor)
             .cornerRadius(15)
 
             // If an error occurs show it on the screen

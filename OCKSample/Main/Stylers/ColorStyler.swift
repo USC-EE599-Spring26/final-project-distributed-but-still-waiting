@@ -18,5 +18,20 @@ struct ColorStyler: OCKColorStyler {
     var tertiaryLabel: UIColor {
 		UIColor(Color.accentColor)
     }
+    var secondaryLabel: UIColor {
+        UIColor(red: 0.42, green: 0.54, blue: 0.65, alpha: 1)
+    }
+    var customGroupedBackground: UIColor {
+        UIColor(red: 0.74, green: 0.87, blue: 0.99, alpha: 1)
+    }
+    var customBlue: UIColor {
+        UIColor(red: 0.42, green: 0.54, blue: 0.65, alpha: 1)
+    }
+    var customGreen: UIColor {
+        UIColor(red: 0.36, green: 0.63, blue: 0.54, alpha: 1)
+    }
+    var separator: UIColor {
+        UIColor(red: 0.74, green: 0.87, blue: 0.99, alpha: 1)
+    }
     #endif
 }
