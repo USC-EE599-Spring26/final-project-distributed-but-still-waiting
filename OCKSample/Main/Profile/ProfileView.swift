@@ -20,6 +20,7 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @ObservedObject var loginViewModel: LoginViewModel
     @State var isPresentingAddTask = false
+    @State var isPresentingManageTasks = false
 
     var body: some View {
         NavigationView {
@@ -108,6 +109,15 @@ struct ProfileView: View {
             }
             .navigationTitle("Profile")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Manage Tasks") {
+                        isPresentingManageTasks = true
+                    }
+                    .sheet(isPresented: $isPresentingManageTasks) {
+                        ManageTasksView()
+                    }
+                }
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add Task") {
                         isPresentingAddTask = true
