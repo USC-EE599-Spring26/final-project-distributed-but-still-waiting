@@ -140,7 +140,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 
     func setupRemotes(uuid: UUID? = nil) async throws {
         do {
-            let historicalStart = Calendar.current.date(byAdding: .year, value: -2, to: Date())!
+            // let historicalStart = Calendar.current.date(byAdding: .year, value: -2, to: Date())!
             if isSyncingWithRemote {
                 guard let uuid = uuid else {
                     Logger.appDelegate.error("Could not setupRemotes, uuid is nil")
@@ -154,7 +154,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 				)
                 parseRemote.parseRemoteDelegate = self
 				self.parseRemote = parseRemote
-                
+
 				let store = OCKStore(
 					name: Constants.iOSParseCareStoreName,
 					type: .onDisk(),
@@ -163,12 +163,12 @@ final class AppDelegate: UIResponder, ObservableObject {
                 sessionDelegate = RemoteSessionDelegate(store: store)
                 self.store = store
 
-                do {
+                /* do {
                     try await store.populateDefaultCarePlansTasksContacts(startDate: historicalStart)
                     print("Seeded CareKit tasks starting:", historicalStart)
                 } catch {
                     print("Tasks already exist or failed to seed:", error)
-                }
+                } */
             } else {
                 let store = OCKStore(name: Constants.iOSLocalCareStoreName,
                                      type: .onDisk(),
@@ -183,7 +183,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 			WCSession.default.activate()
 
             healthKitStore = OCKHealthKitPassthroughStore(store: store)
-            try? await healthKitStore.populateDefaultHealthKitTasks(startDate: historicalStart)
+            // try? await healthKitStore.populateDefaultHealthKitTasks(startDate: historicalStart)
             let storeCoordinator = OCKStoreCoordinator()
             storeCoordinator.attach(store: store)
             storeCoordinator.attach(eventStore: healthKitStore)

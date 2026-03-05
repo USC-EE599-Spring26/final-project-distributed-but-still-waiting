@@ -6,7 +6,6 @@
 //  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
-
 import SwiftUI
 
 struct CareKitTaskView: View {
@@ -20,6 +19,7 @@ struct CareKitTaskView: View {
 	@State var title = ""
 	@State var instructions = ""
 	@State var selectedCard: CareKitCard = .button
+    @State var priority: Int = 100
 
 	var body: some View {
 
@@ -34,13 +34,15 @@ struct CareKitTaskView: View {
 						Text(item.rawValue)
                     }
                 }
+                Stepper("Priority: \(priority)", value: $priority, in: 1...100)
                 Section("Task") {
                     Button("Add") {
                         addTask {
                             await viewModel.addTask(
                                 title,
                                 instructions: instructions,
-                                cardType: selectedCard
+                                cardType: selectedCard,
+                                priority: priority
                             )
                         }
                     }.alert(
@@ -58,7 +60,8 @@ struct CareKitTaskView: View {
                             await viewModel.addHealthKitTask(
                                 title,
                                 instructions: instructions,
-                                cardType: selectedCard
+                                cardType: selectedCard,
+                                priority: priority
                             )
                         }
                     }.alert(

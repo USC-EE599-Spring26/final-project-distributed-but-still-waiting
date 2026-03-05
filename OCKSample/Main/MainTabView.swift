@@ -53,22 +53,10 @@ struct MainTabView: View {
                     }
                 }
                 .tag(2)
-            
-            TimelineView()
-                .tabItem {
-                    if selectedTab == 3 {
-                        Image(systemName: "clock.fill")
-                            .renderingMode(.template)
-                    } else {
-                        Image(systemName: "clock")
-                            .renderingMode(.template)
-                    }
-                }
-                .tag(3)
 
             ProfileView(loginViewModel: loginViewModel)
                 .tabItem {
-                    if selectedTab == 4 {
+                    if selectedTab == 3 {
                         Image(systemName: "person.circle.fill")
                             .renderingMode(.template)
                     } else {
@@ -76,7 +64,7 @@ struct MainTabView: View {
                             .renderingMode(.template)
                     }
                 }
-                .tag(4)
+                .tag(3)
         }
     }
 }
