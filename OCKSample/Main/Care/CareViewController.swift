@@ -212,11 +212,10 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         query.excludesTasksWithNoEvents = true
         do {
             let tasks = try await store.fetchAnyTasks(query: query)
-            let sortedTasks = tasks.sorted {
-                ($0 as? CareTask)?.priority ?? Int.max <
-                ($1 as? CareTask)?.priority ?? Int.max
+            let orderedTasks = TaskID.ordered.compactMap { orderedTaskID in
+                tasks.first(where: { $0.id == orderedTaskID })
             }
-            return sortedTasks
+            return orderedTasks
         } catch {
             Logger.feed.error("Could not fetch tasks: \(error, privacy: .public)")
             return []
@@ -231,72 +230,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         var query = OCKEventQuery(for: date)
         query.taskIDs = [task.id]
 
-        if let task = task as? OCKTask {
-            switch task.card {
-            case .button:
-                let card = OCKButtonLogTaskViewController(
-                    query: query,
-                    store: self.store
-                )
-
-                return [card]
-            case .checklist:
-                let card = OCKChecklistTaskViewController(
-                    query: query,
-                    store: self.store
-                )
-
-                return [card]
-
-            case .grid:
-                let card = OCKGridTaskViewController(
-                    query: query,
-                    store: self.store
-                )
-
-                return [card]
-            case .instruction:
-                let card = EventQueryView<InstructionsTaskView>(
-                    query: query
-                )
-                .formattedHostingController()
-
-                return [card]
-            case .labeledValue:
-                let card = EventQueryView<LabeledValueTaskView>(
-                    query: query
-                )
-                .formattedHostingController()
-
-                return [card]
-
-            case .simple:
-                let card = EventQueryView<SimpleTaskView>(
-                    query: query
-                )
-                .formattedHostingController()
-
-                return [card]
-                
-            default:
-                return nil
-            }
-        } else if let healthKitTask = task as? OCKHealthKitTask {
-            switch healthKitTask.card {
-            case .numericProgress:
-                let card = EventQueryView<NumericProgressTaskView>(
-                    query: query
-                )
-                .formattedHostingController()
-
-                return [card]
-            default:
-                return nil
-            }
-        } else {
-            return nil
-        }
-        /*
         switch task.id {
         case TaskID.steps:
             let card = EventQueryView<NumericProgressTaskView>(
@@ -367,13 +300,8 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             #endif
 
         default:
-            let card = EventQueryView<SimpleTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-
-            return [card]
-        } */
+            return nil
+        }
     }
 
     private func appendTasks(
