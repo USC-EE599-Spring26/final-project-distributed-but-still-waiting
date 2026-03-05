@@ -23,6 +23,7 @@ import UIKit
 struct LoginView: View {
     @Environment(\.tintColorFlip) var tintColorFlip
     @ObservedObject var viewModel: LoginViewModel
+    @State var email = ""
     @State var usersname = ""
     @State var password = ""
     @State var firstName: String = ""
@@ -73,6 +74,11 @@ struct LoginView: View {
 
                 switch signupLoginSegmentValue {
                 case 1:
+                    TextField("EMAIL", text: $email)
+                        .padding()
+                        .background(.white)
+                        .cornerRadius(20.0)
+                        .shadow(radius: 10.0, x: 20, y: 10)
                     TextField("GIVEN_NAME", text: $firstName)
                         .padding()
                         .background(.white)
@@ -101,6 +107,7 @@ struct LoginView: View {
                         await viewModel.signup(
 							.patient,
 							username: usersname,
+                            email: email,
 							password: password,
 							firstName: firstName,
 							lastName: lastName
