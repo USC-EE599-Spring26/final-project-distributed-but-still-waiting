@@ -39,8 +39,8 @@ import UIKit
 @MainActor
 final class CareViewController: OCKDailyPageViewController, @unchecked Sendable {
 
-	private var isSyncing = false
-	private var isLoading = false
+    private var isSyncing = false
+    private var isLoading = false
     private var style: Styler {
         CustomStylerKey.defaultValue
     }
@@ -88,33 +88,33 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             return
         }
 
-		switch progress {
-		case 100:
-			self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-				title: "\(progress)",
-				style: .plain, target: self,
-				action: #selector(self.synchronizeWithRemote)
-			)
-			self.navigationItem.rightBarButtonItem?.tintColor = self.view.tintColor
+        switch progress {
+        case 100:
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "\(progress)",
+                style: .plain, target: self,
+                action: #selector(self.synchronizeWithRemote)
+            )
+            self.navigationItem.rightBarButtonItem?.tintColor = self.view.tintColor
 
-			// Give sometime for the user to see 100
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-				guard let self else { return }
-				self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-					barButtonSystemItem: .refresh,
-					target: self,
-					action: #selector(self.synchronizeWithRemote)
-				)
-				self.navigationItem.rightBarButtonItem?.tintColor = self.navigationItem.leftBarButtonItem?.tintColor
-			}
-		default:
-			self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-				title: "\(progress)",
-				style: .plain, target: self,
-				action: #selector(self.synchronizeWithRemote)
-			)
-			self.navigationItem.rightBarButtonItem?.tintColor = self.view.tintColor
-		}
+            // Give sometime for the user to see 100
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self else { return }
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    barButtonSystemItem: .refresh,
+                    target: self,
+                    action: #selector(self.synchronizeWithRemote)
+                )
+                self.navigationItem.rightBarButtonItem?.tintColor = self.navigationItem.leftBarButtonItem?.tintColor
+            }
+        default:
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "\(progress)",
+                style: .plain, target: self,
+                action: #selector(self.synchronizeWithRemote)
+            )
+            self.navigationItem.rightBarButtonItem?.tintColor = self.view.tintColor
+        }
     }
 
     @objc private func synchronizeWithRemote() {
@@ -126,7 +126,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             let errorString = error?.localizedDescription ?? "Successful sync with remote!"
             Logger.feed.info("\(errorString)")
             DispatchQueue.main.async { [weak self] in
-				guard let self else { return }
+                guard let self else { return }
                 if error != nil {
                     self.navigationItem.rightBarButtonItem?.tintColor = .red
                 } else {
@@ -179,9 +179,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
         fetchAndDisplayTasks(on: listViewController, for: date)
     }
-}
 
-private extension CareViewController {
     private func isSameDay(as date: Date) -> Bool {
         Calendar.current.isDate(
             date,
@@ -229,77 +227,86 @@ private extension CareViewController {
         _ task: any OCKAnyTask,
         on date: Date
     ) -> [UIViewController]? {
+
         var query = OCKEventQuery(for: date)
         query.taskIDs = [task.id]
 
-        if let task = task as? OCKTask {
-            return taskViewControllers(for: task, query: query)
-        } else if let healthKitTask = task as? OCKHealthKitTask {
-            return taskViewControllers(for: healthKitTask, query: query)
-        } else {
-            return nil
-        }
-    }
-
-    private func taskViewControllers(
-        for task: OCKTask,
-        query: OCKEventQuery
-    ) -> [UIViewController]? {
-        switch task.card {
-        case .button:
-            let card = OCKButtonLogTaskViewController(
-                query: query,
-                store: self.store
-            )
-            return [card]
-        case .checklist:
-            let card = OCKChecklistTaskViewController(
-                query: query,
-                store: self.store
-            )
-            return [card]
-        case .grid:
-            let card = OCKGridTaskViewController(
-                query: query,
-                store: self.store
-            )
-            return [card]
-        case .instruction:
-            let card = EventQueryView<InstructionsTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-            return [card]
-        case .labeledValue:
-            let card = EventQueryView<LabeledValueTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-            return [card]
-        case .simple:
-            let card = EventQueryView<SimpleTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-            return [card]
-        default:
-            return nil
-        }
-    }
-
-    private func taskViewControllers(
-        for healthKitTask: OCKHealthKitTask,
-        query: OCKEventQuery
-    ) -> [UIViewController]? {
-        switch healthKitTask.card {
-        case .numericProgress:
+        switch task.id {
+        case TaskID.steps:
             let card = EventQueryView<NumericProgressTaskView>(
                 query: query
             )
             .formattedHostingController()
+
             return [card]
+
+        case TaskID.ovulationTestResult:
+            let card = EventQueryView<LabeledValueTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        case TaskID.stretch:
+            let card = EventQueryView<InstructionsTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        case TaskID.kegels:
+            /*
+             Since the kegel task is only scheduled every other day, there will be cases
+             where it is not contained in the tasks array returned from the query.
+             */
+            let card = EventQueryView<SimpleTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        #if os(iOS)
+        // Create a card for the doxylamine task if there are events for it on this day.
+        case TaskID.doxylamine:
+
+            // This is a UIKit based card.
+            let card = OCKChecklistTaskViewController(
+                query: query,
+                store: self.store
+            )
+
+            return [card]
+        #endif
+
+        case TaskID.nausea:
+
+            #if os(iOS)
+            /*
+             Also create a card (UIKit view) that displays a single event.
+             The event query passed into the initializer specifies that only
+             today's log entries should be displayed by this log task view controller.
+             */
+            let nauseaCard = OCKButtonLogTaskViewController(
+                query: query,
+                store: self.store
+            )
+
+            return [nauseaCard]
+
+            #else
+            return []
+            #endif
+
         default:
-            return nil
+            let card = EventQueryView<SimpleTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
         }
     }
 
