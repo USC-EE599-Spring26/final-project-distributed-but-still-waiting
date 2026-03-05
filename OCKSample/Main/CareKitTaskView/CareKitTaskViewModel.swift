@@ -20,7 +20,8 @@ class CareKitTaskViewModel: ObservableObject {
 	func addTask(
 		_ title: String,
 		instructions: String,
-		cardType: CareKitCard
+		cardType: CareKitCard,
+        priority: Int
 	) async {
 		guard let appDelegate = AppDelegateKey.defaultValue else {
 			error = AppError.couldntBeUnwrapped
@@ -37,6 +38,7 @@ class CareKitTaskViewModel: ObservableObject {
 												  text: nil))
 		task.instructions = instructions
 		task.card = cardType
+        task.priority = priority
 		do {
 			_ = try await appDelegate.store.addTasksIfNotPresent([task])
 			Logger.careKitTask.info("Saved task: \(task.id, privacy: .private)")
@@ -50,7 +52,8 @@ class CareKitTaskViewModel: ObservableObject {
 	func addHealthKitTask(
 		_ title: String,
 		instructions: String,
-		cardType: CareKitCard
+		cardType: CareKitCard,
+        priority: Int
 	) async {
 		guard let appDelegate = AppDelegateKey.defaultValue else {
 			error = AppError.couldntBeUnwrapped
@@ -70,6 +73,7 @@ class CareKitTaskViewModel: ObservableObject {
 																	 unit: .count()))
         healthKitTask.instructions = instructions
         healthKitTask.card = cardType
+        healthKitTask.priority = priority
         do {
             _ = try await appDelegate.healthKitStore.addTasksIfNotPresent([healthKitTask])
             Logger.careKitTask.info("Saved HealthKitTask: \(healthKitTask.id, privacy: .private)")

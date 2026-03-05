@@ -10,21 +10,6 @@
 import Foundation
 import CareKitStore
 
-extension OCKTask {
+extension OCKTask: CareTask {
 
-	var card: CareKitCard {
-		get {
-			guard let cardInfo = userInfo?[Constants.card],
-				  let careKitCard = CareKitCard(rawValue: cardInfo) else {
-				return .grid
-			}
-			return careKitCard
-		}
-		set {
-			if userInfo == nil {
-				userInfo = .init()
-			}
-			userInfo?[Constants.card] = newValue.rawValue
-		}
-	}
 }
