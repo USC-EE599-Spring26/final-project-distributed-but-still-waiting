@@ -73,6 +73,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "PASSWORD" = "Password";
 "GIVEN_NAME" = "First Name";
 "FAMILY_NAME" = "Last Name";
+"EMAIL" = "Email";
 "ERROR" = "Error";
 "OPEN_APP_IPHONE" = "Please open the app on your iPhone";
 

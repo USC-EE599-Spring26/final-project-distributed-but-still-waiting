@@ -15,104 +15,110 @@ import UIKit
 
 struct ProfileView: View {
     @Environment(\.tintColorFlip) var tintColorFlip
-    @CareStoreFetchRequest(query: query()) private var patients
+    private static var query = OCKPatientQuery(for: Date())
+    @CareStoreFetchRequest(query: query) private var patients
     @StateObject private var viewModel = ProfileViewModel()
     @ObservedObject var loginViewModel: LoginViewModel
+    @State var isPresentingAddTask = false
 
     var body: some View {
-        VStack(spacing: 24) {
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(colors: [Color.accentColor, Color(tintColorFlip)],
-                            startPoint: .topLeading,
-                                       endPoint: .bottomTrailing
-                    )
-                )
-                    .frame(width: 180, height: 180)
-                    .shadow(color: Color(tintColorFlip), radius: 20, x: 0, y: 8)
-                let initials = String(viewModel.firstName.prefix((1)) + String(viewModel.lastName.prefix(1)))
-                Text(initials.isEmpty ? "?" : initials.uppercased())
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-            }
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 24) {
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.accentColor, Color(tintColorFlip)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 180, height: 180)
+                            .shadow(color: Color(tintColorFlip), radius: 20, x: 0, y: 8)
 
-            VStack(spacing: 12) {
-                VStack(alignment: .leading) {
-                    TextField(
-                        "GIVEN_NAME",
-                        text: $viewModel.firstName
-                    )
-                    .padding()
-                    .cornerRadius(20.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
+                        let initials = String(viewModel.firstName.prefix(1) + viewModel.lastName.prefix(1))
+                        Text(initials.isEmpty ? "?" : initials.uppercased())
+                            .font(.system(size: 30, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                    }
 
-                    TextField(
-                        "FAMILY_NAME",
-                        text: $viewModel.lastName
-                    )
-                    .padding()
-                    .cornerRadius(20.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
+                    // Form fields
+                    VStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            TextField("First Name", text: $viewModel.firstName)
+                                .padding()
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(12)
+                                .shadow(radius: 4, x: 0, y: 2)
 
-                    DatePicker(
-                        "BIRTHDAY",
-                        selection: $viewModel.birthday,
-                        displayedComponents: [DatePickerComponents.date]
-                    )
-                    .padding()
-                    .cornerRadius(20.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
-                }
+                            TextField("Last Name", text: $viewModel.lastName)
+                                .padding()
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(12)
+                                .shadow(radius: 4, x: 0, y: 2)
 
-                Button(action: {
-                    Task {
-                        do {
-                            try await viewModel.saveProfile()
-                        } catch {
-                            Logger.profile.error("Error saving profile: \(error)")
+                            DatePicker("Birthday", selection: $viewModel.birthday, displayedComponents: [.date])
+                                .padding()
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(12)
+                                .shadow(radius: 4, x: 0, y: 2)
                         }
-                    }
-                }, label: {
-                    Text(
-                        "SAVE_PROFILE"
-                    )
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 300, height: 50)
-                })
-                .background(Color(tintColorFlip))
-                .cornerRadius(15)
 
-                // Notice that "action" is a closure (which is essentially
-                // a function as argument like we discussed in class)
-                Button(action: {
-                    Task {
-                        await loginViewModel.logout()
+                        // Save button
+                        Button(action: {
+                            Task {
+                                do {
+                                    try await viewModel.saveProfile()
+                                } catch {
+                                    Logger.profile.error("Error saving profile: \(error.localizedDescription)")
+                                }
+                            }
+                        }, label: {
+                            Text("Save Profile")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: 300, minHeight: 50)
+                        })
+                        .background(Color.accentColor)
+                        .cornerRadius(15)
+
+                        // Log out button
+                        Button(action: {
+                            Task {
+                                await loginViewModel.logout()
+                            }
+                        }, label: {
+                            Text("Log Out")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: 300, minHeight: 50)
+                        })
+                        .background(Color(.systemRed))
+                        .cornerRadius(15)
                     }
-                }, label: {
-                    Text(
-                        "LOG_OUT"
-                    )
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 300, height: 50)
-                })
-                .background(Color.accentColor)
-                .cornerRadius(15)
+                    .padding(.horizontal)
+                }
+                .padding(.top, 24)
+                .onReceive(patients.publisher) { publishedPatient in
+                    viewModel.updatePatient(publishedPatient.result)
+                }
             }
-            .onReceive(patients.publisher) { publishedPatient in
-                viewModel.updatePatient(publishedPatient.result)
+            .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Add Task") {
+                        isPresentingAddTask = true
+                    }
+                    .sheet(isPresented: $isPresentingAddTask) {
+                        CareKitTaskView()
+                    }
+                }
             }
         }
-        }
-
-    static func query() -> OCKPatientQuery {
-        OCKPatientQuery(for: Date())
     }
-
 }
 
 struct ProfileView_Previews: PreviewProvider {
