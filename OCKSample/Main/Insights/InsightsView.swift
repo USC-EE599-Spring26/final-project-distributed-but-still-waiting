@@ -32,8 +32,8 @@ struct InsightsView: View {
 					ForEach(orderedEvents) { event in
 						let eventResult = event.result
 						let dataStrategy = determineDataStrategy(for: eventResult.task.id)
-						if eventResult.task.id != TaskID.doxylamine
-							&& eventResult.task.id != TaskID.nausea {
+						if eventResult.task.id != TaskID.lexapro
+							&& eventResult.task.id != TaskID.depression {
 
 							// dynamic gradient colors
 							let meanGradientStart = Color(TintColorFlipKey.defaultValue)
@@ -76,37 +76,37 @@ struct InsightsView: View {
 								]
 							)
 
-						} else if eventResult.task.id == TaskID.doxylamine {
-							// Example of showing nausea vs doxlymine
+						} else if eventResult.task.id == TaskID.lexapro {
+							// Example of showing depression vs doxlymine
 
 							// dynamic gradient colors
-							let nauseaGradientStart = Color(TintColorFlipKey.defaultValue)
-							let nauseaGradientEnd = Color.accentColor
+							let depressionGradientStart = Color(TintColorFlipKey.defaultValue)
+							let depressionGradientEnd = Color.accentColor
 
-							let nauseaConfiguration = CKEDataSeriesConfiguration(
-								taskID: TaskID.nausea,
+							let depressionConfiguration = CKEDataSeriesConfiguration(
+								taskID: TaskID.depression,
 								dataStrategy: .sum,
 								mark: .bar,
-								legendTitle: String(localized: "NAUSEA"),
+								legendTitle: String(localized: "DEPRESSION"),
 								showMarkWhenHighlighted: true,
 								showMeanMark: true,
 								showMedianMark: false,
-								color: nauseaGradientEnd,
-								gradientStartColor: nauseaGradientStart,
+								color: depressionGradientEnd,
+								gradientStartColor: depressionGradientStart,
 								stackingMethod: .unstacked
 							) { event in
 								// This event occurs all-day and can be submitted
 								// multiple times, since we want to understand
 								// the "total" amount of times a patient experiences
-								// nausea, we sum the outcomes for each event.
+								// depression, we sum the outcomes for each event.
 								event.computeProgress(by: .summingOutcomeValues())
 							}
 
-							let doxylamineConfiguration = CKEDataSeriesConfiguration(
+							let lexaproConfiguration = CKEDataSeriesConfiguration(
 								taskID: eventResult.task.id,
 								dataStrategy: .sum,
 								mark: .bar,
-								legendTitle: String(localized: "DOXYLAMINE"),
+								legendTitle: String(localized: "LEXAPRO"),
 								color: .gray,
 								gradientStartColor: .gray.opacity(0.3),
 								stackingMethod: .unstacked,
@@ -117,13 +117,13 @@ struct InsightsView: View {
 							}
 
 							CareKitEssentialChartView(
-								title: String(localized: "NAUSEA_DOXYLAMINE_INTAKE"),
+								title: String(localized: "DEPRESSION_LEXAPRO_INTAKE"),
 								subtitle: subtitle,
 								dateInterval: $chartInterval,
 								period: $period,
 								configurations: [
-									nauseaConfiguration,
-									doxylamineConfiguration
+									depressionConfiguration,
+									lexaproConfiguration
 								]
 							)
 						}

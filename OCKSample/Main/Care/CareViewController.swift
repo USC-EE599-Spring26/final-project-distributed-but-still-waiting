@@ -165,8 +165,8 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         if isCurrentDay {
             if Calendar.current.isDate(date, inSameDayAs: Date()) {
                 // Add a non-CareKit view into the list
-                let tipTitle = "Benefits of exercising"
-                let tipText = "Keep your Mental Health in focus"
+                let tipTitle = "Benefits of CBT Exercises"
+                let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
                 let tipView = TipView()
                 tipView.headerView.titleLabel.text = tipTitle
                 tipView.headerView.detailLabel.text = tipText
@@ -214,14 +214,46 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         var query = OCKEventQuery(for: date)
         query.taskIDs = [task.id]
 
-        if let task = task as? OCKTask {
-            return viewControllers(for: task, query: query)
-        } else if let healthKitTask = task as? OCKHealthKitTask {
-            return viewControllers(for: healthKitTask, query: query)
-        } else {
-            return nil
-        }
-    }
+        switch task.id {
+        case TaskID.sleepDuration:
+            let card = EventQueryView<NumericProgressTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        case TaskID.ph9Survey:
+            let card = EventQueryView<LabeledValueTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        case TaskID.stretch:
+            let card = EventQueryView<InstructionsTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        case TaskID.cbtExercises:
+            /*
+             Since the cbt task is only scheduled every other day, there will be cases
+             where it is not contained in the tasks array returned from the query.
+             */
+            let card = EventQueryView<SimpleTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+
+            return [card]
+
+        #if os(iOS)
+        // Create a card for the lexapro task if there are events for it on this day.
+        case TaskID.lexapro:
 
     private func viewControllers(
         for task: OCKTask,

@@ -81,6 +81,39 @@ class CareKitTaskViewModel: ObservableObject {
             )
         }
     }
+    @Published var tasks: [OCKAnyTask] = []
+
+    func fetchTasks() async {
+        guard let appDelegate = AppDelegateKey.defaultValue else { return }
+        // this might be converted to var in future for better UX
+        let query = OCKTaskQuery()
+
+        do {
+            tasks = try await appDelegate.store.fetchAnyTasks(query: query)
+        } catch {
+            self.error = AppError.errorString("Could not fetch tasks: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteTask(task: OCKAnyTask) async {
+        guard let appDelegate = AppDelegateKey.defaultValue else { return }
+
+        do {
+            try await appDelegate.store.deleteAnyTask(task)
+
+            // Refresh the list from CareKit
+            await fetchTasks()
+
+            NotificationCenter.default.post(
+                .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
+            )
+
+        } catch {
+            self.error = AppError.errorString(
+                "Could not delete task: \(error.localizedDescription)"
+            )
+        }
+    }
 
     func addHealthKitTask(
         _ title: String,

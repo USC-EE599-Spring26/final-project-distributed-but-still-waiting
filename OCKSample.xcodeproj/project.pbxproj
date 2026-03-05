@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FBBC2812F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */; };
+		3FBBC2822F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */; };
+		3FE2E9BA2F55F37000462DA1 /* DimensionStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9B92F55F36E00462DA1 /* DimensionStyler.swift */; };
+		3FE2E9BB2F55F37000462DA1 /* DimensionStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9B92F55F36E00462DA1 /* DimensionStyler.swift */; };
+		3FE2E9BC2F55F37000462DA1 /* DimensionStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9B92F55F36E00462DA1 /* DimensionStyler.swift */; };
 		3FE2E9BE2F57AE4200462DA1 /* AnimationStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9BD2F57AE3B00462DA1 /* AnimationStyler.swift */; };
 		3FE2E9BF2F57AE4200462DA1 /* AnimationStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9BD2F57AE3B00462DA1 /* AnimationStyler.swift */; };
 		3FE2E9C02F57AE4200462DA1 /* AnimationStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9BD2F57AE3B00462DA1 /* AnimationStyler.swift */; };
@@ -252,6 +257,8 @@
 /* Begin PBXFileReference section */
 		03580E3E23CFA2E400A57818 /* OCKSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OCKSample.entitlements; sourceTree = "<group>"; };
 		0520468223C3C1F2004F0F36 /* OCKSample.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OCKSample.xctestplan; sourceTree = "<group>"; };
+		3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTasksView.swift; sourceTree = "<group>"; };
+		3FE2E9B92F55F36E00462DA1 /* DimensionStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionStyler.swift; sourceTree = "<group>"; };
 		3FE2E9BD2F57AE3B00462DA1 /* AnimationStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStyler.swift; sourceTree = "<group>"; };
 		3FE2E9C12F57AE4A00462DA1 /* AppearanceStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceStyler.swift; sourceTree = "<group>"; };
 		5173CB8723C3A846007655A0 /* OCKSampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OCKSampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -608,7 +615,7 @@
 		9138666D2F540A1300B9BD74 /* CareKitTaskView */ = {
 			isa = PBXGroup;
 			children = (
-				911AAF622F5A27C000ADCBCD /* ManageTasksView.swift */,
+				3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */,
 				913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */,
 				9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */,
 			);
@@ -1062,7 +1069,7 @@
 				707D29602DCBE68500980253 /* SessionDelegate.swift in Sources */,
 				3FE2E9C02F57AE4200462DA1 /* AnimationStyler.swift in Sources */,
 				707D29612DCBE68500980253 /* Styler.swift in Sources */,
-				911AAF652F5A27C100ADCBCD /* ManageTasksView.swift in Sources */,
+				3FBBC2822F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */,
 				707D29622DCBE68500980253 /* ProfileViewModel.swift in Sources */,
 				707D29632DCBE68500980253 /* AppDelegate+UIApplicationDelegate.swift in Sources */,
 				707D29642DCBE68500980253 /* CareViewController.swift in Sources */,
@@ -1070,6 +1077,7 @@
 				707D29662DCBE68500980253 /* UserType.swift in Sources */,
 				3FE2E9C32F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
 				707D29672DCBE68500980253 /* ContactView.swift in Sources */,
+				3FE2E9BB2F55F37000462DA1 /* DimensionStyler.swift in Sources */,
 				707D29682DCBE68500980253 /* NoHighlightStyle.swift in Sources */,
 				707D29692DCBE68500980253 /* LocalSyncSessionDelegate.swift in Sources */,
 				707D296A2DCBE68500980253 /* Constants.swift in Sources */,
@@ -1184,7 +1192,7 @@
 				70E3422F2DB06281005124F9 /* NoHighlightStyle.swift in Sources */,
 				70CF66E428E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */,
 				70F03AA327860AFF00E5AFB4 /* OCKPatient+Parse.swift in Sources */,
-				911AAF642F5A27C100ADCBCD /* ManageTasksView.swift in Sources */,
+				3FBBC2812F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */,
 				7099D1FF29E98D900037CD8E /* AppError.swift in Sources */,
 				70F0EFE828C2EC050005B5A2 /* OCKSampleApp.swift in Sources */,
 				918FDEB7271B41FF0045A0EF /* Logger.swift in Sources */,
