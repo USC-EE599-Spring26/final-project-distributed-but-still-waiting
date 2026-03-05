@@ -20,7 +20,7 @@ struct SplashScreenView: View {
 						maxWidth: .infinity,
 						maxHeight: .infinity
 					)
-				Image("heart")
+				Image("NeuroMallea")
 					.resizable()
 					.scaledToFit()
 					.clipShape(.circle)
