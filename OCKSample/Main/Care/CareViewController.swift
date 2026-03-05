@@ -170,7 +170,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                 let tipView = TipView()
                 tipView.headerView.titleLabel.text = tipTitle
                 tipView.headerView.detailLabel.text = tipText
-                tipView.imageView.image = UIImage(named: "exercise.jpg")
+                tipView.imageView.image = UIImage(named: "NeuroMalleaBackground")
                 tipView.customStyle = CustomStylerKey.defaultValue
                 listViewController.appendView(tipView, animated: false)
             }
@@ -214,11 +214,11 @@ private extension CareViewController {
         query.excludesTasksWithNoEvents = true
         do {
             let tasks = try await store.fetchAnyTasks(query: query)
-            let sortedTasks = tasks.sorted {
-                ($0 as? CareTask)?.priority ?? Int.max <
-                ($1 as? CareTask)?.priority ?? Int.max
+            /* let orderedTasks = TaskID.ordered.compactMap { orderedTaskID in
+                tasks.first(where: { $0.id == orderedTaskID })
             }
-            return sortedTasks
+            return orderedTasks */
+            return tasks
         } catch {
             Logger.feed.error("Could not fetch tasks: \(error, privacy: .public)")
             return []

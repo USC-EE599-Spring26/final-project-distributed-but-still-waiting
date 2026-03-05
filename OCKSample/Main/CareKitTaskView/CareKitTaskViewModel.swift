@@ -13,7 +13,7 @@ import os.log
 @MainActor
 class CareKitTaskViewModel: ObservableObject {
 
-	@Published var error: AppError?
+    @Published var error: AppError?
 
 	// MARK: Intents
     func addTask(
@@ -21,22 +21,22 @@ class CareKitTaskViewModel: ObservableObject {
         instructions: String,
         cardType: CareKitCard,
         priority: Int
-	) async {
-		guard let appDelegate = AppDelegateKey.defaultValue else {
-			error = AppError.couldntBeUnwrapped
-			return
-		}
-		let uniqueId = UUID().uuidString // Create a unique id for each task
-		var task = OCKTask(id: uniqueId,
-						   title: title,
-						   carePlanUUID: nil,
-						   schedule: .dailyAtTime(hour: 0,
-												  minutes: 0,
-												  start: Date(),
-												  end: nil,
-												  text: nil))
-		task.instructions = instructions
-		task.card = cardType
+    ) async {
+        guard let appDelegate = AppDelegateKey.defaultValue else {
+            error = AppError.couldntBeUnwrapped
+            return
+        }
+        let uniqueId = UUID().uuidString // Create a unique id for each task
+        var task = OCKTask(id: uniqueId,
+                           title: title,
+                           carePlanUUID: nil,
+                           schedule: .dailyAtTime(hour: 0,
+                                                  minutes: 0,
+                                                  start: Date(),
+                                                  end: nil,
+                                                  text: nil))
+        task.instructions = instructions
+        task.card = cardType
         task.priority = priority
 		do {
 			_ = try await appDelegate.store.addTasksIfNotPresent([task])

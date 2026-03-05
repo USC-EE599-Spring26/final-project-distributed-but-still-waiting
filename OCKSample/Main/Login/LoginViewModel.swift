@@ -13,6 +13,8 @@ import ParseSwift
 import os.log
 import WatchConnectivity
 
+// swiftlint:disable function_parameter_count
+
 @MainActor
 class LoginViewModel: ObservableObject {
 
@@ -105,9 +107,10 @@ class LoginViewModel: ObservableObject {
     }
 
     private func savePatientAfterSignUp(
-		_ type: UserType,
-		firstName: String,
-		lastName: String
+        _ type: UserType,
+        email: String,
+        firstName: String,
+        lastName: String
 	) async throws -> OCKPatient {
 
         let remoteUUID = UUID()
@@ -162,16 +165,18 @@ class LoginViewModel: ObservableObject {
 
      This will also enforce that the username is not already taken.
      - parameter username: The username the person signing up.
+     - parameter email: The email the person signing up.
      - parameter password: The password the person signing up.
      - parameter firstName: The first name of the person signing up.
      - parameter lastName: The last name of the person signing up.
     */
     func signup(
-		_ type: UserType,
-		username: String,
-		password: String,
-		firstName: String,
-		lastName: String
+        _ type: UserType,
+        username: String,
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String
 	) async {
         do {
             guard try await PCKUtility.isServerAvailable() else {
@@ -182,11 +187,14 @@ class LoginViewModel: ObservableObject {
             // Set any properties you want saved on the user befor logging in.
             newUser.username = username.lowercased()
             newUser.password = password
+            newUser.email = email.lowercased()
             let user = try await newUser.signup()
             Logger.login.info("Parse signup successful: \(user)")
             let patient = try await savePatientAfterSignUp(type,
+                                                           email: email,
                                                            firstName: firstName,
-                                                           lastName: lastName)
+                                                           lastName: lastName,
+                                                           )
             try? await finishCompletingSignIn(patient)
         } catch {
             Logger.login.error("Error details: \(error)")
@@ -255,8 +263,10 @@ class LoginViewModel: ObservableObject {
             Logger.login.info("Parse login anonymous successful: \(user)")
             // Only allow annonymous users to be patients.
             let patient = try await savePatientAfterSignUp(.patient,
+                                                           email: "Anonymous",
                                                            firstName: "Anonymous",
-                                                           lastName: "Login")
+                                                           lastName: "Login",
+                                                           )
             try? await finishCompletingSignIn(patient)
         } catch {
             // swiftlint:disable:next line_length

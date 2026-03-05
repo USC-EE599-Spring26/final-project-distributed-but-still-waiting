@@ -140,7 +140,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 
     func setupRemotes(uuid: UUID? = nil) async throws {
         do {
-            /* let historicalStart = Calendar.current.date(byAdding: .year, value: -2, to: Date())! */
+            // let historicalStart = Calendar.current.date(byAdding: .year, value: -2, to: Date())!
             if isSyncingWithRemote {
                 guard let uuid = uuid else {
                     Logger.appDelegate.error("Could not setupRemotes, uuid is nil")
@@ -183,7 +183,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 			WCSession.default.activate()
 
             healthKitStore = OCKHealthKitPassthroughStore(store: store)
-            /* try? await healthKitStore.populateDefaultHealthKitTasks(startDate: historicalStart) */
+            // try? await healthKitStore.populateDefaultHealthKitTasks(startDate: historicalStart)
             let storeCoordinator = OCKStoreCoordinator()
             storeCoordinator.attach(store: store)
             storeCoordinator.attach(eventStore: healthKitStore)

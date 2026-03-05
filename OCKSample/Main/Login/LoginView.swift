@@ -23,6 +23,7 @@ import UIKit
 struct LoginView: View {
     @Environment(\.tintColorFlip) var tintColorFlip
     @ObservedObject var viewModel: LoginViewModel
+    @State var email = ""
     @State var usersname = ""
     @State var password = ""
     @State var firstName: String = ""
@@ -37,7 +38,7 @@ struct LoginView: View {
                 .foregroundColor(.white)
                 .padding()
             // Change this image to something that represents your application
-            Image("exercise.jpg")
+            Image("NeuroMallea")
                 .resizable()
                 .frame(width: 150, height: 150, alignment: .center)
                 .clipShape(Circle())
@@ -73,6 +74,11 @@ struct LoginView: View {
 
                 switch signupLoginSegmentValue {
                 case 1:
+                    TextField("EMAIL", text: $email)
+                        .padding()
+                        .background(.white)
+                        .cornerRadius(20.0)
+                        .shadow(radius: 10.0, x: 20, y: 10)
                     TextField("GIVEN_NAME", text: $firstName)
                         .padding()
                         .background(.white)
@@ -101,6 +107,7 @@ struct LoginView: View {
                         await viewModel.signup(
 							.patient,
 							username: usersname,
+                            email: email,
 							password: password,
 							firstName: firstName,
 							lastName: lastName
@@ -130,7 +137,7 @@ struct LoginView: View {
                         .frame(width: 300)
                 }
             })
-            .background(Color(.green))
+            .background(Color(tintColorFlip))
             .cornerRadius(15)
 
             Button(action: {
@@ -149,7 +156,7 @@ struct LoginView: View {
                     EmptyView()
                 }
             })
-            .background(Color(.lightGray))
+            .background(Color.accentColor)
             .cornerRadius(15)
 
             // If an error occurs show it on the screen
