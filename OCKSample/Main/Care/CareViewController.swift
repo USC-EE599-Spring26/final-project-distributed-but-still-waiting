@@ -166,7 +166,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             if Calendar.current.isDate(date, inSameDayAs: Date()) {
                 // Add a non-CareKit view into the list
                 let tipTitle = "Benefits of exercising"
-                let tipText = "Learn how activity can promote a healthy pregnancy."
+                let tipText = "Keep your Mental Health in focus"
                 let tipView = TipView()
                 tipView.headerView.titleLabel.text = tipTitle
                 tipView.headerView.detailLabel.text = tipText
@@ -178,23 +178,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         #endif
 
         fetchAndDisplayTasks(on: listViewController, for: date)
-    }
-
-    private func isSameDay(as date: Date) -> Bool {
-        Calendar.current.isDate(
-            date,
-            inSameDayAs: Date()
-        )
-    }
-
-    private func modifyDateIfNeeded(_ date: Date) -> Date {
-        guard date < .now else {
-            return date
-        }
-        guard !isSameDay(as: date) else {
-            return .now
-        }
-        return date.endOfDay
     }
 
     private func fetchAndDisplayTasks(
@@ -212,11 +195,11 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         query.excludesTasksWithNoEvents = true
         do {
             let tasks = try await store.fetchAnyTasks(query: query)
-            /* let orderedTasks = TaskID.ordered.compactMap { orderedTaskID in
-                tasks.first(where: { $0.id == orderedTaskID })
+            let sortedTasks = tasks.sorted {
+                ($0 as? CareTask)?.priority ?? Int.max <
+                ($1 as? CareTask)?.priority ?? Int.max
             }
-            return orderedTasks */
-            return tasks
+            return sortedTasks
         } catch {
             Logger.feed.error("Could not fetch tasks: \(error, privacy: .public)")
             return []
@@ -231,84 +214,158 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         var query = OCKEventQuery(for: date)
         query.taskIDs = [task.id]
 
-        switch task.id {
-        case TaskID.steps:
-            let card = EventQueryView<NumericProgressTaskView>(
-                query: query
+        if let task = task as? OCKTask {
+            return viewControllers(for: task, query: query)
+        } else if let healthKitTask = task as? OCKHealthKitTask {
+            return viewControllers(for: healthKitTask, query: query)
+        } else {
+            return nil
+        }
+    }
+
+    private func viewControllers(
+        for task: OCKTask,
+        query: OCKEventQuery
+    ) -> [UIViewController]? {
+        switch task.card {
+        case .button:
+            let card = OCKButtonLogTaskViewController(
+                query: query,
+                store: self.store
             )
-            .formattedHostingController()
-
+            if let symbol = task.asset {
+                    card.title = "\(symbol) \(task.title ?? "")"
+                }
             return [card]
-
-        case TaskID.ovulationTestResult:
-            let card = EventQueryView<LabeledValueTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-
-            return [card]
-
-        case TaskID.stretch:
-            let card = EventQueryView<InstructionsTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-
-            return [card]
-
-        case TaskID.kegels:
-            /*
-             Since the kegel task is only scheduled every other day, there will be cases
-             where it is not contained in the tasks array returned from the query.
-             */
-            let card = EventQueryView<SimpleTaskView>(
-                query: query
-            )
-            .formattedHostingController()
-
-            return [card]
-
-        #if os(iOS)
-        // Create a card for the doxylamine task if there are events for it on this day.
-        case TaskID.doxylamine:
-
-            // This is a UIKit based card.
+        case .checklist:
             let card = OCKChecklistTaskViewController(
                 query: query,
                 store: self.store
             )
-
             return [card]
-        #endif
-
-        case TaskID.nausea:
-
-            #if os(iOS)
-            /*
-             Also create a card (UIKit view) that displays a single event.
-             The event query passed into the initializer specifies that only
-             today's log entries should be displayed by this log task view controller.
-             */
-            let nauseaCard = OCKButtonLogTaskViewController(
+        case .grid:
+            let card = OCKGridTaskViewController(
                 query: query,
                 store: self.store
             )
-
-            return [nauseaCard]
-
-            #else
-            return []
-            #endif
-
-        default:
+            return [card]
+        case .instruction:
+            let card = EventQueryView<InstructionsTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+            return [card]
+        case .labeledValue:
+            let card = EventQueryView<LabeledValueTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+            return [card]
+        case .simple:
             let card = EventQueryView<SimpleTaskView>(
                 query: query
             )
             .formattedHostingController()
-
             return [card]
+        default:
+            return nil
         }
     }
+
+    private func viewControllers(
+        for task: OCKHealthKitTask,
+        query: OCKEventQuery
+    ) -> [UIViewController]? {
+        switch task.card {
+        case .numericProgress:
+            let card = EventQueryView<NumericProgressTaskView>(
+                query: query
+            )
+            .formattedHostingController()
+            return [card]
+        default:
+            return nil
+        }
+    }
+
+    /*
+    switch task.id {
+    case TaskID.steps:
+        let card = EventQueryView<NumericProgressTaskView>(
+            query: query
+        )
+        .formattedHostingController()
+
+        return [card]
+
+    case TaskID.ovulationTestResult:
+        let card = EventQueryView<LabeledValueTaskView>(
+            query: query
+        )
+        .formattedHostingController()
+
+        return [card]
+
+    case TaskID.stretch:
+        let card = EventQueryView<InstructionsTaskView>(
+            query: query
+        )
+        .formattedHostingController()
+
+        return [card]
+
+    case TaskID.kegels:
+        /*
+         Since the kegel task is only scheduled every other day, there will be cases
+         where it is not contained in the tasks array returned from the query.
+         */
+        let card = EventQueryView<SimpleTaskView>(
+            query: query
+        )
+        .formattedHostingController()
+
+        return [card]
+
+    #if os(iOS)
+    // Create a card for the doxylamine task if there are events for it on this day.
+    case TaskID.doxylamine:
+
+        // This is a UIKit based card.
+        let card = OCKChecklistTaskViewController(
+            query: query,
+            store: self.store
+        )
+
+        return [card]
+    #endif
+
+    case TaskID.nausea:
+
+        #if os(iOS)
+        /*
+         Also create a card (UIKit view) that displays a single event.
+         The event query passed into the initializer specifies that only
+         today's log entries should be displayed by this log task view controller.
+         */
+        let nauseaCard = OCKButtonLogTaskViewController(
+            query: query,
+            store: self.store
+        )
+
+        return [nauseaCard]
+
+        #else
+        return []
+        #endif
+
+    default:
+        let card = EventQueryView<SimpleTaskView>(
+            query: query
+        )
+        .formattedHostingController()
+
+        return [card]
+    } */
 
     private func appendTasks(
         _ tasks: [any OCKAnyTask],
@@ -336,6 +393,25 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             }
         }
         self.isLoading = false
+    }
+}
+
+private extension CareViewController {
+    func isSameDay(as date: Date) -> Bool {
+        Calendar.current.isDate(
+            date,
+            inSameDayAs: Date()
+        )
+    }
+
+    func modifyDateIfNeeded(_ date: Date) -> Date {
+        guard date < .now else {
+            return date
+        }
+        guard !isSameDay(as: date) else {
+            return .now
+        }
+        return date.endOfDay
     }
 }
 

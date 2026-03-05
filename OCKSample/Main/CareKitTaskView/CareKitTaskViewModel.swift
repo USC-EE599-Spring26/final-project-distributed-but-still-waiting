@@ -20,7 +20,8 @@ class CareKitTaskViewModel: ObservableObject {
         _ title: String,
         instructions: String,
         cardType: CareKitCard,
-        priority: Int
+        priority: Int,
+        asset: String
     ) async {
         guard let appDelegate = AppDelegateKey.defaultValue else {
             error = AppError.couldntBeUnwrapped
@@ -85,7 +86,8 @@ class CareKitTaskViewModel: ObservableObject {
         _ title: String,
         instructions: String,
         cardType: CareKitCard,
-        priority: Int
+        priority: Int,
+        asset: String
     ) async {
 		guard let appDelegate = AppDelegateKey.defaultValue else {
 			error = AppError.couldntBeUnwrapped
