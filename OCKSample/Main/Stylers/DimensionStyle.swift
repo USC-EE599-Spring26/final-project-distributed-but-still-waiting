@@ -6,14 +6,13 @@
 //  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
-
 import CareKitUI
 import UIKit
 
 struct DimensionStyle: OCKDimensionStyler {
-	#if os(iOS)
-
-	var separatorHeight: CGFloat { 1.0 / UIScreen.main.scale }
+	#if os(iOS) || os(visionOS)
+    @MainActor
+	static var separatorHeight: CGFloat { 1.0 / UIScreen.main.scale }
 
 	#endif
 

@@ -11,7 +11,7 @@ protocol CareTask {
     var userInfo: [String: String]? { get set }
     var card: CareKitCard { get set }
     var priority: Int { get set }
-    
+
 }
 
 extension CareTask {
@@ -38,7 +38,7 @@ extension CareTask {
             }
             return priorityValue
         }
-        
+
         set {
             if userInfo == nil {
                 userInfo = [:]

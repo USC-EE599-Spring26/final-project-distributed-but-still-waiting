@@ -53,7 +53,6 @@ struct MainTabView: View {
                     }
                 }
                 .tag(2)
-            
 
             ProfileView(loginViewModel: loginViewModel)
                 .tabItem {

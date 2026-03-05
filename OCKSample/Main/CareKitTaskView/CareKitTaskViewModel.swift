@@ -6,7 +6,6 @@
 //  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
-
 import Foundation
 import CareKitStore
 import os.log
@@ -17,10 +16,10 @@ class CareKitTaskViewModel: ObservableObject {
 	@Published var error: AppError?
 
 	// MARK: Intents
-	func addTask(
-		_ title: String,
-		instructions: String,
-		cardType: CareKitCard,
+    func addTask(
+        _ title: String,
+        instructions: String,
+        cardType: CareKitCard,
         priority: Int
 	) async {
 		guard let appDelegate = AppDelegateKey.defaultValue else {
@@ -48,13 +47,46 @@ class CareKitTaskViewModel: ObservableObject {
 			self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
 		}
 	}
+    @Published var tasks: [OCKAnyTask] = []
 
-	func addHealthKitTask(
-		_ title: String,
-		instructions: String,
-		cardType: CareKitCard,
+    func fetchTasks() async {
+        guard let appDelegate = AppDelegateKey.defaultValue else { return }
+        // this might be converted to var in future for better UX
+        let query = OCKTaskQuery()
+
+        do {
+            tasks = try await appDelegate.store.fetchAnyTasks(query: query)
+        } catch {
+            self.error = AppError.errorString("Could not fetch tasks: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteTask(task: OCKAnyTask) async {
+        guard let appDelegate = AppDelegateKey.defaultValue else { return }
+
+        do {
+            try await appDelegate.store.deleteAnyTask(task)
+
+            // Refresh the list from CareKit
+            await fetchTasks()
+
+            NotificationCenter.default.post(
+                .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
+            )
+
+        } catch {
+            self.error = AppError.errorString(
+                "Could not delete task: \(error.localizedDescription)"
+            )
+        }
+    }
+
+    func addHealthKitTask(
+        _ title: String,
+        instructions: String,
+        cardType: CareKitCard,
         priority: Int
-	) async {
+    ) async {
 		guard let appDelegate = AppDelegateKey.defaultValue else {
 			error = AppError.couldntBeUnwrapped
 			return
@@ -80,7 +112,9 @@ class CareKitTaskViewModel: ObservableObject {
             // Notify views they should refresh tasks if needed
             NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.shouldRefreshView)))
             // Ask HealthKit store for permissions after each new task
+            #if os(iOS) || os(visionOS)
             Utility.requestHealthKitPermissions()
+            #endif
         } catch {
             self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
         }

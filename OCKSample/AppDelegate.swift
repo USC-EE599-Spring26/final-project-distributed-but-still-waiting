@@ -154,7 +154,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 				)
                 parseRemote.parseRemoteDelegate = self
 				self.parseRemote = parseRemote
-                
+
 				let store = OCKStore(
 					name: Constants.iOSParseCareStoreName,
 					type: .onDisk(),
