@@ -136,6 +136,8 @@
 		911AAF492F5A196C00ADCBCD /* AppearanceStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AAF452F5A196C00ADCBCD /* AppearanceStyler.swift */; };
 		911AAF4A2F5A196C00ADCBCD /* AnimationStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AAF442F5A196C00ADCBCD /* AnimationStyler.swift */; };
 		911AAF4B2F5A196C00ADCBCD /* AppearanceStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AAF452F5A196C00ADCBCD /* AppearanceStyler.swift */; };
+		911AAF4C2F5A1C8900ADCBCD /* OCKHealthKitTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866652F5408AE00B9BD74 /* OCKHealthKitTask+Card.swift */; };
+		911AAF4D2F5A1C8F00ADCBCD /* OCKTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866692F54090200B9BD74 /* OCKTask+Card.swift */; };
 		9138666F2F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		913866702F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		913866722F540AB100B9BD74 /* CareKitTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */; };
@@ -1018,6 +1020,7 @@
 				707D29462DCBE68500980253 /* MainTabView.swift in Sources */,
 				707D29472DCBE68500980253 /* User.swift in Sources */,
 				9138667B2F540CE800B9BD74 /* DimensionStyle.swift in Sources */,
+				911AAF4D2F5A1C8F00ADCBCD /* OCKTask+Card.swift in Sources */,
 				707D29482DCBE68500980253 /* FontColorKey.swift in Sources */,
 				707D29492DCBE68500980253 /* MainView.swift in Sources */,
 				9138669C2F595F4700B9BD74 /* CareTask.swift in Sources */,
@@ -1026,6 +1029,7 @@
 				707D29712DCBE6A000980253 /* OCKLocalization.swift in Sources */,
 				707D294C2DCBE68500980253 /* StoreCoordinatorKey.swift in Sources */,
 				707D294D2DCBE68500980253 /* InsightsView.swift in Sources */,
+				911AAF4C2F5A1C8900ADCBCD /* OCKHealthKitTask+Card.swift in Sources */,
 				707D294E2DCBE68500980253 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				707D294F2DCBE68500980253 /* OCKStore+SampleData.swift in Sources */,
 				707D29502DCBE68500980253 /* TaskID.swift in Sources */,
