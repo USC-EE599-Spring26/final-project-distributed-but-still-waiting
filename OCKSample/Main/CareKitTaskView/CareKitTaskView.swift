@@ -20,6 +20,7 @@ struct CareKitTaskView: View {
 	@State var instructions = ""
 	@State var selectedCard: CareKitCard = .button
     @State var priority: Int = 100
+    @State var asset = "star"
 
 	var body: some View {
 
@@ -29,6 +30,8 @@ struct CareKitTaskView: View {
 						  text: $title)
 				TextField("Instructions",
 						  text: $instructions)
+                TextField("SFSymbo Asset", text: $asset
+                )
 				Picker("Card View", selection: $selectedCard) {
 					ForEach(CareKitCard.allCases) { item in
 						Text(item.rawValue)
@@ -42,7 +45,8 @@ struct CareKitTaskView: View {
                                 title,
                                 instructions: instructions,
                                 cardType: selectedCard,
-                                priority: priority
+                                priority: priority,
+                                asset: asset
                             )
                         }
                     }.alert(
@@ -61,7 +65,8 @@ struct CareKitTaskView: View {
                                 title,
                                 instructions: instructions,
                                 cardType: selectedCard,
-                                priority: priority
+                                priority: priority,
+                                asset: asset
                             )
                         }
                     }.alert(
