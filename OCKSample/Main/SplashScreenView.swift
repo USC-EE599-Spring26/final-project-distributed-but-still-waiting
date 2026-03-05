@@ -45,7 +45,7 @@ struct SplashScreenView: View {
 	}
 
 	var careKitLogoColor: Color {
-		Color(#colorLiteral(red: 0.9355412722, green: 0.245944649, blue: 0.3403989077, alpha: 1))
+		Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
 	}
 	var backgroundColorGradient: LinearGradient {
 		LinearGradient(

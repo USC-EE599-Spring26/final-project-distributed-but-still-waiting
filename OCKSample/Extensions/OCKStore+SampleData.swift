@@ -40,7 +40,7 @@ extension OCKStore {
 			)
 
 			switch event.task.id {
-			case TaskID.doxylamine, TaskID.kegels, TaskID.stretch:
+			case TaskID.lexapro, TaskID.cbtExercises, TaskID.stretch:
 				let randomBool: Bool = .random()
 				guard randomBool else { return nil }
 				let outcomeValue = createOutcomeValue(
@@ -53,7 +53,7 @@ extension OCKStore {
 					for: event
 				)
 				return outcome
-			case TaskID.nausea:
+			case TaskID.depression:
 				// multiple random bools
 				let outcomeValues = (0...3).compactMap { _ -> OCKOutcomeValue? in
 					let randomBool: Bool = .random()

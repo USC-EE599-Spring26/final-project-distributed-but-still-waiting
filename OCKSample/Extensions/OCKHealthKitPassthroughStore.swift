@@ -19,32 +19,32 @@ extension OCKHealthKitPassthroughStore {
 	) async throws {
 
         let countUnit = HKUnit.count()
-        let stepTargetValue = OCKOutcomeValue(
-            2000.0,
+        let sleepDurationTargetValue = OCKOutcomeValue(
+            8.0,
             units: countUnit.unitString
         )
-        let stepTargetValues = [ stepTargetValue ]
-        let stepSchedule = OCKSchedule.dailyAtTime(
-            hour: 8,
+        let sleepDurationTargetValues = [ sleepDurationTargetValue ]
+        let sleepDurationSchedule = OCKSchedule.dailyAtTime(
+            hour: 0,
             minutes: 0,
             start: startDate,
             end: nil,
             text: nil,
             duration: .allDay,
-            targetValues: stepTargetValues
+            targetValues: sleepDurationTargetValues
         )
-        var steps = OCKHealthKitTask(
-            id: TaskID.steps,
-            title: String(localized: "STEPS"),
+        var sleepDuration = OCKHealthKitTask(
+            id: TaskID.sleepDuration,
+            title: String(localized: "sleepDuration"),
             carePlanUUID: nil,
-            schedule: stepSchedule,
+            schedule: sleepDurationSchedule,
             healthKitLinkage: OCKHealthKitLinkage(
                 quantityIdentifier: .stepCount,
                 quantityType: .cumulative,
                 unit: countUnit
             )
         )
-        steps.asset = "figure.walk"
+        sleepDuration.asset = "figure.walk"
 
         let ovulationTestResultSchedule = OCKSchedule.dailyAtTime(
             hour: 8,
@@ -65,7 +65,7 @@ extension OCKHealthKitPassthroughStore {
             )
         )
         ovulationTestResult.asset = "circle.dotted"
-        let tasks = [ steps, ovulationTestResult ]
+        let tasks = [ sleepDuration, ovulationTestResult ]
 
         _ = try await addTasksIfNotPresent(tasks)
 

@@ -79,8 +79,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // MARK: Care View
 "NAUSEA_DOXYLAMINE_INTAKE" = "Nausea & Doxylamine Intake";
+"DEPRESSION_LEXAPRO_INTAKE" = "Depression & Lexapro Intake";
 "THIS_WEEK" = "This Week";
 "NAUSEA" = "Nausea";
+"DEPRESSION" = "Depression";
 "DOXYLAMINE" = "Doxylamine";
 
 // MARK: Profile
@@ -99,6 +101,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "STRETCH" = "Stretch";
 "STEPS" = "Steps";
 "OVULATION_TEST_RESULT" = "Ovulation Test Result";
+"TAKE_LEXAPRO" = "Take Lexapro";
+"LEXAPRO_INSTRUCTIONS" = "Take 5mg of Lexapro when you experience nausea";
+"CBT_EXERCISES" = "CBT Exercises";
+"CBT_INSTRUCTIONS" = "Perform guided meditation for 10 minutes.";
+"SLEEP" = "Sleep Duration";
+"PH9_SURVEY" = "PH9 Survey";
+"PH9_INSTRUCTIONS" = "Take Weekly PH-9 Survey";
+"TRACK_DEPRESSION" = "Track your depression";
+"DEPRESSION_INSTRUCTIONS" = "Tap the button below anytime you are sad or feel that you do not belong";
 
 // MARK: Charts
 "CHOOSE_DATE_INTERVAL" = "Chose date interval";
