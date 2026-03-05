@@ -71,12 +71,10 @@ extension OCKStore {
             id: TaskID.doxylamine,
             title: String(localized: "TAKE_DOXYLAMINE"),
             carePlanUUID: nil,
-            schedule: schedule,
+            schedule: schedule
         )
         doxylamine.instructions = String(localized: "DOXYLAMINE_INSTRUCTIONS")
         doxylamine.asset = "pills.fill"
-        // Setting default priorities
-        doxylamine.priority = 10
 
         let nauseaSchedule = OCKSchedule(
             composing: [
@@ -100,8 +98,6 @@ extension OCKStore {
         nausea.impactsAdherence = false
         nausea.instructions = String(localized: "NAUSEA_INSTRUCTIONS")
         nausea.asset = "bed.double"
-        // Setting default priorities
-        nausea.priority = 20
 
         let kegelElement = OCKScheduleElement(
             start: beforeBreakfast,
@@ -119,8 +115,6 @@ extension OCKStore {
         )
         kegels.impactsAdherence = true
         kegels.instructions = String(localized: "KEGEL_INSTRUCTIONS")
-        // Setting default priorities
-        kegels.priority = 30
 
         let stretchElement = OCKScheduleElement(
             start: beforeBreakfast,
@@ -138,8 +132,6 @@ extension OCKStore {
         )
         stretch.impactsAdherence = true
         stretch.asset = "figure.walk"
-        // Setting default priorities
-        stretch.priority = 40
 
         _ = try await addTasksIfNotPresent(
             [
