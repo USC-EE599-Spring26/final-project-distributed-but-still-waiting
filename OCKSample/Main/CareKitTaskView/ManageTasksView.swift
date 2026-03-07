@@ -11,37 +11,48 @@ import CareKitStore
 
 struct ManageTasksView: View {
 
-    @StateObject var viewModel = CareKitTaskViewModel()
+    @Environment(\.careStore) private var store
+    @StateObject private var viewModel: ManageTasksViewModel
+
+    init(store: OCKAnyTaskStore) {
+        _viewModel = StateObject(wrappedValue: ManageTasksViewModel(store: store))
+    }
 
     var body: some View {
+        NavigationView {
+            List {
+                ForEach(viewModel.tasks, id: \.id) { task in
+                    HStack(spacing: 12) {
 
-        List {
-            ForEach(Array(viewModel.tasks), id: \.id) { task in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(task.title ?? "Untitled")
+                        Image(systemName: task.asset ?? "square.grid.2x2")
+                            .font(.title3)
+                            .foregroundColor(.accentColor)
+                            .frame(width: 28)
 
-                        if let priority = (task as? CareTask)?.priority {
-                            Text("Priority: \(priority)")
-                                .font(.caption)
-                                .foregroundColor(.gray)
+                        VStack(alignment: .leading) {
+
+                            Text(task.title ?? "Untitled Task")
+                                .font(.headline)
+
+                            if let instructions = task.instructions {
+                                Text(instructions)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
-
-                    Spacer()
-
-                    Button(role: .destructive) {
-                        Task {
-                            await viewModel.deleteTask(task: task)
-                        }
-                    } label: {
-                        Image(systemName: "trash")
+                    .padding(.vertical, 4)
+                }
+                .onDelete { offsets in
+                    Task {
+                        await viewModel.deleteTasks(at: offsets)
                     }
                 }
             }
-        }
-        .task {
-            await viewModel.fetchTasks()
+            .navigationTitle("Manage Tasks")
+            .task {
+                await viewModel.fetchTasks()
+            }
         }
     }
 }
