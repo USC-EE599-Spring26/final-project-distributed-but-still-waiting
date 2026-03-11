@@ -35,6 +35,7 @@ import CareKitUI
 import os.log
 import SwiftUI
 import UIKit
+// swiftlint:disable type_body_length
 
 @MainActor
 final class CareViewController: OCKDailyPageViewController, @unchecked Sendable {
@@ -230,6 +231,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         query: OCKEventQuery
     ) -> [UIViewController]? {
         switch task.card {
+        #if os(iOS)
         case .button:
             let card = OCKButtonLogTaskViewController(
                 query: query,
@@ -251,7 +253,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                 store: self.store
             )
             return [card]
-
+            #endif
         case .instruction:
             let card = EventQueryView<InstructionsTaskView>(
                 query: query
