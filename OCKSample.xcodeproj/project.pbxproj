@@ -137,18 +137,14 @@
 		70F921B227CAC16E00368CEC /* RemoteSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F921AD27CABE7700368CEC /* RemoteSessionDelegate.swift */; };
 		70F921B327CAC16E00368CEC /* LocalSyncSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F921AF27CABED600368CEC /* LocalSyncSessionDelegate.swift */; };
 		9103AA5227B8C913002C921E /* FontColorKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F03AA727860E7700E5AFB4 /* FontColorKey.swift */; };
-		911AAF592F5A26CA00ADCBCD /* OCKTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866692F54090200B9BD74 /* OCKTask+Card.swift */; };
 		911AAF5A2F5A26CA00ADCBCD /* OCKTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866692F54090200B9BD74 /* OCKTask+Card.swift */; };
 		911AAF5B2F5A26CA00ADCBCD /* OCKTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866692F54090200B9BD74 /* OCKTask+Card.swift */; };
-		911AAF5C2F5A26D200ADCBCD /* OCKHealthKitTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866652F5408AE00B9BD74 /* OCKHealthKitTask+Card.swift */; };
 		911AAF5D2F5A26D200ADCBCD /* OCKHealthKitTask+Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866652F5408AE00B9BD74 /* OCKHealthKitTask+Card.swift */; };
 		911AAF5F2F5A276C00ADCBCD /* DimensionStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AAF5E2F5A276C00ADCBCD /* DimensionStyler.swift */; };
 		911AAF602F5A276C00ADCBCD /* DimensionStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AAF5E2F5A276C00ADCBCD /* DimensionStyler.swift */; };
 		911AAF612F5A276C00ADCBCD /* DimensionStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AAF5E2F5A276C00ADCBCD /* DimensionStyler.swift */; };
-		911AAF662F5A280F00ADCBCD /* CareKitTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */; };
 		911AAF672F5A280F00ADCBCD /* CareKitTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */; };
 		911AAF682F5A280F00ADCBCD /* CareKitTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */; };
-		911AAF692F5A282000ADCBCD /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		911AAF6A2F5A282000ADCBCD /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		911AAF6B2F5A282000ADCBCD /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		9138666F2F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
@@ -169,7 +165,6 @@
 		9144B69B2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9144B69A2F5BA8E70011ECC2 /* ManageTasksViewModel.swift */; };
 		9144B69C2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9144B69A2F5BA8E70011ECC2 /* ManageTasksViewModel.swift */; };
 		9144B69D2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9144B69A2F5BA8E70011ECC2 /* ManageTasksViewModel.swift */; };
-		9144B69E2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9144B69A2F5BA8E70011ECC2 /* ManageTasksViewModel.swift */; };
 		9144B69F2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9144B69A2F5BA8E70011ECC2 /* ManageTasksViewModel.swift */; };
 		914E8CF32F4AE10A001829C7 /* CareKit in Frameworks */ = {isa = PBXBuildFile; productRef = 914E8CF22F4AE10A001829C7 /* CareKit */; };
 		914E8CF52F4AE10A001829C7 /* CareKitFHIR in Frameworks */ = {isa = PBXBuildFile; productRef = 914E8CF42F4AE10A001829C7 /* CareKitFHIR */; };
@@ -1033,12 +1028,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				911AAF592F5A26CA00ADCBCD /* OCKTask+Card.swift in Sources */,
-				911AAF692F5A282000ADCBCD /* CareKitTaskView.swift in Sources */,
-				9144B69E2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */,
 				5173CB8A23C3A846007655A0 /* OCKSampleUITests.swift in Sources */,
-				911AAF5C2F5A26D200ADCBCD /* OCKHealthKitTask+Card.swift in Sources */,
-				911AAF662F5A280F00ADCBCD /* CareKitTaskViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
