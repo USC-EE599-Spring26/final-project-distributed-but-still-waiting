@@ -20,7 +20,19 @@ struct CareKitTaskView: View {
 	@State var instructions = ""
 	@State var selectedCard: CareKitCard = .button
     @State var priority: Int = 100
-    @State var asset = "star"
+    private let sfSymbols: [String] = [
+        "pills.fill",
+        "bandage.fill",
+        "stethoscope",
+        "heart.fill",
+        "bed.double",
+        "figure.walk",
+        "cross.case.fill",
+        "waveform.path.ecg",
+        "syringe.fill",
+        "thermometer"
+    ]
+    @State var asset = "pills.fill"
 
 	var body: some View {
 
@@ -30,8 +42,22 @@ struct CareKitTaskView: View {
 						  text: $title)
 				TextField("Instructions",
 						  text: $instructions)
-                TextField("SFSymbo Asset", text: $asset
-                )
+                Section("Icon") {
+                    Picker("Icon", selection: $asset) {
+                        ForEach(sfSymbols, id: \.self) { symbol in
+                            HStack {
+                                Image(systemName: symbol)
+                                    .foregroundColor(.accentColor)
+                            }
+                            .tag(symbol)
+                        }
+                    }
+#if os(watchOS)
+                    .pickerStyle(.navigationLink)
+#else
+                    .pickerStyle(.menu)
+#endif
+                }
 				Picker("Card View", selection: $selectedCard) {
 					ForEach(CareKitCard.allCases) { item in
 						Text(item.rawValue)

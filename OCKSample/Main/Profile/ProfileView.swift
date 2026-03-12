@@ -15,6 +15,7 @@ import UIKit
 
 struct ProfileView: View {
     @Environment(\.tintColorFlip) var tintColorFlip
+    @Environment(\.careStore) private var store
     private static var query = OCKPatientQuery(for: Date())
     @CareStoreFetchRequest(query: query) private var patients
     @StateObject private var viewModel = ProfileViewModel()
@@ -114,7 +115,7 @@ struct ProfileView: View {
                         isPresentingManageTasks = true
                     }
                     .sheet(isPresented: $isPresentingManageTasks) {
-                        ManageTasksView()
+                        ManageTasksView(store: store )
                     }
                 }
 

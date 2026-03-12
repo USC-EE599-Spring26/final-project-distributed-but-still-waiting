@@ -39,6 +39,8 @@ class CareKitTaskViewModel: ObservableObject {
         task.instructions = instructions
         task.card = cardType
         task.priority = priority
+        // store SF Symbol asset on the task so views can show it
+        task.asset = asset
         do {
             _ = try await appDelegate.store.addTasksIfNotPresent([task])
             Logger.careKitTask.info("Saved task: \(task.id, privacy: .private)")
@@ -48,7 +50,7 @@ class CareKitTaskViewModel: ObservableObject {
             self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
         }
     }
-    @Published var tasks: [OCKAnyTask] = []
+    /* @Published var tasks: [OCKAnyTask] = []
 
     func fetchTasks() async {
         guard let appDelegate = AppDelegateKey.defaultValue else { return }
@@ -66,21 +68,29 @@ class CareKitTaskViewModel: ObservableObject {
         guard let appDelegate = AppDelegateKey.defaultValue else { return }
 
         do {
+
             try await appDelegate.store.deleteAnyTask(task)
 
-            // Refresh the list from CareKit
-            await fetchTasks()
-
-            NotificationCenter.default.post(
-                .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
-            )
+            // After deleting, synchronize with remote so other stores/views see the change,
+            // then refresh our local list and notify listeners.
+            appDelegate.store.synchronize { [weak self] error in
+                Task { @MainActor in
+                    if let error = error {
+                        self?.error = AppError.errorString("Could not synchronize store: \(error.localizedDescription)")
+                    }
+                    await self?.fetchTasks()
+                    NotificationCenter.default.post(
+                        .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
+                    )
+                }
+            }
 
         } catch {
             self.error = AppError.errorString(
                 "Could not delete task: \(error.localizedDescription)"
             )
         }
-    }
+    } */
 
     func addHealthKitTask(
         _ title: String,
@@ -108,6 +118,8 @@ class CareKitTaskViewModel: ObservableObject {
         healthKitTask.instructions = instructions
         healthKitTask.card = cardType
         healthKitTask.priority = priority
+        // store SF Symbol asset on the health kit task for UI
+        healthKitTask.asset = asset
         do {
             _ = try await appDelegate.healthKitStore.addTasksIfNotPresent([healthKitTask])
             Logger.careKitTask.info("Saved HealthKitTask: \(healthKitTask.id, privacy: .private)")
@@ -121,4 +133,5 @@ class CareKitTaskViewModel: ObservableObject {
             self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
         }
     }
+
 }
