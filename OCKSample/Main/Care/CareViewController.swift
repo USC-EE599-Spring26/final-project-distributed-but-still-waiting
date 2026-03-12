@@ -35,6 +35,7 @@ import CareKitUI
 import os.log
 import SwiftUI
 import UIKit
+import ResearchKitSwiftUI
 // swiftlint:disable type_body_length
 
 @MainActor
@@ -42,6 +43,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
     private var isSyncing = false
     private var isLoading = false
+    private let swiftUIPadding: CGFloat = 15
     private var style: Styler {
         CustomStylerKey.defaultValue
     }
@@ -277,6 +279,20 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             )
             .formattedHostingController()
             return [card]
+
+        case .survey:
+            guard let card = researchSurveyViewController(
+                query: query,
+                task: task
+            ) else {
+                Logger.feed.warning(
+                    "Unable to create research survey view controller"
+                )
+                return nil
+            }
+
+            return [card]
+
         default:
             return nil
         }
@@ -297,6 +313,39 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             return nil
         }
     }
+
+    private func researchSurveyViewController(
+            query: OCKEventQuery,
+            task: OCKTask
+        ) -> UIViewController? {
+
+            guard let steps = task.surveySteps else {
+                return nil
+            }
+
+            let surveyViewController = EventQueryContentView<ResearchSurveyView>(
+                query: query
+            ) {
+                EventQueryContentView<ResearchCareForm>(
+                    query: query
+                ) {
+                    ForEach(steps) { step in
+                        ResearchFormStep(
+                            title: task.title,
+                            subtitle: task.instructions
+                        ) {
+                            ForEach(step.questions) { question in
+                                question.view()
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.vertical, swiftUIPadding)
+            .formattedHostingController()
+
+            return surveyViewController
+        }
 
     private func appendTasks(
         _ tasks: [any OCKAnyTask],
