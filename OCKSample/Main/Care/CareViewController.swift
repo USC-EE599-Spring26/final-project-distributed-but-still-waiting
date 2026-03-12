@@ -194,11 +194,16 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         query.excludesTasksWithNoEvents = true
         do {
             let tasks = try await store.fetchAnyTasks(query: query)
-            let sortedTasks = tasks.sorted {
-                ($0 as? CareTask)?.priority ?? Int.max <
-                ($1 as? CareTask)?.priority ?? Int.max
-            }
-            return sortedTasks
+
+                        guard let tasksWithPriority = tasks as? [CareTask] else {
+                            Logger.feed.warning("Could not cast all tasks to \"CareTask\"")
+                            return tasks
+                        }
+                        let orderedPriorityTasks = tasksWithPriority.sortedByPriority()
+                        let orderedTasks = orderedPriorityTasks.compactMap { orderedPriorityTask in
+                            tasks.first(where: { $0.id == orderedPriorityTask.id })
+                        }
+                        return orderedTasks
         } catch {
             Logger.feed.error("Could not fetch tasks: \(error, privacy: .public)")
             return []

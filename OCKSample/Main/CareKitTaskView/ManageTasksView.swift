@@ -31,13 +31,20 @@ struct ManageTasksView: View {
 
                         VStack(alignment: .leading) {
 
-                            Text(task.title ?? "Untitled Task")
-                                .font(.headline)
+                            HStack {
+                                Text(task.title ?? "Untitled Task")
+                                    .font(.headline)
 
-                            if let instructions = task.instructions {
-                                Text(instructions)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                Spacer()
+
+                                if let priority = (task as? CareTask)?.priority {
+                                    Text("P\(priority)")
+                                        .font(.caption)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color.gray.opacity(0.2))
+                                        .cornerRadius(6)
+                                }
                             }
                         }
                     }

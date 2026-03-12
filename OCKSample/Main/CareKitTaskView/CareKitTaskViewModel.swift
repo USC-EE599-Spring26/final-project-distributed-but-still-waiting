@@ -50,47 +50,6 @@ class CareKitTaskViewModel: ObservableObject {
             self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
         }
     }
-    /* @Published var tasks: [OCKAnyTask] = []
-
-    func fetchTasks() async {
-        guard let appDelegate = AppDelegateKey.defaultValue else { return }
-        // this might be converted to var in future for better UX
-        let query = OCKTaskQuery()
-
-        do {
-            tasks = try await appDelegate.store.fetchAnyTasks(query: query)
-        } catch {
-            self.error = AppError.errorString("Could not fetch tasks: \(error.localizedDescription)")
-        }
-    }
-
-    func deleteTask(task: OCKAnyTask) async {
-        guard let appDelegate = AppDelegateKey.defaultValue else { return }
-
-        do {
-
-            try await appDelegate.store.deleteAnyTask(task)
-
-            // After deleting, synchronize with remote so other stores/views see the change,
-            // then refresh our local list and notify listeners.
-            appDelegate.store.synchronize { [weak self] error in
-                Task { @MainActor in
-                    if let error = error {
-                        self?.error = AppError.errorString("Could not synchronize store: \(error.localizedDescription)")
-                    }
-                    await self?.fetchTasks()
-                    NotificationCenter.default.post(
-                        .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
-                    )
-                }
-            }
-
-        } catch {
-            self.error = AppError.errorString(
-                "Could not delete task: \(error.localizedDescription)"
-            )
-        }
-    } */
 
     func addHealthKitTask(
         _ title: String,
