@@ -13,6 +13,7 @@ import Contacts
 import os.log
 import ParseSwift
 import ParseCareKit
+import ResearchKitSwiftUI
 
 extension OCKStore {
 
@@ -76,7 +77,7 @@ extension OCKStore {
         lexapro.instructions = String(localized: "LEXAPRO_INSTRUCTIONS")
         lexapro.asset = "pills.fill"
         lexapro.priority = 1
-        lexapro.card = .checklist
+        lexapro.card = .custom
 
         let cbtExerciseElement = OCKScheduleElement(
             start: beforeBreakfast,
@@ -140,12 +141,15 @@ extension OCKStore {
         stretch.asset = "figure.walk"
         stretch.priority = 4
 
+        let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: nil)
+
         _ = try await addTasksIfNotPresent(
             [
                 depression,
                 lexapro,
                 cbtExercises,
-                stretch
+                stretch,
+                qualityOfLife
             ]
         )
 
@@ -198,5 +202,99 @@ extension OCKStore {
                 contact2
             ]
         )
+    }
+    func createQualityOfLifeSurveyTask(carePlanUUID: UUID?) -> OCKTask {
+        let qualityOfLifeTaskId = TaskID.qualityOfLife
+        let thisMorning = Calendar.current.startOfDay(for: Date())
+        let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
+        let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
+
+        let qualityOfLifeElement = OCKScheduleElement(
+            start: beforeBreakfast,
+            end: nil,
+            interval: DateComponents(day: 1)
+        )
+        let qualityOfLifeSchedule = OCKSchedule(composing: [qualityOfLifeElement])
+
+        let textChoiceYesText = String(localized: "ANSWER_YES")
+        let textChoiceNoText = String(localized: "ANSWER_NO")
+        let choices: [TextChoice] = [
+            .init(id: "\(qualityOfLifeTaskId)_0", choiceText: textChoiceYesText, value: "Yes"),
+            .init(id: "\(qualityOfLifeTaskId)_1", choiceText: textChoiceNoText, value: "No")
+        ]
+
+        let questionOne = SurveyQuestion(
+            id: "\(qualityOfLifeTaskId)-managing-time",
+            type: .multipleChoice,
+            required: true,
+            title: String(localized: "QUALITY_OF_LIFE_TIME"),
+            textChoices: choices,
+            choiceSelectionLimit: .single
+        )
+
+        let questionTwo = SurveyQuestion(
+            id: "\(qualityOfLifeTaskId)-stress",
+            type: .slider,
+            required: false,
+            title: String(localized: "QUALITY_OF_LIFE_STRESS"),
+            detail: String(localized: "QUALITY_OF_LIFE_STRESS_DETAIL"),
+            integerRange: 0...10,
+            sliderStepValue: 1
+        )
+
+        let questionThree = SurveyQuestion(
+            id: "\(qualityOfLifeTaskId)-sleep",
+            type: .slider,
+            required: false,
+            title: String(localized: "QUALITY_OF_LIFE_SLEEP"),
+            detail: String(localized: "QUALITY_OF_LIFE_SLEEP_DETAIL"),
+            integerRange: 0...10,
+            sliderStepValue: 1
+        )
+
+        // 4. NEW: Energy Levels (Scale/Slider)
+        let questionFour = SurveyQuestion(
+            id: "\(qualityOfLifeTaskId)-energy",
+            type: .slider,
+            required: false,
+            title: String(localized: "QUALITY_OF_LIFE_ENERGY"),
+            detail: String(localized: "QUALITY_OF_LIFE_ENERGY_DETAIL"),
+            integerRange: 0...5,
+            sliderStepValue: 1
+        )
+
+        // 5. NEW: Social Interaction (Multiple Choice)
+        let questionFive = SurveyQuestion(
+            id: "\(qualityOfLifeTaskId)-social",
+            type: .multipleChoice,
+            required: true,
+            title: String(localized: "QUALITY_OF_LIFE_SOCIAL"),
+            textChoices: choices,
+            choiceSelectionLimit: .single
+        )
+
+        // Bundle all questions into the step
+        let questions = [questionOne, questionTwo, questionThree, questionFour, questionFive]
+
+        let stepOne = SurveyStep(
+            id: "\(qualityOfLifeTaskId)-step-1",
+            questions: questions
+        )
+
+        // --- Task Creation ---
+        var qualityOfLife = OCKTask(
+            id: "\(qualityOfLifeTaskId)-stress", // Note: Consider using just qualityOfLifeTaskId
+            title: String(localized: "Quality of Life"),
+            carePlanUUID: carePlanUUID,
+            schedule: qualityOfLifeSchedule
+        )
+
+        qualityOfLife.impactsAdherence = true
+        qualityOfLife.asset = "brain.head.profile"
+        qualityOfLife.card = .survey
+        qualityOfLife.surveySteps = [stepOne]
+        qualityOfLife.priority = 1
+
+        return qualityOfLife
     }
 }
