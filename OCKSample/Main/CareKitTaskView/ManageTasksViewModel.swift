@@ -8,11 +8,13 @@
 
 import Foundation
 import CareKitStore
+import os.log
 
 @MainActor
 final class ManageTasksViewModel: ObservableObject {
 
     @Published var tasks: [OCKAnyTask] = []
+    @Published var orderedTasks: [OCKAnyTask] = []
     @Published var error: AppError?
 
     private let store: any OCKAnyTaskStore
@@ -28,7 +30,12 @@ final class ManageTasksViewModel: ObservableObject {
         query.excludesTasksWithNoEvents = true
 
         do {
-            tasks = try await store.fetchAnyTasks(query: query)
+            let fetchedTasks = try await store.fetchAnyTasks(query: query)
+
+                    tasks = fetchedTasks.sorted {
+                        ($0 as? CareTask)?.priority ?? Int.max <
+                        ($1 as? CareTask)?.priority ?? Int.max
+                    }
         } catch {
             self.error = AppError.errorString(
                 "Could not fetch tasks: \(error.localizedDescription)"
