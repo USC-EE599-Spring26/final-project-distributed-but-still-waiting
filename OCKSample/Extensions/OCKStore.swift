@@ -75,8 +75,8 @@ extension OCKStore {
         )
         lexapro.instructions = String(localized: "LEXAPRO_INSTRUCTIONS")
         lexapro.asset = "pills.fill"
-        lexapro.priority = 1
         lexapro.card = .checklist
+        lexapro.priority = 1
 
         let cbtExerciseElement = OCKScheduleElement(
             start: beforeBreakfast,
@@ -94,8 +94,8 @@ extension OCKStore {
         )
         cbtExercises.impactsAdherence = true
         cbtExercises.instructions = String(localized: "CBT_INSTRUCTIONS")
+        cbtExercises.card = .instruction
         cbtExercises.priority = 2
-        cbtExercises.card = .button
 
         let depressionSchedule = OCKSchedule(
             composing: [
@@ -119,8 +119,8 @@ extension OCKStore {
         depression.impactsAdherence = false
         depression.instructions = String(localized: "DEPRESSION_INSTRUCTIONS")
         depression.asset = "bed.double"
+        depression.card = .instruction
         depression.priority = 3
-        depression.card = .simple
 
         let stretchElement = OCKScheduleElement(
             start: beforeBreakfast,
@@ -137,8 +137,9 @@ extension OCKStore {
             schedule: stretchSchedule
         )
         stretch.impactsAdherence = true
-        stretch.asset = "figure.walk"
+        stretch.asset = "figure.flexibility"
         stretch.priority = 4
+        stretch.card = .simple
 
         _ = try await addTasksIfNotPresent(
             [

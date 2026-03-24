@@ -106,6 +106,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "CBT_EXERCISES" = "CBT Exercises";
 "CBT_INSTRUCTIONS" = "Perform guided meditation for 10 minutes.";
 "SLEEP" = "Sleep Duration";
+"SLEEP_RESULT" = "Sleep Result";
 "PH9_SURVEY" = "PH9 Survey";
 "PH9_INSTRUCTIONS" = "Take Weekly PH-9 Survey";
 "TRACK_DEPRESSION" = "Track your depression";
