@@ -33,8 +33,11 @@ import CareKitEssentials
 import CareKitStore
 import CareKitUI
 import os.log
+import ResearchKitSwiftUI
 import SwiftUI
 import UIKit
+
+// swiftlint:disable type_body_length
 
 @MainActor
 final class CareViewController: OCKDailyPageViewController, @unchecked Sendable {
@@ -224,6 +227,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             switch standardTask.card {
 
             case .button:
+                #if os(iOS)
                 let card = OCKButtonLogTaskViewController(
                     query: query,
                     store: self.store
@@ -231,13 +235,22 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
                 return [card]
 
+                #else
+                return []
+                #endif
+
             case .checklist:
+                #if os(iOS)
                 let card = OCKChecklistTaskViewController(
                     query: query,
                     store: self.store
                 )
 
                 return [card]
+
+                #else
+                return []
+                #endif
 
             case .featured:
                 return nil
@@ -267,6 +280,19 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
                 return [card]
 
+            case .survey:
+                guard let card = researchSurveyViewController(
+                    query: query,
+                    task: standardTask
+                ) else {
+                    Logger.feed.warning(
+                        "Unable to create research survey view controller"
+                    )
+                    return nil
+                }
+
+                return [card]
+
             default:
                 return nil
             }
@@ -292,6 +318,39 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             return nil
         }
 
+    }
+
+    private func researchSurveyViewController(
+        query: OCKEventQuery,
+        task: OCKTask
+    ) -> UIViewController? {
+
+        guard let steps = task.surveySteps else {
+            return nil
+        }
+
+        let surveyViewController = EventQueryContentView<ResearchSurveyView>(
+            query: query
+        ) {
+            EventQueryContentView<ResearchCareForm>(
+                query: query
+            ) {
+                ForEach(steps) { step in
+                    ResearchFormStep(
+                        title: task.title,
+                        subtitle: task.instructions
+                    ) {
+                        ForEach(step.questions) { question in
+                            question.view()
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.vertical, swiftUIPadding)
+        .formattedHostingController()
+
+        return surveyViewController
     }
 
     private func appendTasks(
