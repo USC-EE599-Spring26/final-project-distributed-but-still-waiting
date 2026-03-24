@@ -232,7 +232,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         return nil
 
     }
-
+    // swiftlint:disable:next cyclomatic_complexity
     private func viewControllers(
         for task: OCKTask,
         query: OCKEventQuery
@@ -290,6 +290,15 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                 )
                 return nil
             }
+
+            return [card]
+
+        case .custom:
+            let card = EventQueryView<MyCustomCardView>(
+                query: query
+            )
+            .padding(.vertical, swiftUIPadding)
+            .formattedHostingController()
 
             return [card]
 
