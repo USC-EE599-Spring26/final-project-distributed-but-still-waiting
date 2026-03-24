@@ -123,34 +123,35 @@ extension OCKStore {
         depression.card = .instruction
         depression.priority = 3
 
-        let stretchElement = OCKScheduleElement(
+        let energyElement = OCKScheduleElement(
             start: beforeBreakfast,
             end: nil,
-            interval: DateComponents(day: 1)
+            interval: DateComponents(hour: 3)
         )
-        let stretchSchedule = OCKSchedule(
-            composing: [stretchElement]
+        let energySchedule = OCKSchedule(
+            composing: [energyElement]
         )
-        var stretch = OCKTask(
-            id: TaskID.stretch,
-            title: String(localized: "STRETCH"),
+        var energy = OCKTask(
+            id: TaskID.energy,
+            title: String(localized: "ENERGY"),
             carePlanUUID: nil,
-            schedule: stretchSchedule
+            schedule: energySchedule
         )
-        stretch.impactsAdherence = true
-        stretch.asset = "figure.flexibility"
-        stretch.priority = 4
-        stretch.card = .custom
+        energy.impactsAdherence = true
+        energy.asset = "figure.flexibility"
+        energy.priority = 4
+        energy.card = .customEnergy
 
-        let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: nil)
+        // let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: nil)
+        let ph9 = createPH9SurveyTask(carePlanUUID: nil)
 
         _ = try await addTasksIfNotPresent(
             [
                 depression,
                 lexapro,
                 cbtExercises,
-                stretch,
-                qualityOfLife
+                energy,
+                ph9
             ]
         )
 
@@ -270,5 +271,87 @@ extension OCKStore {
         qualityOfLife.priority = 1
 
         return qualityOfLife
+    }
+
+    func createPH9SurveyTask(carePlanUUID: UUID?) -> OCKTask {
+        let ph9SurveyTaskId = TaskID.ph9
+        let thisMorning = Calendar.current.startOfDay(for: Date())
+        let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
+        let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
+        let ph9Element = OCKScheduleElement(
+            start: beforeBreakfast,
+            end: nil,
+            interval: DateComponents(day: 1)
+        )
+        let ph9SurveySchedule = OCKSchedule(
+            composing: [ph9Element]
+        )
+        let textChoiceDifficultText = String(localized: "ANSWER_DIFFICULT")
+        let textChoiceNotDifficultText = String(localized: "ANSWER_NOT_DIFFICULT")
+        let difficultValue = "Difficult"
+        let notDifficultValue = "NotDifficult"
+        let choices: [TextChoice] = [
+            .init(
+                id: "\(ph9SurveyTaskId)_0",
+                choiceText: textChoiceDifficultText,
+                value: difficultValue
+            ),
+            .init(
+                id: "\(ph9SurveyTaskId)_1",
+                choiceText: textChoiceNotDifficultText,
+                value: notDifficultValue
+            )
+
+        ]
+        let questionOne = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q1",
+            type: .slider,
+            required: false,
+            title: String(localized: "PH9_QUESTION1"),
+            integerRange: 0...3,
+            sliderStepValue: 1
+        )
+        let questionTwo = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q2",
+            type: .slider,
+            required: false,
+            title: String(localized: "PH9_QUESTION2"),
+            integerRange: 0...3,
+            sliderStepValue: 1
+        )
+        let questionThree = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q3",
+            type: .slider,
+            required: false,
+            title: String(localized: "PH9_QUESTION3"),
+            integerRange: 0...3,
+            sliderStepValue: 1
+        )
+        let questionFour = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q4",
+            type: .multipleChoice,
+            required: true,
+            title: String(localized: "PH9_LAST_QUESTION"),
+            textChoices: choices,
+            choiceSelectionLimit: .single
+        )
+        let questions = [questionOne, questionTwo, questionThree, questionFour]
+        let stepOne = SurveyStep(
+            id: "\(ph9SurveyTaskId)-step-1",
+            questions: questions
+        )
+        var ph9Survey = OCKTask(
+            id: "\(ph9SurveyTaskId)-ph9",
+            title: String(localized: "PH9_SURVEY"),
+            carePlanUUID: carePlanUUID,
+            schedule: ph9SurveySchedule
+        )
+        ph9Survey.impactsAdherence = true
+        ph9Survey.asset = "brain.head.profile"
+        ph9Survey.card = .survey
+        ph9Survey.surveySteps = [stepOne]
+        ph9Survey.priority = 1
+
+        return ph9Survey
     }
 }

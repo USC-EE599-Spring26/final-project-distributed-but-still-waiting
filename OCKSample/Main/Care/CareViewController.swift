@@ -302,6 +302,15 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
                 return [card]
 
+            case .customEnergy:
+                let card = EventQueryView<EnergyCardView>(
+                    query: query
+                )
+                .padding(.vertical, swiftUIPadding)
+                .formattedHostingController()
+
+                return [card]
+
             default:
                 return nil
             }
