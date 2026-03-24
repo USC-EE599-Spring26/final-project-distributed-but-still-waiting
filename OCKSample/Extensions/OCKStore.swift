@@ -140,7 +140,7 @@ extension OCKStore {
         stretch.impactsAdherence = true
         stretch.asset = "figure.flexibility"
         stretch.priority = 4
-        stretch.card = .simple
+        stretch.card = .custom
 
         let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: nil)
 
