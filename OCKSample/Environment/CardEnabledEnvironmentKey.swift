@@ -2,25 +2,25 @@
 //  CardEnabledEnvironmentKey.swift
 //  OCKSample
 //
-//  Created by Student on 3/24/26.
+//  Created by Jai Shah on 11/03/26.
 //  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
 import SwiftUI
 
 private struct CardEnabledEnvironmentKey: EnvironmentKey {
-    nonisolated(unsafe) static var defaultValue = true
+	nonisolated(unsafe) static var defaultValue = true
 }
 
 extension EnvironmentValues {
-    var isCardEnabled: Bool {
-        get { self[CardEnabledEnvironmentKey.self] }
-        set { self[CardEnabledEnvironmentKey.self] = newValue }
-    }
+	var isCardEnabled: Bool {
+		get { self[CardEnabledEnvironmentKey.self] }
+		set { self[CardEnabledEnvironmentKey.self] = newValue }
+	}
 }
 
 extension View {
-    func cardEnabled(_ enabled: Bool) -> some View {
-        return self.environment(\.isCardEnabled, enabled)
-    }
+	func cardEnabled(_ enabled: Bool) -> some View {
+		return self.environment(\.isCardEnabled, enabled)
+	}
 }
