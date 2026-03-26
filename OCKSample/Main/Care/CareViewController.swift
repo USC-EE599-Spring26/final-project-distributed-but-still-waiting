@@ -371,39 +371,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         return surveyViewController
     }
 
-    private func researchSurveyViewController(
-            query: OCKEventQuery,
-            task: OCKTask
-        ) -> UIViewController? {
-
-            guard let steps = task.surveySteps else {
-                return nil
-            }
-
-            let surveyViewController = EventQueryContentView<ResearchSurveyView>(
-                query: query
-            ) {
-                EventQueryContentView<ResearchCareForm>(
-                    query: query
-                ) {
-                    ForEach(steps) { step in
-                        ResearchFormStep(
-                            title: task.title,
-                            subtitle: task.instructions
-                        ) {
-                            ForEach(step.questions) { question in
-                                question.view()
-                            }
-                        }
-                    }
-                }
-            }
-            .padding(.vertical, swiftUIPadding)
-            .formattedHostingController()
-
-            return surveyViewController
-        }
-
     private func appendTasks(
         _ tasks: [any OCKAnyTask],
         to listViewController: OCKListViewController,
