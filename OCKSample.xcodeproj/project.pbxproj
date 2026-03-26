@@ -30,11 +30,6 @@
 		3FF6C8672F72A23F00C49E6D /* ResearchKitSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF6C85B2F72A18A00C49E6D /* ResearchKitSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FF6C8692F72A24B00C49E6D /* ResearchKitSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF6C85B2F72A18A00C49E6D /* ResearchKitSwiftUI.framework */; };
 		3FF6C86A2F72A24B00C49E6D /* ResearchKitSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF6C85B2F72A18A00C49E6D /* ResearchKitSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3FF6C87F2F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
-		3FF6C8802F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
-		3FF6C8812F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
-		3FF6C8832F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
-		3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
 		3FF6C8862F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
 		3FF6C8872F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
 		5173CB8A23C3A846007655A0 /* OCKSampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5173CB8923C3A846007655A0 /* OCKSampleUITests.swift */; };
@@ -426,8 +421,6 @@
 		3FF6C7932F729BC200C49E6D /* CareTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareTask.swift; sourceTree = "<group>"; };
 		3FF6C7F12F72A0AB00C49E6D /* ResearchKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ResearchKit.xcodeproj; path = ResearchKit/ResearchKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		3FF6C8262F72A15900C49E6D /* ResearchKitSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ResearchKitSwiftUI.xcodeproj; path = ResearchKit/ResearchKitSwiftUI/ResearchKitSwiftUI.xcodeproj; sourceTree = SOURCE_ROOT; };
-		3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEnabledEnvironmentKey.swift; sourceTree = "<group>"; };
-		3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomCardView.swift; sourceTree = "<group>"; };
 		3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyCardView.swift; sourceTree = "<group>"; };
 		5173CB8723C3A846007655A0 /* OCKSampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OCKSampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5173CB8923C3A846007655A0 /* OCKSampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCKSampleUITests.swift; sourceTree = "<group>"; };
@@ -1336,7 +1329,6 @@
 				707D294E2DCBE68500980253 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				91F7B9A22F626E5A008A2482 /* MyCustomCardView.swift in Sources */,
 				707D294F2DCBE68500980253 /* OCKStore+SampleData.swift in Sources */,
-				3FF6C8832F72B37700C49E6D /* MyCustomCardView.swift in Sources */,
 				707D29502DCBE68500980253 /* TaskID.swift in Sources */,
 				707D29512DCBE68500980253 /* CareView.swift in Sources */,
 				707D29522DCBE68500980253 /* AppDelegateKey.swift in Sources */,
@@ -1368,7 +1360,6 @@
 				3FE2E9C32F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
 				91F7B9982F626E08008A2482 /* CardEnabledEnvironmentKey.swift in Sources */,
 				707D29672DCBE68500980253 /* ContactView.swift in Sources */,
-				3FF6C87F2F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
 				707D29682DCBE68500980253 /* NoHighlightStyle.swift in Sources */,
 				707D29692DCBE68500980253 /* LocalSyncSessionDelegate.swift in Sources */,
 				3FF6C7952F729BC400C49E6D /* CareTask.swift in Sources */,
@@ -1407,7 +1398,6 @@
 				918FDEB8271B49060045A0EF /* Logger.swift in Sources */,
 				91AD923B24A4C42D00925D4D /* CareView.swift in Sources */,
 				70F921A927CA9A4000368CEC /* CustomStylerKey.swift in Sources */,
-				3FF6C8802F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
 				7099D20629E98DFF0037CD8E /* TaskID.swift in Sources */,
 				91F7B9992F626E08008A2482 /* CardEnabledEnvironmentKey.swift in Sources */,
 				7075151E28DE1A8300A57A0C /* MainView.swift in Sources */,
@@ -1481,7 +1471,6 @@
 				70F921A827CA9A3A00368CEC /* CustomStylerKey.swift in Sources */,
 				91F7B9A32F626E5A008A2482 /* MyCustomCardView.swift in Sources */,
 				70221F3428D8ABBE00971195 /* AppDelegate+UIApplicationDelegate.swift in Sources */,
-				3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */,
 				9169381D271B650700A634ED /* ColorStyler.swift in Sources */,
 				E72B2C0A226939E3009A9438 /* AppDelegate.swift in Sources */,
 				7036E4C4256E0A48006E9A3C /* CareView.swift in Sources */,

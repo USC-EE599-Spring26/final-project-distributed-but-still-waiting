@@ -142,10 +142,7 @@ extension OCKStore {
         energy.priority = 4
         energy.card = .customEnergy
 
-        // let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: nil)
         let ph9 = createPH9SurveyTask(carePlanUUID: nil)
-
-        let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: nil)
 
         _ = try await addTasksIfNotPresent(
             [
