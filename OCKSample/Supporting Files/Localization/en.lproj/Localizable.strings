@@ -124,6 +124,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "QUALITY_OF_LIFE_TIME" = "Since using the app, have you felt more flexible in managing your time?";
 "QUALITY_OF_LIFE_STRESS" = "How would you score your stress level?";
 "QUALITY_OF_LIFE_STRESS_DETAIL" = "0 is no stress, 10 is extremely high stress.";
+"QUALITY_OF_LIFE_SLEEP" = "How well did you sleep?";
+"QUALITY_OF_LIFE_SLEEP_DETAIL" = "0 is restless, 10 is very restful";
+"QUALITY_OF_LIFE_ENERGY" = "Current Energy Level";
+"QUALITY_OF_LIFE_ENERGY_DETAIL" = "How energetic do you feel right now?";
+"QUALITY_OF_LIFE_SOCIAL" = "Did you connect with a friend or family member today?";
+
 "ANSWER_YES" = "Yes";
 "ANSWER_NO" = "No";
 
