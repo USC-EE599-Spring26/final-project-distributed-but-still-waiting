@@ -9,6 +9,4 @@
 import Foundation
 import CareKitStore
 
-extension OCKTask: CareTask {
-
-}
+extension OCKTask: CareTask {}

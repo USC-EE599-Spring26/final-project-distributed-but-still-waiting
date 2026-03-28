@@ -19,32 +19,32 @@ extension OCKHealthKitPassthroughStore {
 	) async throws {
 
         let countUnit = HKUnit.count()
-        let sleepDurationTargetValue = OCKOutcomeValue(
+        let sleepResultTargetValue = OCKOutcomeValue(
             8.0,
             units: countUnit.unitString
         )
-        let sleepDurationTargetValues = [ sleepDurationTargetValue ]
-        let sleepDurationSchedule = OCKSchedule.dailyAtTime(
+        let sleepResultTargetValues = [ sleepResultTargetValue ]
+        let sleepResultSchedule = OCKSchedule.dailyAtTime(
             hour: 0,
             minutes: 0,
             start: startDate,
             end: nil,
             text: nil,
             duration: .allDay,
-            targetValues: sleepDurationTargetValues
+            targetValues: sleepResultTargetValues
         )
-        var sleepDuration = OCKHealthKitTask(
-            id: TaskID.sleepDuration,
-            title: String(localized: "sleepDuration"),
+        var sleepResult = OCKHealthKitTask(
+            id: TaskID.sleepResult,
+            title: String(localized: "SLEEP_RESULT"),
             carePlanUUID: nil,
-            schedule: sleepDurationSchedule,
+            schedule: sleepResultSchedule,
             healthKitLinkage: OCKHealthKitLinkage(
-                quantityIdentifier: .stepCount,
-                quantityType: .cumulative,
-                unit: countUnit
+                categoryIdentifier: .sleepAnalysis
             )
         )
-        sleepDuration.asset = "figure.walk"
+        sleepResult.asset = "figure.walk"
+        sleepResult.card = .labeledValue
+        sleepResult.priority = 0
 
         let ovulationTestResultSchedule = OCKSchedule.dailyAtTime(
             hour: 8,
@@ -65,7 +65,9 @@ extension OCKHealthKitPassthroughStore {
             )
         )
         ovulationTestResult.asset = "circle.dotted"
-        let tasks = [ sleepDuration, ovulationTestResult ]
+        ovulationTestResult.card = .labeledValue
+        ovulationTestResult.priority = 1
+        let tasks = [ sleepResult, ovulationTestResult ]
 
         _ = try await addTasksIfNotPresent(tasks)
 

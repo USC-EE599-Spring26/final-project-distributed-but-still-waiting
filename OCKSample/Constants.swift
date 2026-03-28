@@ -47,5 +47,5 @@ enum Constants {
     static let userTypeKey = "userType"
     static let appName = "ParseCareKitSample"
     static let card = "card"
-    static let priority = "priority"
+    static let priority = "priority" // Priority to represent which card should be first to display
 }

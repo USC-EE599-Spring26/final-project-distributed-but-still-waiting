@@ -40,7 +40,7 @@ extension OCKStore {
 			)
 
 			switch event.task.id {
-			case TaskID.lexapro, TaskID.cbtExercises, TaskID.stretch:
+			case TaskID.lexapro, TaskID.cbtExercises, TaskID.energy:
 				let randomBool: Bool = .random()
 				guard randomBool else { return nil }
 				let outcomeValue = createOutcomeValue(
