@@ -34,6 +34,10 @@ import CareKitStore
 import CareKitUI
 import os.log
 import SwiftUI
+#if canImport(ResearchKit) && canImport(ResearchKitUI)
+import ResearchKit
+import ResearchKitUI
+#endif
 import UIKit
 import ResearchKitSwiftUI
 // swiftlint:disable type_body_length
@@ -160,36 +164,89 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
         // Always call this method to ensure dates for
         // queries are correct.
-        let date = modifyDateIfNeeded(date)
-        let isCurrentDay = isSameDay(as: date)
-        #if os(iOS)
-        // Only show the tip view on the current date
-        if isCurrentDay {
-            if Calendar.current.isDate(date, inSameDayAs: Date()) {
-                // Add a non-CareKit view into the list
-                let tipTitle = "Benefits of CBT Exercises"
-                let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
-                let tipView = TipView()
-                tipView.headerView.titleLabel.text = tipTitle
-                tipView.headerView.detailLabel.text = tipText
-                tipView.imageView.image = UIImage(named: "NeuroMalleaBackground")
-                tipView.customStyle = CustomStylerKey.defaultValue
-                listViewController.appendView(tipView, animated: false)
+//        let date = modifyDateIfNeeded(date)
+//        let isCurrentDay = isSameDay(as: date)
+//        #if os(iOS)
+//        // Only show the tip view on the current date
+//        if isCurrentDay {
+//            if Calendar.current.isDate(date, inSameDayAs: Date()) {
+//                // Add a non-CareKit view into the list
+//                let tipTitle = "Benefits of CBT Exercises"
+//                let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
+//                let tipView = TipView()
+//                tipView.headerView.titleLabel.text = tipTitle
+//                tipView.headerView.detailLabel.text = tipText
+//                tipView.imageView.image = UIImage(named: "NeuroMalleaBackground")
+//                tipView.customStyle = CustomStylerKey.defaultValue
+//                listViewController.appendView(tipView, animated: false)
+//            }
+//        }
+//        #endif
+//        fetchAndDisplayTasks(on: listViewController, for: date)
+//    }
+        Task {
+                    guard await Utility.checkIfOnboardingIsComplete() else {
+
+                        let onboardSurvey = Onboard()
+                        var query = OCKEventQuery(for: Date())
+                        query.taskIDs = [Onboard.identifier()]
+                        let onboardCard = OCKSurveyTaskViewController(
+                            eventQuery: query,
+                            store: self.store,
+                            survey: onboardSurvey.createSurvey(),
+                            extractOutcome: { _ in
+                                // Need to call reload sometime in the future
+                                // since the OCKSurveyTaskViewControllerDelegate
+                                // is broken.
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.reload()
+                                }
+                                return [OCKOutcomeValue(Date())]
+                            }
+                        )
+                        onboardCard.surveyDelegate = self
+
+                        listViewController.clear()
+                        listViewController.appendViewController(
+                            onboardCard,
+                            animated: false
+                        )
+                        self.isLoading = false
+                        return
+                    }
+
+                    // Always call this method to ensure dates for
+                    // queries are correct.
+                    let date = modifyDateIfNeeded(date)
+
+                    let isCurrentDay = isSameDay(as: date)
+
+                    // Only show the tip view on the current date
+                    if isCurrentDay {
+                        if Calendar.current.isDate(date, inSameDayAs: Date()) {
+                            // Add a non-CareKit view into the list
+                            let tipTitle = "Benefits of exercising"
+                            let tipText = "Learn how activity can promote a healthy pregnancy."
+                            let tipView = TipView()
+                            tipView.headerView.titleLabel.text = tipTitle
+                            tipView.headerView.detailLabel.text = tipText
+                            tipView.imageView.image = UIImage(named: "exercise.jpg")
+                            tipView.customStyle = CustomStylerKey.defaultValue
+                            listViewController.appendView(tipView, animated: false)
+                        }
+                    }
+
+                    await fetchAndDisplayTasks(on: listViewController, for: date)
+                }
             }
-        }
-        #endif
-        fetchAndDisplayTasks(on: listViewController, for: date)
-    }
 
     private func fetchAndDisplayTasks(
         on listViewController: OCKListViewController,
         for date: Date
-    ) {
-        Task {
+    ) async {
             let tasks = await self.fetchTasks(on: date)
             appendTasks(tasks, to: listViewController, date: date)
         }
-    }
 
     private func fetchTasks(on date: Date) async -> [any OCKAnyTask] {
         var query = OCKTaskQuery(for: date)
@@ -205,7 +262,8 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                         let orderedTasks = orderedPriorityTasks.compactMap { orderedPriorityTask in
                             tasks.first(where: { $0.id == orderedPriorityTask.id })
                         }
-                        return orderedTasks
+            // hide the onboarding task
+                        return orderedTasks.filter { $0.id != Onboard.identifier() }
         } catch {
             Logger.feed.error("Could not fetch tasks: \(error, privacy: .public)")
             return []
@@ -292,6 +350,25 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             }
 
             return [card]
+
+#if canImport(ResearchKit)
+            case .uiKitSurvey:
+                guard let surveyTask = task as? OCKTask,
+                      let survey = surveyTask.uiKitSurvey else {
+                    Logger.feed.error("Can only use a survey for an \"OCKTask\", not \(task.id)")
+                    return nil
+                }
+
+                let surveyCard = OCKSurveyTaskViewController(
+                    eventQuery: query,
+                    store: self.store,
+                    survey: survey.type().createSurvey(),
+                    viewSynchronizer: SurveyViewSynchronizer(),
+                    extractOutcome: survey.type().extractAnswers
+                )
+                surveyCard.surveyDelegate = self
+                return [surveyCard]
+            #endif
 
         case .custom:
             let card = EventQueryView<MyCustomCardView>(
@@ -403,6 +480,22 @@ private extension CareViewController {
         return date.endOfDay
     }
 }
+
+#if canImport(ResearchKit)
+extension CareViewController: OCKSurveyTaskViewControllerDelegate {
+
+    /*
+    func surveyTask(
+        viewController: OCKSurveyTaskViewController,
+        for task: OCKAnyTask,
+        didFinish result: Result<ORKTaskFinishReason, Error>
+    ) {
+        if case let .success(reason) = result, reason == .completed {
+            reload()
+        }
+    } */
+}
+#endif
 
 private extension View {
     /// Convert SwiftUI view to UIKit view.
