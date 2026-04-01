@@ -45,14 +45,14 @@ import UIKit
 
 @MainActor
 final class CareViewController: OCKDailyPageViewController, @unchecked Sendable {
-
+    
     private var isSyncing = false
     private var isLoading = false
     private let swiftUIPadding: CGFloat = 15
     private var style: Styler {
         CustomStylerKey.defaultValue
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -87,15 +87,15 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             object: nil
         )
     }
-
+    
     @objc private func updateSynchronizationProgress(
         _ notification: Notification
     ) {
         guard let receivedInfo = notification.userInfo as? [String: Any],
-            let progress = receivedInfo[Constants.progressUpdate] as? Int else {
+              let progress = receivedInfo[Constants.progressUpdate] as? Int else {
             return
         }
-
+        
         switch progress {
         case 100:
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -104,7 +104,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                 action: #selector(self.synchronizeWithRemote)
             )
             self.navigationItem.rightBarButtonItem?.tintColor = self.view.tintColor
-
+            
             // Give sometime for the user to see 100
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self else { return }
@@ -124,7 +124,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             self.navigationItem.rightBarButtonItem?.tintColor = self.view.tintColor
         }
     }
-
+    
     @objc private func synchronizeWithRemote() {
         guard !isSyncing else {
             return
@@ -144,14 +144,14 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             }
         }
     }
-
+    
     @objc private func reloadView(_ notification: Notification? = nil) {
         guard !isLoading else {
             return
         }
         self.reload()
     }
-
+    
     /*
      This will be called each time the selected date changes.
      Use this as an opportunity to rebuild the content shown to the user.
@@ -162,84 +162,88 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         for date: Date
     ) {
         self.isLoading = true
-
+        
         // Always call this method to ensure dates for
         // queries are correct.
-//        let date = modifyDateIfNeeded(date)
-//        let isCurrentDay = isSameDay(as: date)
-//        #if os(iOS)
-//        // Only show the tip view on the current date
-//        if isCurrentDay {
-//            if Calendar.current.isDate(date, inSameDayAs: Date()) {
-//                // Add a non-CareKit view into the list
-//                let tipTitle = "Benefits of CBT Exercises"
-//                let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
-//                let tipView = TipView()
-//                tipView.headerView.titleLabel.text = tipTitle
-//                tipView.headerView.detailLabel.text = tipText
-//                tipView.imageView.image = UIImage(named: "NeuroMalleaBackground")
-//                tipView.customStyle = CustomStylerKey.defaultValue
-//                listViewController.appendView(tipView, animated: false)
-//            }
-//        }
-//        #endif
-//        fetchAndDisplayTasks(on: listViewController, for: date)
-//    }
+        //        let date = modifyDateIfNeeded(date)
+        //        let isCurrentDay = isSameDay(as: date)
+        //        #if os(iOS)
+        //        // Only show the tip view on the current date
+        //        if isCurrentDay {
+        //            if Calendar.current.isDate(date, inSameDayAs: Date()) {
+        //                // Add a non-CareKit view into the list
+        //                let tipTitle = "Benefits of CBT Exercises"
+        //                let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
+        //                let tipView = TipView()
+        //                tipView.headerView.titleLabel.text = tipTitle
+        //                tipView.headerView.detailLabel.text = tipText
+        //                tipView.imageView.image = UIImage(named: "NeuroMalleaBackground")
+        //                tipView.customStyle = CustomStylerKey.defaultValue
+        //                listViewController.appendView(tipView, animated: false)
+        //            }
+        //        }
+        //        #endif
+        //        fetchAndDisplayTasks(on: listViewController, for: date)
+        //    }
+
         Task {
-                    guard await Utility.checkIfOnboardingIsComplete() else {
-
-                        let onboardSurvey = Onboard()
-                        var query = OCKEventQuery(for: Date())
-                        query.taskIDs = [Onboard.identifier()]
-                        let onboardCard = OCKSurveyTaskViewController(
-                            eventQuery: query,
-                            store: self.store,
-                            survey: onboardSurvey.createSurvey(),
-                            extractOutcome: { _ in
-                                // Need to call reload sometime in the future
-                                // since the OCKSurveyTaskViewControllerDelegate
-                                // is broken.
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    self.reload()
-                                }
-                                return [OCKOutcomeValue(Date())]
-                            }
-                        )
-                        onboardCard.surveyDelegate = self
-
-                        listViewController.clear()
-                        listViewController.appendViewController(
-                            onboardCard,
-                            animated: false
-                        )
-                        self.isLoading = false
-                        return
-                    }
-
-                    // Always call this method to ensure dates for
-                    // queries are correct.
-                    let date = modifyDateIfNeeded(date)
-
-                    let isCurrentDay = isSameDay(as: date)
-
-                    // Only show the tip view on the current date
-                    if isCurrentDay {
-                        if Calendar.current.isDate(date, inSameDayAs: Date()) {
-                            // Add a non-CareKit view into the list
-                            let tipTitle = "Benefits of exercising"
-                            let tipText = "Learn how activity can promote a healthy pregnancy."
-                            let tipView = TipView()
-                            tipView.headerView.titleLabel.text = tipTitle
-                            tipView.headerView.detailLabel.text = tipText
-                            tipView.imageView.image = UIImage(named: "exercise.jpg")
-                            tipView.customStyle = CustomStylerKey.defaultValue
-                            listViewController.appendView(tipView, animated: false)
+#if canImport(ResearchKit)
+            guard await Utility.checkIfOnboardingIsComplete() else {
+                
+                let onboardSurvey = Onboard()
+                var query = OCKEventQuery(for: Date())
+                query.taskIDs = [Onboard.identifier()]
+                let onboardCard = OCKSurveyTaskViewController(
+                    eventQuery: query,
+                    store: self.store,
+                    survey: onboardSurvey.createSurvey(),
+                    extractOutcome: { _ in
+                        // Need to call reload sometime in the future
+                        // since the OCKSurveyTaskViewControllerDelegate
+                        // is broken.
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.reload()
                         }
+                        return [OCKOutcomeValue(Date())]
                     }
-
-                    await fetchAndDisplayTasks(on: listViewController, for: date)
-                }
+                )
+                onboardCard.surveyDelegate = self
+                
+                listViewController.clear()
+                listViewController.appendViewController(
+                    onboardCard,
+                    animated: false
+                )
+                self.isLoading = false
+                return
             }
+            
+            
+            // Always call this method to ensure dates for
+            // queries are correct.
+            let date = modifyDateIfNeeded(date)
+            
+            let isCurrentDay = isSameDay(as: date)
+            
+            // Only show the tip view on the current date
+            if isCurrentDay {
+                if Calendar.current.isDate(date, inSameDayAs: Date()) {
+                    // Add a non-CareKit view into the list
+                    let tipTitle = "Benefits of exercising"
+                    let tipText = "Learn how activity can promote a healthy pregnancy."
+                    let tipView = TipView()
+                    tipView.headerView.titleLabel.text = tipTitle
+                    tipView.headerView.detailLabel.text = tipText
+                    tipView.imageView.image = UIImage(named: "exercise.jpg")
+                    tipView.customStyle = CustomStylerKey.defaultValue
+                    listViewController.appendView(tipView, animated: false)
+                }
+            }#endif
+            
+            await fetchAndDisplayTasks(on: listViewController, for: date)
+        }
+    }
+    
 
     private func fetchAndDisplayTasks(
         on listViewController: OCKListViewController,
@@ -376,7 +380,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         } else if let healthTask = task as? OCKHealthKitTask {
             switch healthTask.card {
 
-#if canImport(ResearchKit)
+#if canImport(ResearchKit) && canImport(ResearchKitUI)
             case .uiKitSurvey:
                 guard let surveyTask = task as? OCKTask,
                       let survey = surveyTask.uiKitSurvey else {
@@ -492,7 +496,7 @@ private extension CareViewController {
     }
 }
 
-#if canImport(ResearchKit)
+#if canImport(ResearchKit) && canImport(ResearchKitUI)
 extension CareViewController: OCKSurveyTaskViewControllerDelegate {
 
     /*
