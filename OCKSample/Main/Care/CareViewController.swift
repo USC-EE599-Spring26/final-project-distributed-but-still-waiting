@@ -395,13 +395,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                 return [surveyCard]
             #endif
 
-        case .custom:
-            let card = EventQueryView<MyCustomCardView>(
-                query: query
-            )
-            .padding(.vertical, swiftUIPadding)
-            .formattedHostingController()
-
             case .numericProgress:
                 let card = EventQueryView<NumericProgressTaskView>(
                     query: query
@@ -416,7 +409,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         } else {
             return nil
         }
-
     }
 
     private func researchSurveyViewController(

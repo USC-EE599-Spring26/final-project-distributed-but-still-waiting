@@ -32,7 +32,6 @@
 		3FF6C86A2F72A24B00C49E6D /* ResearchKitSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF6C85B2F72A18A00C49E6D /* ResearchKitSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FF6C87F2F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
 		3FF6C8802F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
-		3FF6C8812F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
 		3FF6C8832F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
 		3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
 		3FF6C8862F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
@@ -238,27 +237,14 @@
 		91B29CBB2F7C607D00089F9F /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B29CA22F7C532200089F9F /* Survey.swift */; };
 		91B29CBC2F7C608100089F9F /* Surveyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B29CA52F7C532D00089F9F /* Surveyable.swift */; };
 		91B29CBD2F7C609E00089F9F /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B29C9F2F7C531100089F9F /* RangeOfMotion.swift */; };
-		91F7B9672F62581C008A2482 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B92B2F6256A5008A2482 /* ResearchKit.framework */; platformFilter = ios; };
-		91F7B9682F62581C008A2482 /* ResearchKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B92B2F6256A5008A2482 /* ResearchKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		91F7B9692F62581C008A2482 /* ResearchKitActiveTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9312F6256A5008A2482 /* ResearchKitActiveTask.framework */; platformFilter = ios; };
-		91F7B96A2F62581C008A2482 /* ResearchKitActiveTask.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9312F6256A5008A2482 /* ResearchKitActiveTask.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		91F7B96B2F62581C008A2482 /* ResearchKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B92F2F6256A5008A2482 /* ResearchKitUI.framework */; platformFilter = ios; };
-		91F7B96C2F62581C008A2482 /* ResearchKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B92F2F6256A5008A2482 /* ResearchKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		91F7B96D2F62581C008A2482 /* ResearchKitSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */; platformFilters = (ios, xros, ); };
-		91F7B96E2F62581C008A2482 /* ResearchKitSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		91F7B96F2F62583C008A2482 /* ResearchKitSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */; };
-		91F7B9702F62583C008A2482 /* ResearchKitSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		91F7B9722F625856008A2482 /* ResearchKitSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */; };
-		91F7B9732F625856008A2482 /* ResearchKitSwiftUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		91F7B9972F626E08008A2482 /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F7B9962F626E08008A2482 /* CardEnabledEnvironmentKey.swift */; };
+		91B29CE62F7C9F0D00089F9F /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
+		91B29CE72F7CA02400089F9F /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C37848228F887800E982D8 /* TipView.swift */; };
+		91B29CE82F7CA02400089F9F /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C37848228F887800E982D8 /* TipView.swift */; };
 		91F7B9982F626E08008A2482 /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F7B9962F626E08008A2482 /* CardEnabledEnvironmentKey.swift */; };
-		91F7B9992F626E08008A2482 /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F7B9962F626E08008A2482 /* CardEnabledEnvironmentKey.swift */; };
 		91F7B9A22F626E5A008A2482 /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F7B9A12F626E5A008A2482 /* MyCustomCardView.swift */; };
-		91F7B9A32F626E5A008A2482 /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F7B9A12F626E5A008A2482 /* MyCustomCardView.swift */; };
 		E72B2C0A226939E3009A9438 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72B2C09226939E3009A9438 /* AppDelegate.swift */; };
 		E72B2C14226939E4009A9438 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72B2C12226939E4009A9438 /* LaunchScreen.storyboard */; };
 		E7440E4F229477F7007AD30A /* CareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7440E4E229477F7007AD30A /* CareViewController.swift */; };
-		E7C37849228F887800E982D8 /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C37848228F887800E982D8 /* TipView.swift */; };
 		E7C4CA0B22809AD500ECC3D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7C4CA0A22809AD500ECC3D7 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -479,8 +465,6 @@
 		91B29CAC2F7C58E800089F9F /* CarePlanID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarePlanID.swift; sourceTree = "<group>"; };
 		91B29CB12F7C5AE400089F9F /* OCKAnyEvent+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKAnyEvent+Custom.swift"; sourceTree = "<group>"; };
 		91B29CB62F7C5B5D00089F9F /* SurveyViewSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyViewSynchronizer.swift; sourceTree = "<group>"; };
-		91F7B9032F625676008A2482 /* ResearchKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ResearchKit.xcodeproj; path = ResearchKit/ResearchKit.xcodeproj; sourceTree = SOURCE_ROOT; };
-		91F7B9372F6257A3008A2482 /* ResearchKitSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ResearchKitSwiftUI.xcodeproj; path = ResearchKit/ResearchKitSwiftUI/ResearchKitSwiftUI.xcodeproj; sourceTree = SOURCE_ROOT; };
 		91F7B9962F626E08008A2482 /* CardEnabledEnvironmentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEnabledEnvironmentKey.swift; sourceTree = "<group>"; };
 		91F7B9A12F626E5A008A2482 /* MyCustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomCardView.swift; sourceTree = "<group>"; };
 		E72B2C06226939E3009A9438 /* OCKSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OCKSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -566,7 +550,7 @@
 			isa = PBXGroup;
 			children = (
 				3FF6C8192F72A0B900C49E6D /* ResearchKit.framework */,
-				3FF6C81B2F72A0B900C49E6D /* .xctest */,
+				3FF6C81B2F72A0B900C49E6D /* ResearchKitTests.xctest */,
 				3FF6C81D2F72A0B900C49E6D /* ResearchKitUI.framework */,
 				3FF6C81F2F72A0B900C49E6D /* ResearchKitActiveTask.framework */,
 			);
@@ -749,7 +733,6 @@
 				91B29CB52F7C5B2C00089F9F /* UIKit */,
 				3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */,
 				3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */,
-				E7C37848228F887800E982D8 /* TipView.swift */,
 				70E3422D2DB0626A005124F9 /* Modifiers */,
 			);
 			path = Cards;
@@ -809,6 +792,8 @@
 			children = (
 				911AAF622F5A27C000ADCBCD /* ManageTasksView.swift */,
 				3FE2E9B92F55F36E00462DA1 /* DimensionStyler.swift */,
+				91F7B9962F626E08008A2482 /* CardEnabledEnvironmentKey.swift */,
+				91F7B9A12F626E5A008A2482 /* MyCustomCardView.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -928,30 +913,10 @@
 		91B29CB52F7C5B2C00089F9F /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				91B29CB62F7C5B5D00089F9F /* SurveyViewSynchronizer.swift */,
 				E7C37848228F887800E982D8 /* TipView.swift */,
+				91B29CB62F7C5B5D00089F9F /* SurveyViewSynchronizer.swift */,
 			);
 			path = UIKit;
-			sourceTree = "<group>";
-		};
-		91F7B9232F6256A5008A2482 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				91F7B92B2F6256A5008A2482 /* ResearchKit.framework */,
-				91F7B92D2F6256A5008A2482 /* ResearchKitTests.xctest */,
-				91F7B92F2F6256A5008A2482 /* ResearchKitUI.framework */,
-				91F7B9312F6256A5008A2482 /* ResearchKitActiveTask.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		91F7B95A2F6257D1008A2482 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				91F7B9642F6257D1008A2482 /* ResearchKitSwiftUI.framework */,
-				91F7B9662F6257D1008A2482 /* ResearchKitSwiftUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		E72B2BFD226939E3009A9438 = {
@@ -1198,7 +1163,7 @@
 			remoteRef = 3FF6C8182F72A0B900C49E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3FF6C81B2F72A0B900C49E6D /* .xctest */ = {
+		3FF6C81B2F72A0B900C49E6D /* ResearchKitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ResearchKitTests.xctest;
@@ -1427,6 +1392,7 @@
 				7075151E28DE1A8300A57A0C /* MainView.swift in Sources */,
 				707D28D02DCA8AAB00980253 /* OCKStore+SampleData.swift in Sources */,
 				70B8E0A72F0EC1CA00440FCA /* Mutex.swift in Sources */,
+				91B29CE82F7CA02400089F9F /* TipView.swift in Sources */,
 				911AAF5A2F5A26CA00ADCBCD /* OCKTask+Card.swift in Sources */,
 				70A98D62278A2683009B58F2 /* Styler.swift in Sources */,
 				91693818271B5E1600A634ED /* Constants.swift in Sources */,
@@ -1454,7 +1420,6 @@
 				7099D20929E98E200037CD8E /* UserType.swift in Sources */,
 				918FDEB9271B493A0045A0EF /* Installation.swift in Sources */,
 				91AD923F24A4C42D00925D4D /* NotificationController.swift in Sources */,
-				913868692F5996C800B9BD74 /* CareTask.swift in Sources */,
 				91B29CBD2F7C609E00089F9F /* RangeOfMotion.swift in Sources */,
 				70CF66E528E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */,
 				70F03A9C27860A2000E5AFB4 /* OCKStore.swift in Sources */,
@@ -1487,10 +1452,12 @@
 				91B29CAB2F7C584D00089F9F /* OCKTask+ResearchKitSwiftUI.swift in Sources */,
 				911AAF612F5A276C00ADCBCD /* DimensionStyler.swift in Sources */,
 				3FF6C8862F731AD200C49E6D /* EnergyCardView.swift in Sources */,
+				91B29CE62F7C9F0D00089F9F /* CardEnabledEnvironmentKey.swift in Sources */,
 				7099D20829E98E200037CD8E /* UserType.swift in Sources */,
 				70F921AC27CABE3000368CEC /* SessionDelegate.swift in Sources */,
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
 				7055723F2DC1E63A008E5B0A /* InsightsView.swift in Sources */,
+				91B29CE72F7CA02400089F9F /* TipView.swift in Sources */,
 				91B29CA62F7C532D00089F9F /* Surveyable.swift in Sources */,
 				7036E64025717F85006E9A3C /* Constants.swift in Sources */,
 				7099D20529E98DFF0037CD8E /* TaskID.swift in Sources */,
@@ -1521,7 +1488,6 @@
 				3FBBC2812F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */,
 				7099D1FF29E98D900037CD8E /* AppError.swift in Sources */,
 				91B29CAE2F7C58E800089F9F /* CarePlanID.swift in Sources */,
-				91F7B9972F626E08008A2482 /* CardEnabledEnvironmentKey.swift in Sources */,
 				70F0EFE828C2EC050005B5A2 /* OCKSampleApp.swift in Sources */,
 				918FDEB7271B41FF0045A0EF /* Logger.swift in Sources */,
 				70221F2A28D7BE0600971195 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,
@@ -1530,7 +1496,6 @@
 				91693822271B897200A634ED /* Utility.swift in Sources */,
 				707CC718254DA91900116728 /* OCKLocalization.swift in Sources */,
 				913866732F540AB200B9BD74 /* CareKitTaskViewModel.swift in Sources */,
-				E7C37849228F887800E982D8 /* TipView.swift in Sources */,
 				3FE2E9BF2F57AE4200462DA1 /* AnimationStyler.swift in Sources */,
 				70077597252228E900EC0EDA /* User.swift in Sources */,
 				913866762F540C5400B9BD74 /* CareKitCard.swift in Sources */,
