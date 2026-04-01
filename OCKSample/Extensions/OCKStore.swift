@@ -198,8 +198,8 @@ extension OCKStore {
         )
         lexapro.instructions = String(localized: "LEXAPRO_INSTRUCTIONS")
         lexapro.asset = "pills.fill"
+        lexapro.card = .checklist
         lexapro.priority = 1
-        lexapro.card = .custom
 
         let cbtExerciseElement = OCKScheduleElement(
             start: beforeBreakfast,
@@ -217,8 +217,8 @@ extension OCKStore {
         )
         cbtExercises.impactsAdherence = true
         cbtExercises.instructions = String(localized: "CBT_INSTRUCTIONS")
+        cbtExercises.card = .instruction
         cbtExercises.priority = 2
-        cbtExercises.card = .button
 
         let depressionSchedule = OCKSchedule(
             composing: [
@@ -242,36 +242,37 @@ extension OCKStore {
         depression.impactsAdherence = false
         depression.instructions = String(localized: "DEPRESSION_INSTRUCTIONS")
         depression.asset = "bed.double"
+        depression.card = .instruction
         depression.priority = 3
-        depression.card = .simple
 
-        let stretchElement = OCKScheduleElement(
+        let energyElement = OCKScheduleElement(
             start: beforeBreakfast,
             end: nil,
-            interval: DateComponents(day: 1)
+            interval: DateComponents(hour: 3)
         )
-        let stretchSchedule = OCKSchedule(
-            composing: [stretchElement]
+        let energySchedule = OCKSchedule(
+            composing: [energyElement]
         )
-        var stretch = OCKTask(
-            id: TaskID.stretch,
-            title: String(localized: "STRETCH"),
-            carePlanUUID: carePlanUUIDs[.mentalHealth],
-            schedule: stretchSchedule
+        var energy = OCKTask(
+            id: TaskID.energy,
+            title: String(localized: "ENERGY"),
+            carePlanUUID: nil,
+            schedule: energySchedule
         )
-        stretch.impactsAdherence = true
-        stretch.asset = "figure.walk"
-        stretch.priority = 4
+        energy.impactsAdherence = true
+        energy.asset = "figure.flexibility"
+        energy.priority = 4
+        energy.card = .customEnergy
 
-        let qualityOfLife = createQualityOfLifeSurveyTask(carePlanUUID: carePlanUUIDs[.mentalHealth])
+        let ph9 = createPH9SurveyTask(carePlanUUID: nil)
 
         _ = try await addTasksIfNotPresent(
             [
                 depression,
                 lexapro,
                 cbtExercises,
-                stretch,
-                qualityOfLife
+                energy,
+                ph9
             ]
         )
         _ = try await addOnboardingTask(carePlanUUIDs[.mentalHealth])
@@ -327,26 +328,37 @@ extension OCKStore {
             ]
         )
     }
+
     func createQualityOfLifeSurveyTask(carePlanUUID: UUID?) -> OCKTask {
         let qualityOfLifeTaskId = TaskID.qualityOfLife
         let thisMorning = Calendar.current.startOfDay(for: Date())
         let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
         let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
-
         let qualityOfLifeElement = OCKScheduleElement(
             start: beforeBreakfast,
             end: nil,
             interval: DateComponents(day: 1)
         )
-        let qualityOfLifeSchedule = OCKSchedule(composing: [qualityOfLifeElement])
-
+        let qualityOfLifeSchedule = OCKSchedule(
+            composing: [qualityOfLifeElement]
+        )
         let textChoiceYesText = String(localized: "ANSWER_YES")
         let textChoiceNoText = String(localized: "ANSWER_NO")
+        let yesValue = "Yes"
+        let noValue = "No"
         let choices: [TextChoice] = [
-            .init(id: "\(qualityOfLifeTaskId)_0", choiceText: textChoiceYesText, value: "Yes"),
-            .init(id: "\(qualityOfLifeTaskId)_1", choiceText: textChoiceNoText, value: "No")
-        ]
+            .init(
+                id: "\(qualityOfLifeTaskId)_0",
+                choiceText: textChoiceYesText,
+                value: yesValue
+            ),
+            .init(
+                id: "\(qualityOfLifeTaskId)_1",
+                choiceText: textChoiceNoText,
+                value: noValue
+            )
 
+        ]
         let questionOne = SurveyQuestion(
             id: "\(qualityOfLifeTaskId)-managing-time",
             type: .multipleChoice,
@@ -355,9 +367,8 @@ extension OCKStore {
             textChoices: choices,
             choiceSelectionLimit: .single
         )
-
         let questionTwo = SurveyQuestion(
-            id: "\(qualityOfLifeTaskId)-stress",
+            id: qualityOfLifeTaskId,
             type: .slider,
             required: false,
             title: String(localized: "QUALITY_OF_LIFE_STRESS"),
@@ -365,54 +376,17 @@ extension OCKStore {
             integerRange: 0...10,
             sliderStepValue: 1
         )
-
-        let questionThree = SurveyQuestion(
-            id: "\(qualityOfLifeTaskId)-sleep",
-            type: .slider,
-            required: false,
-            title: String(localized: "QUALITY_OF_LIFE_SLEEP"),
-            detail: String(localized: "QUALITY_OF_LIFE_SLEEP_DETAIL"),
-            integerRange: 0...10,
-            sliderStepValue: 1
-        )
-
-        // 4. NEW: Energy Levels (Scale/Slider)
-        let questionFour = SurveyQuestion(
-            id: "\(qualityOfLifeTaskId)-energy",
-            type: .slider,
-            required: false,
-            title: String(localized: "QUALITY_OF_LIFE_ENERGY"),
-            detail: String(localized: "QUALITY_OF_LIFE_ENERGY_DETAIL"),
-            integerRange: 0...5,
-            sliderStepValue: 1
-        )
-
-        // 5. NEW: Social Interaction (Multiple Choice)
-        let questionFive = SurveyQuestion(
-            id: "\(qualityOfLifeTaskId)-social",
-            type: .multipleChoice,
-            required: true,
-            title: String(localized: "QUALITY_OF_LIFE_SOCIAL"),
-            textChoices: choices,
-            choiceSelectionLimit: .single
-        )
-
-        // Bundle all questions into the step
-        let questions = [questionOne, questionTwo, questionThree, questionFour, questionFive]
-
+        let questions = [questionOne, questionTwo]
         let stepOne = SurveyStep(
             id: "\(qualityOfLifeTaskId)-step-1",
             questions: questions
         )
-
-        // --- Task Creation ---
         var qualityOfLife = OCKTask(
-            id: "\(qualityOfLifeTaskId)-stress", // Note: Consider using just qualityOfLifeTaskId
-            title: String(localized: "Quality of Life"),
+            id: "\(qualityOfLifeTaskId)-stress",
+            title: String(localized: "QUALITY_OF_LIFE"),
             carePlanUUID: carePlanUUID,
             schedule: qualityOfLifeSchedule
         )
-
         qualityOfLife.impactsAdherence = true
         qualityOfLife.asset = "brain.head.profile"
         qualityOfLife.card = .survey
@@ -420,6 +394,88 @@ extension OCKStore {
         qualityOfLife.priority = 1
 
         return qualityOfLife
+    }
+
+    func createPH9SurveyTask(carePlanUUID: UUID?) -> OCKTask {
+        let ph9SurveyTaskId = TaskID.ph9
+        let thisMorning = Calendar.current.startOfDay(for: Date())
+        let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
+        let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
+        let ph9Element = OCKScheduleElement(
+            start: beforeBreakfast,
+            end: nil,
+            interval: DateComponents(day: 1)
+        )
+        let ph9SurveySchedule = OCKSchedule(
+            composing: [ph9Element]
+        )
+        let textChoiceDifficultText = String(localized: "ANSWER_DIFFICULT")
+        let textChoiceNotDifficultText = String(localized: "ANSWER_NOT_DIFFICULT")
+        let difficultValue = "Difficult"
+        let notDifficultValue = "NotDifficult"
+        let choices: [TextChoice] = [
+            .init(
+                id: "\(ph9SurveyTaskId)_0",
+                choiceText: textChoiceDifficultText,
+                value: difficultValue
+            ),
+            .init(
+                id: "\(ph9SurveyTaskId)_1",
+                choiceText: textChoiceNotDifficultText,
+                value: notDifficultValue
+            )
+
+        ]
+        let questionOne = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q1",
+            type: .slider,
+            required: false,
+            title: String(localized: "PH9_QUESTION1"),
+            integerRange: 0...3,
+            sliderStepValue: 1
+        )
+        let questionTwo = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q2",
+            type: .slider,
+            required: false,
+            title: String(localized: "PH9_QUESTION2"),
+            integerRange: 0...3,
+            sliderStepValue: 1
+        )
+        let questionThree = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q3",
+            type: .slider,
+            required: false,
+            title: String(localized: "PH9_QUESTION3"),
+            integerRange: 0...3,
+            sliderStepValue: 1
+        )
+        let questionFour = SurveyQuestion(
+            id: "\(ph9SurveyTaskId)-q4",
+            type: .multipleChoice,
+            required: true,
+            title: String(localized: "PH9_LAST_QUESTION"),
+            textChoices: choices,
+            choiceSelectionLimit: .single
+        )
+        let questions = [questionOne, questionTwo, questionThree, questionFour]
+        let stepOne = SurveyStep(
+            id: "\(ph9SurveyTaskId)-step-1",
+            questions: questions
+        )
+        var ph9Survey = OCKTask(
+            id: "\(ph9SurveyTaskId)-ph9",
+            title: String(localized: "PH9_SURVEY"),
+            carePlanUUID: carePlanUUID,
+            schedule: ph9SurveySchedule
+        )
+        ph9Survey.impactsAdherence = true
+        ph9Survey.asset = "brain.head.profile"
+        ph9Survey.card = .survey
+        ph9Survey.surveySteps = [stepOne]
+        ph9Survey.priority = 1
+
+        return ph9Survey
     }
 
     func addOnboardingTask(_ carePlanUUID: UUID? = nil) async throws -> [OCKTask] {
