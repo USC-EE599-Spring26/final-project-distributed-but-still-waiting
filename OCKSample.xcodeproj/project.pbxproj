@@ -8,6 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		3F3935152F75E2FA004180FA /* ResearchKitActiveTask.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF6C81F2F72A0B900C49E6D /* ResearchKitActiveTask.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3F3935852F7DF243004180FA /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935842F7DF241004180FA /* Consent.swift */; };
+		3F3935862F7DF243004180FA /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935842F7DF241004180FA /* Consent.swift */; };
+		3F3935882F7DF289004180FA /* Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935872F7DF285004180FA /* Onboard.swift */; };
+		3F3935892F7DF289004180FA /* Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935872F7DF285004180FA /* Onboard.swift */; };
+		3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
+		3F39358C2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
+		3F39358E2F7DF2D9004180FA /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358D2F7DF2D7004180FA /* Survey.swift */; };
+		3F39358F2F7DF2D9004180FA /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358D2F7DF2D7004180FA /* Survey.swift */; };
+		3F3935912F7DF2EC004180FA /* Surveyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935902F7DF2EA004180FA /* Surveyable.swift */; };
+		3F3935922F7DF2EC004180FA /* Surveyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935902F7DF2EA004180FA /* Surveyable.swift */; };
+		3F3935932F7DF334004180FA /* Surveyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935902F7DF2EA004180FA /* Surveyable.swift */; };
+		3F3935942F7DF334004180FA /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358D2F7DF2D7004180FA /* Survey.swift */; };
+		3F3935952F7DF334004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
+		3F3935962F7DF33A004180FA /* Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935872F7DF285004180FA /* Onboard.swift */; };
+		3F3935972F7DF33A004180FA /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935842F7DF241004180FA /* Consent.swift */; };
 		3FBBC2812F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */; };
 		3FBBC2822F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */; };
 		3FE2E9BE2F57AE4200462DA1 /* AnimationStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2E9BD2F57AE3B00462DA1 /* AnimationStyler.swift */; };
@@ -338,6 +353,11 @@
 /* Begin PBXFileReference section */
 		03580E3E23CFA2E400A57818 /* OCKSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OCKSample.entitlements; sourceTree = "<group>"; };
 		0520468223C3C1F2004F0F36 /* OCKSample.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OCKSample.xctestplan; sourceTree = "<group>"; };
+		3F3935842F7DF241004180FA /* Consent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consent.swift; sourceTree = "<group>"; };
+		3F3935872F7DF285004180FA /* Onboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard.swift; sourceTree = "<group>"; };
+		3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeOfMotion.swift; sourceTree = "<group>"; };
+		3F39358D2F7DF2D7004180FA /* Survey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
+		3F3935902F7DF2EA004180FA /* Surveyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surveyable.swift; sourceTree = "<group>"; };
 		3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTasksView.swift; sourceTree = "<group>"; };
 		3FE2E9B92F55F36E00462DA1 /* DimensionStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionStyler.swift; sourceTree = "<group>"; };
 		3FE2E9BD2F57AE3B00462DA1 /* AnimationStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStyler.swift; sourceTree = "<group>"; };
@@ -506,11 +526,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F39357B2F7D0602004180FA /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				3F3935902F7DF2EA004180FA /* Surveyable.swift */,
+				3F39358D2F7DF2D7004180FA /* Survey.swift */,
+				3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */,
+				3F3935832F7D060E004180FA /* Onboard */,
+			);
+			path = Surveys;
+			sourceTree = "<group>";
+		};
+		3F3935832F7D060E004180FA /* Onboard */ = {
+			isa = PBXGroup;
+			children = (
+				3F3935872F7DF285004180FA /* Onboard.swift */,
+				3F3935842F7DF241004180FA /* Consent.swift */,
+			);
+			path = Onboard;
+			sourceTree = "<group>";
+		};
 		3FF6C8112F72A0B900C49E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				3FF6C8192F72A0B900C49E6D /* ResearchKit.framework */,
-				3FF6C81B2F72A0B900C49E6D /* .xctest */,
+				3FF6C81B2F72A0B900C49E6D /* ResearchKitTests.xctest */,
 				3FF6C81D2F72A0B900C49E6D /* ResearchKitUI.framework */,
 				3FF6C81F2F72A0B900C49E6D /* ResearchKitActiveTask.framework */,
 			);
@@ -564,6 +604,7 @@
 		703088772582727500FFABB6 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				3F39357B2F7D0602004180FA /* Surveys */,
 				9138666D2F540A1300B9BD74 /* CareKitTaskView */,
 				70221F2728D7809800971195 /* MainTabView.swift */,
 				7036E4D2256EBE35006E9A3C /* MainView.swift */,
@@ -1088,7 +1129,7 @@
 			remoteRef = 3FF6C8182F72A0B900C49E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3FF6C81B2F72A0B900C49E6D /* .xctest */ = {
+		3FF6C81B2F72A0B900C49E6D /* ResearchKitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ResearchKitTests.xctest;
@@ -1232,6 +1273,7 @@
 				707D294F2DCBE68500980253 /* OCKStore+SampleData.swift in Sources */,
 				3FF6C8832F72B37700C49E6D /* MyCustomCardView.swift in Sources */,
 				707D29502DCBE68500980253 /* TaskID.swift in Sources */,
+				3F3935912F7DF2EC004180FA /* Surveyable.swift in Sources */,
 				707D29512DCBE68500980253 /* CareView.swift in Sources */,
 				707D29522DCBE68500980253 /* AppDelegateKey.swift in Sources */,
 				707D29532DCBE68500980253 /* Logger.swift in Sources */,
@@ -1247,6 +1289,8 @@
 				707D295C2DCBE68500980253 /* AppDelegate.swift in Sources */,
 				707D295D2DCBE68500980253 /* LoginViewModel.swift in Sources */,
 				70B8E0A62F0EC1CA00440FCA /* Mutex.swift in Sources */,
+				3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */,
+				3F3935882F7DF289004180FA /* Onboard.swift in Sources */,
 				707D295E2DCBE68500980253 /* Utility.swift in Sources */,
 				913866772F540C5400B9BD74 /* CareKitCard.swift in Sources */,
 				707D29602DCBE68500980253 /* SessionDelegate.swift in Sources */,
@@ -1261,12 +1305,14 @@
 				707D29662DCBE68500980253 /* UserType.swift in Sources */,
 				3FE2E9C32F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
 				707D29672DCBE68500980253 /* ContactView.swift in Sources */,
+				3F39358E2F7DF2D9004180FA /* Survey.swift in Sources */,
 				3FF6C87F2F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
 				707D29682DCBE68500980253 /* NoHighlightStyle.swift in Sources */,
 				707D29692DCBE68500980253 /* LocalSyncSessionDelegate.swift in Sources */,
 				3FF6C7952F729BC400C49E6D /* CareTask.swift in Sources */,
 				707D296A2DCBE68500980253 /* Constants.swift in Sources */,
 				707D296B2DCBE68500980253 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,
+				3F3935852F7DF243004180FA /* Consent.swift in Sources */,
 				707D296C2DCBE68500980253 /* RemoteSessionDelegate.swift in Sources */,
 				707D296D2DCBE68500980253 /* OCKPatient+Parse.swift in Sources */,
 				911AAF602F5A276C00ADCBCD /* DimensionStyler.swift in Sources */,
@@ -1333,6 +1379,9 @@
 				70F03A9C27860A2000E5AFB4 /* OCKStore.swift in Sources */,
 				70C0D474279BA492003DA141 /* Utility.swift in Sources */,
 				3FE2E9C22F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
+				3F3935932F7DF334004180FA /* Surveyable.swift in Sources */,
+				3F3935942F7DF334004180FA /* Survey.swift in Sources */,
+				3F3935952F7DF334004180FA /* RangeOfMotion.swift in Sources */,
 				91AD923D24A4C42D00925D4D /* AppDelegate.swift in Sources */,
 				91AD924124A4C42D00925D4D /* NotificationView.swift in Sources */,
 				7099D20C29E98E400037CD8E /* InstallationChannel.swift in Sources */,
@@ -1341,6 +1390,8 @@
 				70308886258273D400FFABB6 /* LoginViewModel.swift in Sources */,
 				70F921B127CAC16E00368CEC /* SessionDelegate.swift in Sources */,
 				911AAF6A2F5A282000ADCBCD /* CareKitTaskView.swift in Sources */,
+				3F3935962F7DF33A004180FA /* Onboard.swift in Sources */,
+				3F3935972F7DF33A004180FA /* Consent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1375,6 +1426,7 @@
 				3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */,
 				9169381D271B650700A634ED /* ColorStyler.swift in Sources */,
 				E72B2C0A226939E3009A9438 /* AppDelegate.swift in Sources */,
+				3F3935922F7DF2EC004180FA /* Surveyable.swift in Sources */,
 				7036E4C4256E0A48006E9A3C /* CareView.swift in Sources */,
 				70F921B027CABED600368CEC /* LocalSyncSessionDelegate.swift in Sources */,
 				70221F2828D7809800971195 /* MainTabView.swift in Sources */,
@@ -1382,12 +1434,14 @@
 				3FF6C7942F729BC400C49E6D /* CareTask.swift in Sources */,
 				70CF66E428E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */,
 				70F03AA327860AFF00E5AFB4 /* OCKPatient+Parse.swift in Sources */,
+				3F39358C2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */,
 				3FBBC2812F5A3DE0007F0AEE /* ManageTasksView.swift in Sources */,
 				7099D1FF29E98D900037CD8E /* AppError.swift in Sources */,
 				3FF6C8812F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
 				70F0EFE828C2EC050005B5A2 /* OCKSampleApp.swift in Sources */,
 				918FDEB7271B41FF0045A0EF /* Logger.swift in Sources */,
 				70221F2A28D7BE0600971195 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,
+				3F3935862F7DF243004180FA /* Consent.swift in Sources */,
 				7036E4D3256EBE35006E9A3C /* MainView.swift in Sources */,
 				918FDEC5271B4EA70045A0EF /* StoreCoordinatorKey.swift in Sources */,
 				91693822271B897200A634ED /* Utility.swift in Sources */,
@@ -1400,8 +1454,10 @@
 				7036E4C9256E1A6F006E9A3C /* ProfileView.swift in Sources */,
 				7083A856279CA40A00B3832E /* PCKUtility.swift in Sources */,
 				70B8E0A52F0EC1CA00440FCA /* Mutex.swift in Sources */,
+				3F39358F2F7DF2D9004180FA /* Survey.swift in Sources */,
 				70F921AE27CABE7700368CEC /* RemoteSessionDelegate.swift in Sources */,
 				70F03A952786093B00E5AFB4 /* OCKHealthKitPassthroughStore.swift in Sources */,
+				3F3935892F7DF289004180FA /* Onboard.swift in Sources */,
 				7036E4BF256DA089006E9A3C /* LoginViewModel.swift in Sources */,
 				7036E517256F2413006E9A3C /* ProfileViewModel.swift in Sources */,
 				7099D20B29E98E400037CD8E /* InstallationChannel.swift in Sources */,
