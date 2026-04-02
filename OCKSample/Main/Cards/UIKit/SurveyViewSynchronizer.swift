@@ -12,6 +12,7 @@ import CareKit
 import CareKitStore
 import CareKitUI
 import ResearchKit
+import ResearchKitActiveTask
 import UIKit
 import os.log
 
@@ -26,22 +27,22 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
 
         if let event = context.viewModel.first?.first, event.outcome != nil {
             view.instructionsLabel.isHidden = false
-            /*
-             TODO: You need to modify this so the instuction label shows
-             correctly for each Task/Card.
-             Hint - Each event (OCKAnyEvent) has a task. How can you use
-             this task to determine what instruction answers should show?
-             Look at how the CareViewController differentiates between
-             surveys.
-             */
-            /*let pain = event.answer(kind: RangeOfMotion.)
-            let sleep = event.answer(kind: CheckIn.sleepItemIdentifier)
 
-            view.instructionsLabel.text = """
-                Pain: \(Int(pain))
-                Sleep: \(Int(sleep)) hours
-                """
-             */
+            guard let task = event.task as? OCKTask else {
+                view.instructionsLabel.text = nil
+                return
+            }
+
+            switch task.id {
+            case Onboard.identifier():
+                view.instructionsLabel.text = "Welcome to NeuroMallea. The application is set up and ready to use!"
+            case RangeOfMotion.identifier():
+                let range = event.answer(kind: #keyPath(ORKRangeOfMotionResult.range))
+                view.instructionsLabel.text = "Your Range of Motion Result: \(Int(range))"
+            default:
+                view.instructionsLabel.isHidden = false
+            }
+
         } else {
             view.instructionsLabel.isHidden = true
         }
