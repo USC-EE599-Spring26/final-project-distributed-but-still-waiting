@@ -58,6 +58,11 @@
 		3FF742E42F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */; };
 		3FF742E52F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */; };
 		3FF742E62F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */; };
+		3FF742E82F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */; };
+		3FF742E92F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */; };
+		3FF742EA2F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */; };
+		3FF742EC2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742EB2F7E832C00F1F171 /* SurveyViewSynchronizer.swift */; };
+		3FF742ED2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742EB2F7E832C00F1F171 /* SurveyViewSynchronizer.swift */; };
 		5173CB8A23C3A846007655A0 /* OCKSampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5173CB8923C3A846007655A0 /* OCKSampleUITests.swift */; };
 		70077597252228E900EC0EDA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70077596252228E900EC0EDA /* User.swift */; };
 		7007759B252229C900EC0EDA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70077596252228E900EC0EDA /* User.swift */; };
@@ -376,6 +381,8 @@
 		3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyCardView.swift; sourceTree = "<group>"; };
 		3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarePlanID.swift; sourceTree = "<group>"; };
 		3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ORKTask+ResearchKit.swift"; sourceTree = "<group>"; };
+		3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKAnyEvent+Custom.swift"; sourceTree = "<group>"; };
+		3FF742EB2F7E832C00F1F171 /* SurveyViewSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyViewSynchronizer.swift; sourceTree = "<group>"; };
 		5173CB8723C3A846007655A0 /* OCKSampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OCKSampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5173CB8923C3A846007655A0 /* OCKSampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCKSampleUITests.swift; sourceTree = "<group>"; };
 		5173CB8B23C3A846007655A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -574,6 +581,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3FF742EE2F7E83A300F1F171 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				3FF742EB2F7E832C00F1F171 /* SurveyViewSynchronizer.swift */,
+				E7C37848228F887800E982D8 /* TipView.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		51431F9723D166AE006A7CFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -738,9 +754,9 @@
 		70E3422C2DB058A7005124F9 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				3FF742EE2F7E83A300F1F171 /* UIKit */,
 				3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */,
 				3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */,
-				E7C37848228F887800E982D8 /* TipView.swift */,
 				70E3422D2DB0626A005124F9 /* Modifiers */,
 			);
 			path = Cards;
@@ -833,6 +849,7 @@
 		918FDEBA271B4DF60045A0EF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */,
 				3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */,
 				913866692F54090200B9BD74 /* OCKTask+CareTask.swift */,
 				913866652F5408AE00B9BD74 /* OCKHealthKitTask+CareTask.swift */,
@@ -1294,7 +1311,9 @@
 				707D29572DCBE68500980253 /* OCKStore.swift in Sources */,
 				707D29582DCBE68500980253 /* ProfileView.swift in Sources */,
 				707D29592DCBE68500980253 /* AppError.swift in Sources */,
+				3FF742E82F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */,
 				707D295A2DCBE68500980253 /* InstallationChannel.swift in Sources */,
+				3FF742EC2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */,
 				707D295B2DCBE68500980253 /* LoginView.swift in Sources */,
 				707D295C2DCBE68500980253 /* AppDelegate.swift in Sources */,
 				707D295D2DCBE68500980253 /* LoginViewModel.swift in Sources */,
@@ -1365,6 +1384,7 @@
 				70B8E0A72F0EC1CA00440FCA /* Mutex.swift in Sources */,
 				911AAF5A2F5A26CA00ADCBCD /* OCKTask+CareTask.swift in Sources */,
 				3FF742E42F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */,
+				3FF742E92F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */,
 				70A98D62278A2683009B58F2 /* Styler.swift in Sources */,
 				91693818271B5E1600A634ED /* Constants.swift in Sources */,
 				70E3422B2DB0581C005124F9 /* MainTabView.swift in Sources */,
@@ -1463,6 +1483,7 @@
 				707CC718254DA91900116728 /* OCKLocalization.swift in Sources */,
 				913866732F540AB200B9BD74 /* CareKitTaskViewModel.swift in Sources */,
 				E7C37849228F887800E982D8 /* TipView.swift in Sources */,
+				3FF742EA2F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */,
 				3FE2E9BF2F57AE4200462DA1 /* AnimationStyler.swift in Sources */,
 				3FF742E52F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */,
 				70077597252228E900EC0EDA /* User.swift in Sources */,
@@ -1474,6 +1495,7 @@
 				70F921AE27CABE7700368CEC /* RemoteSessionDelegate.swift in Sources */,
 				70F03A952786093B00E5AFB4 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				3F3935892F7DF289004180FA /* Onboard.swift in Sources */,
+				3FF742ED2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */,
 				7036E4BF256DA089006E9A3C /* LoginViewModel.swift in Sources */,
 				7036E517256F2413006E9A3C /* ProfileViewModel.swift in Sources */,
 				7099D20B29E98E400037CD8E /* InstallationChannel.swift in Sources */,
