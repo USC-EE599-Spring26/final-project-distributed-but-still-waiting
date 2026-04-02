@@ -25,9 +25,7 @@ extension OCKStore {
         }
 
         var query = OCKCarePlanQuery(for: Date())
-        query.ids = [
-            CarePlanID.health.rawValue
-        ]
+        query.ids = CarePlanID.allCases.map { $0.rawValue }
 
         let foundCarePlans = try await store.fetchCarePlans(query: query)
         // Populate the dictionary for all CarePlan's

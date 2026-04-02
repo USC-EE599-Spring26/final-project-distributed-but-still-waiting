@@ -166,6 +166,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         // Always call this method to ensure dates for
         // queries are correct.
         Task {
+            #if canImport(ResearchKit)
             guard await Utility.checkIfOnboardingIsComplete() else {
 
                 let onboardSurvey = Onboard()
@@ -215,6 +216,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
                     listViewController.appendView(tipView, animated: false)
                 }
             }
+            #endif
             await fetchAndDisplayTasks(on: listViewController, for: date)
         }
     }
