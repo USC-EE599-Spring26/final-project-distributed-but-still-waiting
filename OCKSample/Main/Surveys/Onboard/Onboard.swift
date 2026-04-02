@@ -31,8 +31,8 @@ extension Onboard {
         welcomeInstructionStep.detailText = """
         Your companion app to improving your mental health through personalized care plans.
         """
-        welcomeInstructionStep.image = UIImage(named: "brain.head.profile")
-        welcomeInstructionStep.imageContentMode = .scaleAspectFit
+        welcomeInstructionStep.image = UIImage(named: "NeuroMalleaBackground")
+        welcomeInstructionStep.imageContentMode = .scaleToFill
 
         // The Informed Consent Instruction step.
         let studyOverviewInstructionStep = ORKInstructionStep(
@@ -89,7 +89,7 @@ extension Onboard {
         let secureDataBodyItem = ORKBodyItem(
             text: "Your data is kept private and secure.",
             detailText: """
-            We will only use your information to tailor your care plane and will not share your data with third parties.
+            We will only use your information to tailor your care plan and will not share your data with third parties.
             """,
             image: UIImage(systemName: "lock.fill"),
             learnMoreItem: nil,
