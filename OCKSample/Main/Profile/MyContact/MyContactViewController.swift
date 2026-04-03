@@ -1,3 +1,11 @@
+//
+//  MyContactViewController.swift
+//  OCKSample
+//
+//  Created by Jai Shah on 02/04/26.
+//  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
+//
+
 import UIKit
 import CareKitStore
 import CareKitUI
@@ -62,19 +70,8 @@ class MyContactViewController: OCKListViewController {
 			return
 		}
 
-		/*
-		 TODO: How would you modify this query to only fetch the contact that belongs to this device?
-
-		 Hint 1: There are multiple ways to do this. You can modify the query
-		 below which can work.
-
-		 Hint2: Look at the other queries in the app related to the uuid of the
-		 user/patient who's signed in.
-
-		 Hint3: You should have a warning currently, solving this properly would
-		 get rid of the warning without changing the line the warning is on.
-		 */
 		var query = OCKContactQuery(for: Date())
+        query.ids = [personUUIDString]
 		query.sortDescriptors.append(.familyName(ascending: true))
 		query.sortDescriptors.append(.givenName(ascending: true))
 

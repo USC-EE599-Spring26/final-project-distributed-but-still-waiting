@@ -13,6 +13,9 @@ struct ManageTasksView: View {
 
     @Environment(\.careStore) private var store
     @StateObject private var viewModel: ManageTasksViewModel
+    @StateObject private var addTaskViewModel = CareKitTaskViewModel()
+    @State private var isPresentingAddTask = false
+    @State private var newTaskTitle = ""
 
     init(store: OCKAnyTaskStore) {
         _viewModel = StateObject(wrappedValue: ManageTasksViewModel(store: store))
@@ -57,6 +60,19 @@ struct ManageTasksView: View {
                 }
             }
             .navigationTitle("Manage Tasks")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isPresentingAddTask = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isPresentingAddTask) {
+                CareKitTaskView()
+
+            }
             .task {
                 await viewModel.fetchTasks()
             }

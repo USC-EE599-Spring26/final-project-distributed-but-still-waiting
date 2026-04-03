@@ -1,3 +1,11 @@
+//
+//  ProfileImageView.swift
+//  OCKSample
+//
+//  Created by Jai Shah on 02/04/26.
+//  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
+//
+
 import SwiftUI
 
 struct ProfileImageView: View {
