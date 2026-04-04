@@ -14,13 +14,16 @@ import os.log
 
 struct MyContactView: UIViewControllerRepresentable {
 	@Environment(\.careStore) var careStore
+    let profileImage: UIImage?
+    let name: String
 
 	func makeUIViewController(context: Context) -> some UIViewController {
 		let viewController = createViewController()
-		let navigationController = UINavigationController(
-			rootViewController: viewController
-		)
-		return navigationController
+//		let navigationController = UINavigationController(
+//			rootViewController: viewController
+//		)
+//		return navigationController
+        return viewController
 
 	}
 
@@ -30,7 +33,10 @@ struct MyContactView: UIViewControllerRepresentable {
 	) {}
 
 	func createViewController() -> UIViewController {
-		let viewController = MyContactViewController(store: careStore)
+		let viewController = MyContactViewController(
+            store: careStore,
+            profileImage: profileImage,
+            name: name)
 		return viewController
 	}
 }
@@ -38,7 +44,8 @@ struct MyContactView: UIViewControllerRepresentable {
 struct MyContactView_Previews: PreviewProvider {
 
 	static var previews: some View {
-		MyContactView()
+		MyContactView( profileImage: UIImage(systemName: "person.fill"),
+                       name: "Sample")
 			.environment(\.careStore, Utility.createPreviewStore())
 			.accentColor(Color.accentColor)
 	}

@@ -33,6 +33,7 @@ class ProfileViewModel: ObservableObject {
     @Published var isPresentingAddTask = false
     @Published var isPresentingContact = false
     @Published var isPresentingImagePicker = false
+    @Published var isProfileCreated: Bool = false
     @Published var profileUIImage = UIImage(systemName: "person.fill") {
         willSet {
             guard self.profileUIImage != newValue,
@@ -118,6 +119,7 @@ class ProfileViewModel: ObservableObject {
             return
         }
         self.contact = contact
+        self.isProfileCreated = true
     }
 
     @MainActor
