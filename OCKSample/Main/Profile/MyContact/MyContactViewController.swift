@@ -23,6 +23,8 @@ class MyContactViewController: UIViewController {
 //	fileprivate let viewSynchronizer = OCKDetailedContactViewSynchronizer()
     fileprivate let profileImage: UIImage?
     fileprivate let displayName: String
+    private let imageView = UIImageView()
+    private let nameLabel = UILabel()
 
 	/// Initialize using a store manager. All of the contacts in the store manager will be queried and dispalyed.
 	///
@@ -101,17 +103,19 @@ class MyContactViewController: UIViewController {
 //			self.appendViewController(contactViewController, animated: false)
 //		}
 //	}
+    func update(profileImage: UIImage?, name: String) {
+        imageView.image = profileImage ?? UIImage(systemName: "person.fill")
+        nameLabel.text = name.isEmpty ? "Your Name" : name
+    }
 
     func setupUI() {
 
-        let imageView = UIImageView()
         imageView.image = profileImage ?? UIImage(systemName: "person.fill")
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
-        let nameLabel = UILabel()
         nameLabel.text = displayName.isEmpty ? "Your Name" : displayName
         nameLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         nameLabel.textAlignment = .center

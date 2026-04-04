@@ -68,21 +68,6 @@ struct ProfileView: View {
                                 TextField("Postal code", text: $viewModel.zipcode)
                             }
                         }
-                        Button(action: {
-                            Task {
-                                await viewModel.saveProfile()
-                                isEditing = false
-
-                            }
-                        }, label: {
-                            Text("Save Profile")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(width: 300, height: 50)
-                        })
-                        .background(Color(.green))
-                        .cornerRadius(15)
                     }
 
                     // Notice that "action" is a closure (which is essentially
@@ -103,9 +88,16 @@ struct ProfileView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Edit") {
+                        Button(isEditing ? "Done" : "Edit") {
+                            if isEditing {
+                                Task {
+                                    await viewModel.saveProfile()
+                                    isEditing = false
+                                }
+                            } else {
                                 isEditing = true
                             }
+                        }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Manage Tasks") {

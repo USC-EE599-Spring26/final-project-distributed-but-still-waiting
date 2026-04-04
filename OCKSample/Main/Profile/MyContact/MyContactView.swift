@@ -27,10 +27,11 @@ struct MyContactView: UIViewControllerRepresentable {
 
 	}
 
-	func updateUIViewController(
-		_ uiViewController: UIViewControllerType,
-		context: Context
-	) {}
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        if let vcon = uiViewController as? MyContactViewController {
+            vcon.update(profileImage: profileImage, name: name)
+        }
+    }
 
 	func createViewController() -> UIViewController {
 		let viewController = MyContactViewController(
