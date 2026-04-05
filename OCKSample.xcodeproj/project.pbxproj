@@ -201,6 +201,12 @@
 		9126F1202F7F3DB0000396FB /* MyContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F11E2F7F3DB0000396FB /* MyContactViewController.swift */; };
 		9126F1222F7F3DE3000396FB /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1212F7F3DE3000396FB /* ProfileImageView.swift */; };
 		9126F1232F7F3DE3000396FB /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1212F7F3DE3000396FB /* ProfileImageView.swift */; };
+		9126F14E2F80BE41000396FB /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F14D2F80BE30000396FB /* StreakManager.swift */; };
+		9126F14F2F80BE41000396FB /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F14D2F80BE30000396FB /* StreakManager.swift */; };
+		9126F1502F80BE41000396FB /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F14D2F80BE30000396FB /* StreakManager.swift */; };
+		9126F1522F80C6C2000396FB /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1512F80C6B7000396FB /* Notification+Extensions.swift */; };
+		9126F1532F80C6C2000396FB /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1512F80C6B7000396FB /* Notification+Extensions.swift */; };
+		9126F1542F80C6C2000396FB /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1512F80C6B7000396FB /* Notification+Extensions.swift */; };
 		9138666F2F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		913866702F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		913866722F540AB100B9BD74 /* CareKitTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */; };
@@ -448,6 +454,8 @@
 		9126F11B2F7F3D8D000396FB /* MyContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContactView.swift; sourceTree = "<group>"; };
 		9126F11E2F7F3DB0000396FB /* MyContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContactViewController.swift; sourceTree = "<group>"; };
 		9126F1212F7F3DE3000396FB /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
+		9126F14D2F80BE30000396FB /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
+		9126F1512F80C6B7000396FB /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		913866652F5408AE00B9BD74 /* OCKHealthKitTask+CareTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKHealthKitTask+CareTask.swift"; sourceTree = "<group>"; };
 		913866692F54090200B9BD74 /* OCKTask+CareTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKTask+CareTask.swift"; sourceTree = "<group>"; };
 		9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareKitTaskView.swift; sourceTree = "<group>"; };
@@ -820,6 +828,14 @@
 			path = MyContact;
 			sourceTree = "<group>";
 		};
+		9126F1452F80BE1B000396FB /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				9126F14D2F80BE30000396FB /* StreakManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		9138666D2F540A1300B9BD74 /* CareKitTaskView */ = {
 			isa = PBXGroup;
 			children = (
@@ -877,6 +893,7 @@
 		918FDEBA271B4DF60045A0EF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9126F1512F80C6B7000396FB /* Notification+Extensions.swift */,
 				3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */,
 				3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */,
 				913866692F54090200B9BD74 /* OCKTask+CareTask.swift */,
@@ -976,6 +993,7 @@
 		E72B2C08226939E3009A9438 /* OCKSample */ = {
 			isa = PBXGroup;
 			children = (
+				9126F1452F80BE1B000396FB /* Manager */,
 				913868652F5996B100B9BD74 /* Protocols */,
 				03580E3E23CFA2E400A57818 /* OCKSample.entitlements */,
 				E72B2C09226939E3009A9438 /* AppDelegate.swift */,
@@ -1313,6 +1331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9138686A2F59AE8600B9BD74 /* OCKTask+CareTask.swift in Sources */,
+				9126F14F2F80BE41000396FB /* StreakManager.swift in Sources */,
 				9138686B2F59AE8600B9BD74 /* OCKHealthKitTask+CareTask.swift in Sources */,
 				3FF6C8872F731AD200C49E6D /* EnergyCardView.swift in Sources */,
 				707D29462DCBE68500980253 /* MainTabView.swift in Sources */,
@@ -1343,6 +1362,7 @@
 				707D29592DCBE68500980253 /* AppError.swift in Sources */,
 				3FF742E82F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */,
 				9126F11C2F7F3D8D000396FB /* MyContactView.swift in Sources */,
+				9126F1542F80C6C2000396FB /* Notification+Extensions.swift in Sources */,
 				707D295A2DCBE68500980253 /* InstallationChannel.swift in Sources */,
 				3FF742EC2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */,
 				707D295B2DCBE68500980253 /* LoginView.swift in Sources */,
@@ -1447,8 +1467,10 @@
 				3FE2E9C22F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
 				3F3935932F7DF334004180FA /* Surveyable.swift in Sources */,
 				3F3935942F7DF334004180FA /* Survey.swift in Sources */,
+				9126F1522F80C6C2000396FB /* Notification+Extensions.swift in Sources */,
 				3F3935952F7DF334004180FA /* RangeOfMotion.swift in Sources */,
 				91AD923D24A4C42D00925D4D /* AppDelegate.swift in Sources */,
+				9126F14E2F80BE41000396FB /* StreakManager.swift in Sources */,
 				91AD924124A4C42D00925D4D /* NotificationView.swift in Sources */,
 				7099D20C29E98E400037CD8E /* InstallationChannel.swift in Sources */,
 				913866752F540C5400B9BD74 /* CareKitCard.swift in Sources */,
@@ -1478,6 +1500,7 @@
 				70F921AC27CABE3000368CEC /* SessionDelegate.swift in Sources */,
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
 				7055723F2DC1E63A008E5B0A /* InsightsView.swift in Sources */,
+				9126F1532F80C6C2000396FB /* Notification+Extensions.swift in Sources */,
 				7036E64025717F85006E9A3C /* Constants.swift in Sources */,
 				7099D20529E98DFF0037CD8E /* TaskID.swift in Sources */,
 				7036E4CE256E9A0C006E9A3C /* ContactView.swift in Sources */,
@@ -1501,6 +1524,7 @@
 				70221F2828D7809800971195 /* MainTabView.swift in Sources */,
 				70E3422F2DB06281005124F9 /* NoHighlightStyle.swift in Sources */,
 				3FF6C7942F729BC400C49E6D /* CareTask.swift in Sources */,
+				9126F1502F80BE41000396FB /* StreakManager.swift in Sources */,
 				70CF66E428E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */,
 				70F03AA327860AFF00E5AFB4 /* OCKPatient+Parse.swift in Sources */,
 				3F39358C2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */,

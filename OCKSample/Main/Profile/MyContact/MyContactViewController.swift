@@ -23,18 +23,21 @@ class MyContactViewController: UIViewController {
 //	fileprivate let viewSynchronizer = OCKDetailedContactViewSynchronizer()
     fileprivate let profileImage: UIImage?
     fileprivate let displayName: String
+    fileprivate var streak: Int
     private let imageView = UIImageView()
     private let nameLabel = UILabel()
+    private let streakLabel = UILabel()
 
 	/// Initialize using a store manager. All of the contacts in the store manager will be queried and dispalyed.
 	///
 	/// - Parameter store: The store from which to query the tasks.
 	/// - Parameter viewSynchronizer: The type of view to show
-	init(store: OCKAnyStoreProtocol, profileImage: UIImage?, name: String
+    init(store: OCKAnyStoreProtocol, profileImage: UIImage?, name: String, streak: Int
 	) {
 		self.store = store
         self.profileImage = profileImage
         self.displayName = name
+        self.streak = streak
 		super.init(nibName: nil, bundle: nil)
 	}
 
@@ -106,6 +109,7 @@ class MyContactViewController: UIViewController {
     func update(profileImage: UIImage?, name: String) {
         imageView.image = profileImage ?? UIImage(systemName: "person.fill")
         nameLabel.text = name.isEmpty ? "Your Name" : name
+        streakLabel.text = "🔥 \(streak) day streak"
     }
 
     func setupUI() {
@@ -132,6 +136,19 @@ class MyContactViewController: UIViewController {
 
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
             nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+
+        let streakLabel = UILabel()
+        streakLabel.text = "🔥 \(streak) day streak"
+        streakLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        streakLabel.textAlignment = .center
+        streakLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(streakLabel)
+
+        NSLayoutConstraint.activate([
+            streakLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            streakLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 

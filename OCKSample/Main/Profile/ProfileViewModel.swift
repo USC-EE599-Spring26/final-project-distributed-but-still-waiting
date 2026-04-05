@@ -33,6 +33,7 @@ class ProfileViewModel: ObservableObject {
     @Published var isPresentingAddTask = false
     @Published var isPresentingContact = false
     @Published var isPresentingImagePicker = false
+    @Published var currentStreak: Int = 0
     @Published var isProfileCreated: Bool = false
     @Published var profileUIImage = UIImage(systemName: "person.fill") {
         willSet {
@@ -90,6 +91,10 @@ class ProfileViewModel: ObservableObject {
     }
 
     // MARK: Helpers (public)
+
+    func loadStreak() {
+        currentStreak = StreakManager.shared.getCurrentStreak()
+    }
 
     func updatePatient(_ patient: OCKAnyPatient) {
         guard let patient = patient as? OCKPatient,
@@ -160,6 +165,9 @@ class ProfileViewModel: ObservableObject {
             alertMessage = "Could not save profile: \(error)"
         }
         isShowingSaveAlert = true // Make alert pop up for user.
+        await MainActor.run {
+            self.loadStreak()
+        }
     }
 
     @MainActor

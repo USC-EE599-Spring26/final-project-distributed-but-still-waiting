@@ -20,6 +20,9 @@ struct OCKSampleApp: App {
             MainView()
                 .environment(\.appDelegate, appDelegate)
                 .careKitStyle(style)
+                .onAppear {
+                    StreakManager.shared.handleAppLaunch()
+                }
         }
     }
 }

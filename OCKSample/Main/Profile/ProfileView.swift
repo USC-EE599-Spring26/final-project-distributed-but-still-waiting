@@ -36,7 +36,8 @@ struct ProfileView: View {
                     if viewModel.isProfileCreated && !isEditing {
                         // DISPLAY MODE
                         MyContactView(profileImage: viewModel.profileUIImage,
-                                      name: "\(viewModel.firstName) \(viewModel.lastName)")
+                                      name: "\(viewModel.firstName) \(viewModel.lastName)",
+                                      streak: viewModel.currentStreak)
                     } else {
                         ProfileImageView(viewModel: viewModel)
                         Form {
@@ -125,6 +126,9 @@ struct ProfileView: View {
             .onReceive(contacts.publisher) { publishedContact in
                 viewModel.updateContact(publishedContact.result)
             }
+        }
+        .onAppear {
+            viewModel.loadStreak()
         }
     }
 

@@ -17,6 +17,8 @@ struct MyContactView: UIViewControllerRepresentable {
     let profileImage: UIImage?
     let name: String
 
+    let streak: Int
+
 	func makeUIViewController(context: Context) -> some UIViewController {
 		let viewController = createViewController()
 //		let navigationController = UINavigationController(
@@ -37,7 +39,8 @@ struct MyContactView: UIViewControllerRepresentable {
 		let viewController = MyContactViewController(
             store: careStore,
             profileImage: profileImage,
-            name: name)
+            name: name,
+            streak: streak)
 		return viewController
 	}
 }
@@ -46,7 +49,8 @@ struct MyContactView_Previews: PreviewProvider {
 
 	static var previews: some View {
 		MyContactView( profileImage: UIImage(systemName: "person.fill"),
-                       name: "Sample")
+                       name: "Sample",
+                       streak: 1)
 			.environment(\.careStore, Utility.createPreviewStore())
 			.accentColor(Color.accentColor)
 	}
