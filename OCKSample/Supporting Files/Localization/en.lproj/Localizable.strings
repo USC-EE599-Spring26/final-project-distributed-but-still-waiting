@@ -126,6 +126,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "QUALITY_OF_LIFE_STRESS_DETAIL" = "0 is no stress, 10 is extremely high stress.";
 "ANSWER_YES" = "Yes";
 "ANSWER_NO" = "No";
+// MARK: BADGEs
+
+"badge_streak_3_title" = "Streak - 3 Day";
+"badge_streak_7_title" = "Streak - 7 Day";
+"badge_streak_30_title" = "Streak - 30 Day";
+
+"badge_streak_3_desc" = "Maintain a 3 day streak";
+"badge_streak_7_desc" = "Maintain a 7 day streak";
+"badge_streak_30_desc" = "Maintain a 30 day streak";
+
+"badge_phq_3_title" = "PHQ - 3 Day";
+"badge_phq_7_title" = "PHQ - 7 Day";
+"badge_phq_30_title" = "PHQ - 30 Day";
+
+"badge_phq_3_desc" = "Complete PHQ surveys for 3 days";
+"badge_phq_7_desc" = "Complete PHQ surveys for 7 days";
+"badge_phq_30_desc" = "Complete PHQ surveys for 30 days";
 
 // MARK: ResearchKit SwiftUI
 "BUTTON_CANCEL" = "Cancel";

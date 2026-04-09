@@ -15,8 +15,11 @@ import os.log
 extension OCKHealthKitPassthroughStore {
 
     func populateDefaultHealthKitTasks(
-		startDate: Date = Date()
+        _ patientUUID: UUID? = nil,
+        startDate: Date = Date()
 	) async throws {
+
+        let carePlanUUIDs = try await OCKStore.getCarePlanUUIDs()
 
         let countUnit = HKUnit.count()
         let sleepResultTargetValue = OCKOutcomeValue(
@@ -36,7 +39,7 @@ extension OCKHealthKitPassthroughStore {
         var sleepResult = OCKHealthKitTask(
             id: TaskID.sleepResult,
             title: String(localized: "SLEEP_RESULT"),
-            carePlanUUID: nil,
+            carePlanUUID: carePlanUUIDs[.sleepHealth],
             schedule: sleepResultSchedule,
             healthKitLinkage: OCKHealthKitLinkage(
                 categoryIdentifier: .sleepAnalysis
@@ -45,6 +48,7 @@ extension OCKHealthKitPassthroughStore {
         sleepResult.asset = "figure.walk"
         sleepResult.card = .labeledValue
         sleepResult.priority = 0
+        sleepResult.impactsAdherence = false
 
         let ovulationTestResultSchedule = OCKSchedule.dailyAtTime(
             hour: 8,
@@ -58,7 +62,7 @@ extension OCKHealthKitPassthroughStore {
         var ovulationTestResult = OCKHealthKitTask(
             id: TaskID.ovulationTestResult,
             title: String(localized: "OVULATION_TEST_RESULT"),
-            carePlanUUID: nil,
+            carePlanUUID: carePlanUUIDs[.wellness],
             schedule: ovulationTestResultSchedule,
             healthKitLinkage: OCKHealthKitLinkage(
                 categoryIdentifier: .ovulationTestResult
@@ -67,6 +71,8 @@ extension OCKHealthKitPassthroughStore {
         ovulationTestResult.asset = "circle.dotted"
         ovulationTestResult.card = .labeledValue
         ovulationTestResult.priority = 1
+        ovulationTestResult.impactsAdherence = false
+
         let tasks = [ sleepResult, ovulationTestResult ]
 
         _ = try await addTasksIfNotPresent(tasks)

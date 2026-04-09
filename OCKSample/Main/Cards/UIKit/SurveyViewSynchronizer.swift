@@ -22,7 +22,6 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
         _ view: OCKInstructionsTaskView,
         context: OCKSynchronizationContext<OCKTaskEvents>
     ) {
-
         super.updateView(view, context: context)
 
         if let event = context.viewModel.first?.first, event.outcome != nil {
