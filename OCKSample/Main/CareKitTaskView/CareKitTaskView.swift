@@ -13,6 +13,7 @@ struct CareKitTaskView: View {
 	// MARK: Navigation
 	@State var isShowingAlert = false
 	@State var isAddingTask = false
+    @Environment(\.careStore) var careStore
 
 	// MARK: View
 	@StateObject var viewModel = CareKitTaskViewModel()
@@ -64,6 +65,21 @@ struct CareKitTaskView: View {
                     }
                 }
                 Stepper("Priority: \(priority)", value: $priority, in: 1...100)
+                Section(header: Text("Care Plan")) {
+                    Picker("Care Plan", selection: $viewModel.selectedCarePlanUUID) {
+                        Text("None").tag(UUID?.none)
+
+                        ForEach(viewModel.availableCarePlans, id: \.uuid) { plan in
+                            Text(plan.title )
+                                .tag(plan.uuid)
+                        }
+                    }
+                }
+                .onAppear {
+                    Task {
+                        await viewModel.loadCarePlans(store: careStore)
+                    }
+                }
                 Section("Task") {
                     Button("Add") {
                         addTask {

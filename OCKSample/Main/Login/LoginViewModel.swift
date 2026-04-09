@@ -129,6 +129,16 @@ class LoginViewModel: ObservableObject {
         newPatient.userType = type
         let savedPatient = try await appDelegate.store.addPatient(newPatient)
 
+        // Added code to create a contact for the respective signed up user
+        let newContact = OCKContact(
+            id: remoteUUID.uuidString,
+            name: newPatient.name,
+            carePlanUUID: nil
+        )
+
+        // This is new contact that has never been saved before
+        _ = try await appDelegate.store.addAnyContact(newContact)
+
 		let currentDate = Date()
 		let startDate = daysInThePastToGenerateSampleData < 0 ? Calendar.current.date(
 			byAdding: .day,
@@ -136,10 +146,12 @@ class LoginViewModel: ObservableObject {
 			to: currentDate
 		)! : currentDate
         try await appDelegate.store.populateDefaultCarePlansTasksContacts(
+            savedPatient.uuid,
 			startDate: startDate
 		)
         try await appDelegate.healthKitStore.populateDefaultHealthKitTasks(
-			startDate: startDate
+            savedPatient.uuid,
+			startDate: startDate,
 		)
 		if startDate < currentDate {
 			try await appDelegate.store.populateSampleOutcomes(

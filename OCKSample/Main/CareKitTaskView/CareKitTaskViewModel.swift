@@ -14,6 +14,8 @@ import os.log
 class CareKitTaskViewModel: ObservableObject {
 
     @Published var error: AppError?
+    @Published var selectedCarePlanUUID: UUID?
+    @Published var availableCarePlans: [OCKCarePlan] = []
 
     // MARK: Intents
     func addTask(
@@ -30,7 +32,7 @@ class CareKitTaskViewModel: ObservableObject {
         let uniqueId = UUID().uuidString // Create a unique id for each task
         var task = OCKTask(id: uniqueId,
                            title: title,
-                           carePlanUUID: nil,
+                           carePlanUUID: selectedCarePlanUUID,
                            schedule: .dailyAtTime(hour: 0,
                                                   minutes: 0,
                                                   start: Date(),
@@ -65,7 +67,7 @@ class CareKitTaskViewModel: ObservableObject {
         let uniqueId = UUID().uuidString // Create a unique id for each task
         var healthKitTask = OCKHealthKitTask(id: uniqueId,
                                              title: title,
-                                             carePlanUUID: nil,
+                                             carePlanUUID: selectedCarePlanUUID,
                                              schedule: .dailyAtTime(hour: 0,
                                                                     minutes: 0,
                                                                     start: Date(),
@@ -93,4 +95,20 @@ class CareKitTaskViewModel: ObservableObject {
         }
     }
 
+    func loadCarePlans(store: OCKAnyStoreProtocol) async {
+        do {
+            let plans = try await store.fetchAnyCarePlans(query: OCKCarePlanQuery())
+
+            await MainActor.run {
+                self.availableCarePlans = plans.compactMap { $0 as? OCKCarePlan }
+
+                // Optional default selection
+                if self.selectedCarePlanUUID == nil {
+                    self.selectedCarePlanUUID = self.availableCarePlans.first?.uuid
+                }
+            }
+        } catch {
+            Logger.appDelegate.error("Failed to load care plans")
+        }
+    }
 }
