@@ -48,6 +48,16 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
 	private var isSyncing = false
 	private var isLoading = false
+    // State
+	private var selectedCarePlanUUID: UUID?
+	private var availableTabs: [CarePlanSliderView.Tab] = []
+    private var tasksByDate: [Date: [any OCKAnyTask]] = [:]
+    private var taskControllersByDate: [Date: [UIViewController]] = [:]
+
+    // UI References
+    private var sliderHostingController: UIHostingController<CarePlanSliderView>?
+    private var tipView: TipView?
+
 	private let swiftUIPadding: CGFloat = 15
 	private var style: Styler {
 		CustomStylerKey.defaultValue
@@ -207,21 +217,33 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
 			let isCurrentDay = isSameDay(as: date)
 
-			// Only show the tip view on the current date
+            // 1. Add the Care Plan Slider
+            if availableTabs.isEmpty {
+                await fetchCarePlans()
+            }
+
+            let hvc = UIHostingController(rootView: makeSliderView(for: date, listViewController: listViewController))
+            hvc.view.backgroundColor = .clear
+            self.sliderHostingController = hvc
+            listViewController.appendViewController(hvc, animated: false)
+
+			// 2. Only show the tip view on the current date
 			if isCurrentDay {
 				if Calendar.current.isDate(date, inSameDayAs: Date()) {
 					// Add a non-CareKit view into the list
 					let tipTitle = "Benefits of CBT Exercises"
 					let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
-					let tipView = TipView()
-					tipView.headerView.titleLabel.text = tipTitle
-					tipView.headerView.detailLabel.text = tipText
-					tipView.imageView.image = UIImage(named: "NeuroMalleaBackground")
-					tipView.customStyle = CustomStylerKey.defaultValue
-					listViewController.appendView(tipView, animated: false)
+					let tip = TipView()
+					tip.headerView.titleLabel.text = tipTitle
+					tip.headerView.detailLabel.text = tipText
+					tip.imageView.image = UIImage(named: "NeuroMalleaBackground")
+					tip.customStyle = CustomStylerKey.defaultValue
+                    self.tipView = tip
+					listViewController.appendView(tip, animated: false)
 				}
 			}
 			#endif
+
 			await fetchAndDisplayTasks(on: listViewController, for: date)
 		}
 	}
@@ -230,13 +252,45 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 		on listViewController: OCKListViewController,
 		for date: Date
 	) async {
-		let tasks = await self.fetchTasks(on: date)
-		appendTasks(tasks, to: listViewController, date: date)
+        // Fetch ALL tasks regardless of care plan first to cache them
+		let allTasks = await self.fetchAllTasks(on: date)
+        self.tasksByDate[date] = allTasks
+
+        // Filter tasks based on selection
+        let filteredTasks = filterTasks(allTasks, by: selectedCarePlanUUID)
+		appendTasks(filteredTasks, to: listViewController, date: date)
 	}
 
-	private func fetchTasks(on date: Date) async -> [any OCKAnyTask] {
+    private func updateDisplayedTasks(
+        on listViewController: OCKListViewController,
+        for date: Date
+    ) async {
+        listViewController.clear()
+
+        if let slider = sliderHostingController {
+            listViewController.appendViewController(slider, animated: false)
+        }
+
+        if let tip = tipView {
+            listViewController.appendView(tip, animated: false)
+        }
+
+        let allTasks: [any OCKAnyTask]
+        if let cachedTasks = tasksByDate[date] {
+            allTasks = cachedTasks
+        } else {
+            allTasks = await fetchAllTasks(on: date)
+            tasksByDate[date] = allTasks
+        }
+
+        let filtered = filterTasks(allTasks, by: selectedCarePlanUUID)
+        appendTasks(filtered, to: listViewController, date: date)
+    }
+
+	private func fetchAllTasks(on date: Date) async -> [any OCKAnyTask] {
 		var query = OCKTaskQuery(for: date)
 		query.excludesTasksWithNoEvents = true
+
 		do {
 			let tasks = try await store.fetchAnyTasks(query: query)
 
@@ -257,6 +311,19 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 			return []
 		}
 	}
+
+    private func filterTasks(_ tasks: [any OCKAnyTask], by carePlanUUID: UUID?) -> [any OCKAnyTask] {
+        guard let carePlanUUID else { return tasks }
+        return tasks.filter { task in
+            if let standardTask = task as? OCKTask {
+                return standardTask.carePlanUUID == carePlanUUID
+            }
+            if let healthTask = task as? OCKHealthKitTask {
+                return healthTask.carePlanUUID == carePlanUUID
+            }
+            return false
+        }
+    }
 
 	// swiftlint:disable:next cyclomatic_complexity
 	private func taskViewControllers(
@@ -442,6 +509,8 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 		date: Date
 	) {
 		let isCurrentDay = isSameDay(as: date)
+        var newControllers: [UIViewController] = []
+
 		tasks.compactMap {
 			let cards = self.taskViewControllers(
 				$0,
@@ -459,8 +528,12 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 			cards.forEach {
 				let card = $0
 				listViewController.appendViewController(card, animated: true)
+                newControllers.append(card)
 			}
 		}
+
+        // Track the added controllers for this date
+        self.taskControllersByDate[date] = newControllers
 		self.isLoading = false
 	}
 }
@@ -482,6 +555,43 @@ private extension CareViewController {
 		}
 		return date.endOfDay
 	}
+
+    private func makeSliderView(
+        for date: Date,
+        listViewController: OCKListViewController
+    ) -> CarePlanSliderView {
+        CarePlanSliderView(
+            carePlans: availableTabs,
+            selectedID: Binding(
+                get: { self.selectedCarePlanUUID },
+                set: { newID in
+                    self.selectedCarePlanUUID = newID
+                    // Update highlighting
+                    self.sliderHostingController?.rootView = self.makeSliderView(
+                        for: date,
+                        listViewController: listViewController
+                    )
+
+                    Task { @MainActor in
+                        await self.updateDisplayedTasks(on: listViewController, for: date)
+                    }
+                }
+            )
+        )
+    }
+
+    private func fetchCarePlans() async {
+        do {
+            let storeCarePlans = try await store.fetchAnyCarePlans(query: OCKCarePlanQuery())
+            let mapped = storeCarePlans.compactMap { plan -> CarePlanSliderView.Tab? in
+                guard let carePlan = plan as? OCKCarePlan else { return nil }
+                return .init(id: carePlan.uuid, title: carePlan.title)
+            }
+            self.availableTabs = [.init(id: nil, title: "All Tasks")] + mapped
+        } catch {
+            Logger.feed.error("Failed to fetch care plans: \(error.localizedDescription)")
+        }
+    }
 }
 
 #if canImport(ResearchKit) && canImport(ResearchKitUI)
