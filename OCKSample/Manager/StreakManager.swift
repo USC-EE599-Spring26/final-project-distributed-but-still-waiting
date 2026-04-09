@@ -72,7 +72,15 @@ final class StreakManager {
     }
 
     func getLongestStreak() -> Int {
-        UserDefaults.standard.integer(forKey: longestKey)
+        let longest = UserDefaults.standard.integer(forKey: longestKey)
+        let current = getCurrentStreak()
+
+        if current > longest {
+            UserDefaults.standard.set(current, forKey: longestKey)
+            return current
+        }
+
+        return longest
     }
 
     func hasRecordedToday() -> Bool {
@@ -84,15 +92,27 @@ final class StreakManager {
         do {
             var user = try await User.current()
             user = try await user.fetch()
+
+            let serverLongest = user.longestStreak ?? 0
+
             user.currentStreak = current
-            user.longestStreak = longest
             user.lastActiveDate = lastDate
             Logger.streak.debug("Saving streak for user: \(user.objectId ?? "nil", privacy: .public)")
 
-            try await user.save()
-
-            Logger.streak.info("Str sent to Parse: \(current, privacy: .public), longest=\(longest, privacy: .public)")
-
+            if longest > serverLongest {
+                user.longestStreak = longest
+                try await user.save()
+                // swiftlint:disable:next line_length
+                Logger.streak.info("Str sent to Parse: \(current, privacy: .public), longest=\(longest, privacy: .public)")
+            } else {
+                try await user.save()
+                // swiftlint:disable:next line_length
+                Logger.streak.info("Str sent to Parse: \(current, privacy: .public), longest kept server version=\(serverLongest, privacy: .public)")
+                if serverLongest > longest {
+                    UserDefaults.standard.set(serverLongest, forKey: longestKey)
+                    NotificationCenter.default.post(name: .streakUpdated, object: nil)
+                }
+            }
         } catch {
             Logger.streak.error("Failed to save streak: \(error.localizedDescription, privacy: .public)")
         }
@@ -100,7 +120,8 @@ final class StreakManager {
 
     func loadFromParse() async {
         do {
-            let user = try await User.current()
+            var user = try await User.current()
+            user = try await user.fetch()
 
             let current = user.currentStreak ?? 0
             let longest = user.longestStreak ?? 0

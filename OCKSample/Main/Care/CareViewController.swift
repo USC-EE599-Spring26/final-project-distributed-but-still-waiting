@@ -130,6 +130,11 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 			return
 		}
 		isSyncing = true
+
+		Task {
+			await StreakManager.shared.loadFromParse()
+		}
+
 		AppDelegateKey.defaultValue?.store.synchronize { error in
 			let errorString = error?.localizedDescription ?? "Successful sync with remote!"
 			Logger.feed.info("\(errorString)")

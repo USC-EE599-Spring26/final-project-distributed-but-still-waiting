@@ -170,11 +170,12 @@ extension OCKStore {
 		lexapro.asset = "pills.fill"
 		lexapro.card = .checklist
 		lexapro.priority = 1
+		lexapro.impactsAdherence = true
 
 		let cbtExerciseElement = OCKScheduleElement(
 			start: beforeBreakfast,
 			end: nil,
-			interval: DateComponents(hour: 3)
+			interval: DateComponents(day: 1)
 		)
 		let cbtExerciseSchedule = OCKSchedule(
 			composing: [cbtExerciseElement]
@@ -209,7 +210,7 @@ extension OCKStore {
 			carePlanUUID: carePlanUUIDs[.mentalHealth],
 			schedule: depressionSchedule
 		)
-		depression.impactsAdherence = false
+		depression.impactsAdherence = true
 		depression.instructions = String(localized: "DEPRESSION_INSTRUCTIONS")
 		depression.asset = "bed.double"
 		depression.card = .instruction
@@ -218,7 +219,7 @@ extension OCKStore {
 		let energyElement = OCKScheduleElement(
 			start: beforeBreakfast,
 			end: nil,
-			interval: DateComponents(hour: 3)
+			interval: DateComponents(day: 1)
 		)
 		let energySchedule = OCKSchedule(
 			composing: [energyElement]
@@ -246,8 +247,8 @@ extension OCKStore {
 			]
 		)
 
-		_ = try await addOnboardingTask(carePlanUUIDs[.mentalHealth])
-		_ = try await addUIKitSurveyTasks(carePlanUUIDs[.stressReduction])
+		_ = try await addOnboardingTask(nil)
+		_ = try await addUIKitSurveyTasks(carePlanUUIDs[.mentalHealth])
 
 		var contact1 = OCKContact(
 			id: "jane",
@@ -300,72 +301,72 @@ extension OCKStore {
 		)
 	}
 
-	func createQualityOfLifeSurveyTask(carePlanUUID: UUID?) -> OCKTask {
-		let qualityOfLifeTaskId = TaskID.qualityOfLife
-		let thisMorning = Calendar.current.startOfDay(for: Date())
-		let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
-		let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
-		let qualityOfLifeElement = OCKScheduleElement(
-			start: beforeBreakfast,
-			end: nil,
-			interval: DateComponents(day: 1)
-		)
-		let qualityOfLifeSchedule = OCKSchedule(
-			composing: [qualityOfLifeElement]
-		)
-		let textChoiceYesText = String(localized: "ANSWER_YES")
-		let textChoiceNoText = String(localized: "ANSWER_NO")
-		let yesValue = "Yes"
-		let noValue = "No"
-		let choices: [TextChoice] = [
-			.init(
-				id: "\(qualityOfLifeTaskId)_0",
-				choiceText: textChoiceYesText,
-				value: yesValue
-			),
-			.init(
-				id: "\(qualityOfLifeTaskId)_1",
-				choiceText: textChoiceNoText,
-				value: noValue
-			)
-
-		]
-		let questionOne = SurveyQuestion(
-			id: "\(qualityOfLifeTaskId)-managing-time",
-			type: .multipleChoice,
-			required: true,
-			title: String(localized: "QUALITY_OF_LIFE_TIME"),
-			textChoices: choices,
-			choiceSelectionLimit: .single
-		)
-		let questionTwo = SurveyQuestion(
-			id: qualityOfLifeTaskId,
-			type: .slider,
-			required: false,
-			title: String(localized: "QUALITY_OF_LIFE_STRESS"),
-			detail: String(localized: "QUALITY_OF_LIFE_STRESS_DETAIL"),
-			integerRange: 0...10,
-			sliderStepValue: 1
-		)
-		let questions = [questionOne, questionTwo]
-		let stepOne = SurveyStep(
-			id: "\(qualityOfLifeTaskId)-step-1",
-			questions: questions
-		)
-		var qualityOfLife = OCKTask(
-			id: "\(qualityOfLifeTaskId)-stress",
-			title: String(localized: "QUALITY_OF_LIFE"),
-			carePlanUUID: carePlanUUID,
-			schedule: qualityOfLifeSchedule
-		)
-		qualityOfLife.impactsAdherence = true
-		qualityOfLife.asset = "brain.head.profile"
-		qualityOfLife.card = .survey
-		qualityOfLife.surveySteps = [stepOne]
-		qualityOfLife.priority = 1
-
-		return qualityOfLife
-	}
+//	func createQualityOfLifeSurveyTask(carePlanUUID: UUID?) -> OCKTask {
+//		let qualityOfLifeTaskId = TaskID.qualityOfLife
+//		let thisMorning = Calendar.current.startOfDay(for: Date())
+//		let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
+//		let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
+//		let qualityOfLifeElement = OCKScheduleElement(
+//			start: beforeBreakfast,
+//			end: nil,
+//			interval: DateComponents(day: 1)
+//		)
+//		let qualityOfLifeSchedule = OCKSchedule(
+//			composing: [qualityOfLifeElement]
+//		)
+//		let textChoiceYesText = String(localized: "ANSWER_YES")
+//		let textChoiceNoText = String(localized: "ANSWER_NO")
+//		let yesValue = "Yes"
+//		let noValue = "No"
+//		let choices: [TextChoice] = [
+//			.init(
+//				id: "\(qualityOfLifeTaskId)_0",
+//				choiceText: textChoiceYesText,
+//				value: yesValue
+//			),
+//			.init(
+//				id: "\(qualityOfLifeTaskId)_1",
+//				choiceText: textChoiceNoText,
+//				value: noValue
+//			)
+//
+//		]
+//		let questionOne = SurveyQuestion(
+//			id: "\(qualityOfLifeTaskId)-managing-time",
+//			type: .multipleChoice,
+//			required: true,
+//			title: String(localized: "QUALITY_OF_LIFE_TIME"),
+//			textChoices: choices,
+//			choiceSelectionLimit: .single
+//		)
+//		let questionTwo = SurveyQuestion(
+//			id: qualityOfLifeTaskId,
+//			type: .slider,
+//			required: false,
+//			title: String(localized: "QUALITY_OF_LIFE_STRESS"),
+//			detail: String(localized: "QUALITY_OF_LIFE_STRESS_DETAIL"),
+//			integerRange: 0...10,
+//			sliderStepValue: 1
+//		)
+//		let questions = [questionOne, questionTwo]
+//		let stepOne = SurveyStep(
+//			id: "\(qualityOfLifeTaskId)-step-1",
+//			questions: questions
+//		)
+//		var qualityOfLife = OCKTask(
+//			id: "\(qualityOfLifeTaskId)-stress",
+//			title: String(localized: "QUALITY_OF_LIFE"),
+//			carePlanUUID: carePlanUUID,
+//			schedule: qualityOfLifeSchedule
+//		)
+//		qualityOfLife.impactsAdherence = true
+//		qualityOfLife.asset = "brain.head.profile"
+//		qualityOfLife.card = .survey
+//		qualityOfLife.surveySteps = [stepOne]
+//		qualityOfLife.priority = 1
+//
+//		return qualityOfLife
+//	}
 
 	func createPHQSurveyTask(carePlanUUID: UUID?) -> OCKTask {
 		let phqSurveyTaskId = TaskID.phq
@@ -519,6 +520,7 @@ extension OCKStore {
 		rangeOfMotionTask.asset = "figure.walk.motion"
 		rangeOfMotionTask.card = .uiKitSurvey
 		rangeOfMotionTask.uiKitSurvey = .rangeOfMotion
+		rangeOfMotionTask.impactsAdherence = true
 
 		return try await addTasksIfNotPresent([rangeOfMotionTask])
 	}
