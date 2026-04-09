@@ -69,22 +69,46 @@ struct ProfileView: View {
 					VStack {
 						ProfileImageView(viewModel: viewModel)
 
-						Form {
-							Section(header: Text("About")) {
-								TextField("First Name", text: $viewModel.firstName)
-								TextField("Last Name", text: $viewModel.lastName)
-								DatePicker("Birthday",
-										   selection: $viewModel.birthday,
-										   displayedComponents: [.date])
-							}
+                        Form {
+                                                Section(header: Text("About")) {
+                                                    TextField("First Name",
+                                                              text: $viewModel.firstName)
+                                                    .padding()
+                                                    .cornerRadius(20.0)
+                                                    .shadow(radius: 10.0, x: 20, y: 10)
 
-							Section(header: Text("Contact")) {
-								TextField("Street", text: $viewModel.street)
-								TextField("City", text: $viewModel.city)
-								TextField("State", text: $viewModel.state)
-								TextField("Postal code", text: $viewModel.zipcode)
-							}
-						}
+                                                    TextField("Last Name",
+                                                              text: $viewModel.lastName)
+                                                    .padding()
+                                                    .cornerRadius(20.0)
+                                                    .shadow(radius: 10.0, x: 20, y: 10)
+
+                                                    DatePicker("Birthday",
+                                                               selection: $viewModel.birthday,
+                                                               displayedComponents: [DatePickerComponents.date])
+                                                    .padding()
+                                                    .cornerRadius(20.0)
+                                                    .shadow(radius: 10.0, x: 20, y: 10)
+
+                                                    TextField("Allergies",
+                                                              text: $viewModel.allergies)
+                                                    .padding()
+                                                    .cornerRadius(20.0)
+                                                    .shadow(radius: 10.0, x: 20, y: 10)
+                                                }
+
+                                                Section(header: Text("Contact")) {
+                                                    TextField("Street", text: $viewModel.street)
+                                                    TextField("City", text: $viewModel.city)
+                                                    TextField("State", text: $viewModel.state)
+                                                    TextField("Postal code", text: $viewModel.zipcode)
+                                                    TextField("Email Address", text: $viewModel.emailAddresses)
+                                                    TextField("Messaging Number", text: $viewModel.messagingNumbers)
+                                                    TextField("Phone Number", text: $viewModel.phoneNumbers)
+                                                    TextField("Other Contact Info", text: $viewModel.otherContactInfo)
+                                                }
+                                            }
+                                        }
 					}
 				}
 				Spacer()
@@ -103,50 +127,50 @@ struct ProfileView: View {
 				.background(Color.red)
 				.cornerRadius(15)
 				.padding()
-				.toolbar {
-					ToolbarItem(placement: .navigationBarLeading) {
-						Button(isEditing ? "Done" : "Edit") {
-							if isEditing {
-								Task {
-									await viewModel.saveProfile()
-									isEditing = false
-								}
-							} else {
-								isEditing = true
-							}
-						}
-					}
-					ToolbarItem(placement: .navigationBarTrailing) {
-						Button("Manage Tasks") {
-							isPresentingManageTasks = true
-						}
-						.sheet(isPresented: $isPresentingManageTasks) {
-							ManageTasksView(store: store )
-						}
-					}
-				}
-				.sheet(isPresented: $viewModel.isPresentingImagePicker) {
-					ImagePickerView(image: $viewModel.profileUIImage)
-				}
-				.alert(isPresented: $viewModel.isShowingSaveAlert) {
-					return Alert(title: Text("Update"),
-								 message: Text(viewModel.alertMessage),
-								 dismissButton: .default(Text("Ok"), action: {
-						viewModel.isShowingSaveAlert = false
-					}))
-				}
 			}
+            .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(isEditing ? "Done" : "Edit") {
+                        if isEditing {
+                            Task {
+                                await viewModel.saveProfile()
+                                isEditing = false
+                            }
+                        } else {
+                            isEditing = true
+                        }
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Manage Tasks") {
+                        isPresentingManageTasks = true
+                    }
+                    .sheet(isPresented: $isPresentingManageTasks) {
+                        ManageTasksView(store: store )
+                    }
+                }
+            }
+            .sheet(isPresented: $viewModel.isPresentingImagePicker) {
+                ImagePickerView(image: $viewModel.profileUIImage)
+            }
+            .alert(isPresented: $viewModel.isShowingSaveAlert) {
+                return Alert(title: Text("Update"),
+                             message: Text(viewModel.alertMessage),
+                             dismissButton: .default(Text("Ok"), action: {
+                    viewModel.isShowingSaveAlert = false
+                }))
+            }
 			.onReceive(patients.publisher) { publishedPatient in
 				viewModel.updatePatient(publishedPatient.result)
 			}
 			.onReceive(contacts.publisher) { publishedContact in
 				viewModel.updateContact(publishedContact.result)
 			}
+            .onAppear {
+                viewModel.loadStreak()
+            }
 		}
-		.onAppear {
-			viewModel.loadStreak()
-		}
-
 	}
 
 	struct ProfileView_Previews: PreviewProvider {
@@ -156,4 +180,3 @@ struct ProfileView: View {
 				.environment(\.careStore, Utility.createPreviewStore())
 		}
 	}
-}
