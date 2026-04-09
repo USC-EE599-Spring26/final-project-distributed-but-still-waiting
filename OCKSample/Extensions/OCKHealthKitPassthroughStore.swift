@@ -15,7 +15,8 @@ import os.log
 extension OCKHealthKitPassthroughStore {
 
     func populateDefaultHealthKitTasks(
-		startDate: Date = Date()
+        _ patientUUID: UUID? = nil,
+        startDate: Date = Date()
 	) async throws {
 
         let countUnit = HKUnit.count()

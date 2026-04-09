@@ -1,21 +1,20 @@
 //
-//  ImagePicker.swift
+//  ImagePickerView.swift
 //  OCKSample
 //
 //  Created by Student on 4/2/26.
 //  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
-
 import SwiftUI
 import UIKit
 
-struct ImagePicker: UIViewControllerRepresentable {
+struct ImagePickerView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     @Binding var image: UIImage?
 
     func makeUIViewController(
-        context: UIViewControllerRepresentableContext<ImagePicker>
+        context: UIViewControllerRepresentableContext<ImagePickerView>
     ) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
@@ -24,7 +23,7 @@ struct ImagePicker: UIViewControllerRepresentable {
 
     func updateUIViewController(
         _ uiViewController: UIImagePickerController,
-        context: UIViewControllerRepresentableContext<ImagePicker>
+        context: UIViewControllerRepresentableContext<ImagePickerView>
     ) {}
 
     func makeCoordinator() -> Coordinator {
@@ -32,9 +31,9 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: ImagePicker
+        let parent: ImagePickerView
 
-        init(_ parent: ImagePicker) {
+        init(_ parent: ImagePickerView) {
             self.parent = parent
         }
 

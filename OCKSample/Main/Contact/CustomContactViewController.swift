@@ -114,7 +114,7 @@ class CustomContactViewController: OCKListViewController, @unchecked Sendable {
         }
 
         let filterdContacts = contacts.filter { convertedContact in
-            if(convertedContact.id == personUUIDString) {
+            if convertedContact.id == personUUIDString {
                 return false
             }
             Logger.contact.info("Contact filtered: \(convertedContact.id)")
