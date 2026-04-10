@@ -14,14 +14,12 @@ import os.log
 
 extension OCKHealthKitPassthroughStore {
 
-    /*
-         TOD: You need to tie an OCKPatient and CarePlan to these tasks,
-         */
-
     func populateDefaultHealthKitTasks(
         _ patientUUID: UUID? = nil,
         startDate: Date = Date()
 	) async throws {
+
+        let carePlanUUIDs = try await OCKStore.getCarePlanUUIDs()
 
         let countUnit = HKUnit.count()
         let sleepResultTargetValue = OCKOutcomeValue(
@@ -41,7 +39,7 @@ extension OCKHealthKitPassthroughStore {
         var sleepResult = OCKHealthKitTask(
             id: TaskID.sleepResult,
             title: String(localized: "SLEEP_RESULT"),
-            carePlanUUID: nil,
+            carePlanUUID: carePlanUUIDs[.sleepHealth],
             schedule: sleepResultSchedule,
             healthKitLinkage: OCKHealthKitLinkage(
                 categoryIdentifier: .sleepAnalysis
@@ -63,7 +61,7 @@ extension OCKHealthKitPassthroughStore {
         var ovulationTestResult = OCKHealthKitTask(
             id: TaskID.ovulationTestResult,
             title: String(localized: "OVULATION_TEST_RESULT"),
-            carePlanUUID: nil,
+            carePlanUUID: carePlanUUIDs[.wellness],
             schedule: ovulationTestResultSchedule,
             healthKitLinkage: OCKHealthKitLinkage(
                 categoryIdentifier: .ovulationTestResult
