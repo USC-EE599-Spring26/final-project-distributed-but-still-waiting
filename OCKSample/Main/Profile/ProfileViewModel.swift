@@ -42,6 +42,7 @@ class ProfileViewModel: ObservableObject {
 	@Published var currentStreak: Int = 0
 	@Published var isProfileCreated: Bool = false
 	@Published var badges: [Badge] = []
+	@Published private(set) var currentProfileID: String?
 	@Published var profileUIImage = UIImage(systemName: "person.fill") {
 		willSet {
 			guard self.profileUIImage != newValue,
@@ -136,8 +137,14 @@ class ProfileViewModel: ObservableObject {
 		loadBadges()
 	}
 
+	func loadCurrentProfileID() async {
+		currentProfileID = try? await Utility.getRemoteClockUUID().uuidString
+	}
+
 	func updatePatient(_ patient: OCKAnyPatient) {
 		guard let patient = patient as? OCKPatient,
+			  let currentProfileID,
+			  patient.id == currentProfileID,
 			  // Only update if we have a newer version.
 			  patient.uuid != self.patient?.uuid else {
 			return
@@ -155,10 +162,9 @@ class ProfileViewModel: ObservableObject {
 	}
 
 	func updateContact(_ contact: OCKAnyContact) {
-		guard let currentPatient = self.patient,
-			  let contact = contact as? OCKContact,
-			  // Has to be my contact.
-			  contact.id == currentPatient.id,
+		guard let contact = contact as? OCKContact,
+			  let currentProfileID,
+			  contact.id == currentProfileID,
 			  // Only update if we have a newer version.
 			  contact.uuid != self.contact?.uuid else {
 			return
