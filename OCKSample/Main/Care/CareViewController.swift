@@ -56,7 +56,9 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
     // UI References
     private var sliderHostingController: UIHostingController<CarePlanSliderView>?
+    #if os(iOS)
     private var tipView: TipView?
+    #endif
 
 	private let swiftUIPadding: CGFloat = 15
 	private var style: Styler {
@@ -181,7 +183,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 		// Always call this method to ensure dates for
 		// queries are correct.
 		Task {
-			#if canImport(ResearchKit)
+			#if canImport(ResearchKit) && canImport(ResearchKitUI)
 			guard await Utility.checkIfOnboardingIsComplete() else {
 
 				let onboardSurvey = Onboard()
@@ -210,6 +212,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				self.isLoading = false
 				return
 			}
+			#endif
 
 			// Always call this method to ensure dates for
 			// queries are correct.
@@ -228,6 +231,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             listViewController.appendViewController(hvc, animated: false)
 
 			// 2. Only show the tip view on the current date
+            #if os(iOS)
 			if isCurrentDay {
 				if Calendar.current.isDate(date, inSameDayAs: Date()) {
 					// Add a non-CareKit view into the list
@@ -242,7 +246,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 					listViewController.appendView(tip, animated: false)
 				}
 			}
-			#endif
+	            #endif
 
 			await fetchAndDisplayTasks(on: listViewController, for: date)
 		}
@@ -271,9 +275,11 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             listViewController.appendViewController(slider, animated: false)
         }
 
+        #if os(iOS)
         if let tip = tipView {
             listViewController.appendView(tip, animated: false)
         }
+        #endif
 
         let allTasks: [any OCKAnyTask]
         if let cachedTasks = tasksByDate[date] {

@@ -263,6 +263,7 @@
 		91AD924624A4C42E00925D4D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91AD924524A4C42E00925D4D /* Preview Assets.xcassets */; };
 		91AD924B24A4C42E00925D4D /* OCKWatchSample.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 91AD922724A4C42B00925D4D /* OCKWatchSample.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		91F8973A2F877A7600C788C9 /* CarePlanSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F897322F877A7600C788C9 /* CarePlanSliderView.swift */; };
+		91F8973B2F877A7600C788C9 /* CarePlanSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F897322F877A7600C788C9 /* CarePlanSliderView.swift */; };
 		E72B2C0A226939E3009A9438 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72B2C09226939E3009A9438 /* AppDelegate.swift */; };
 		E72B2C14226939E4009A9438 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72B2C12226939E4009A9438 /* LaunchScreen.storyboard */; };
 		E7440E4F229477F7007AD30A /* CareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7440E4E229477F7007AD30A /* CareViewController.swift */; };
@@ -1347,6 +1348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91F8973B2F877A7600C788C9 /* CarePlanSliderView.swift in Sources */,
 				9138686A2F59AE8600B9BD74 /* OCKTask+CareTask.swift in Sources */,
 				9126F14F2F80BE41000396FB /* StreakManager.swift in Sources */,
 				9138686B2F59AE8600B9BD74 /* OCKHealthKitTask+CareTask.swift in Sources */,
