@@ -31,11 +31,11 @@ class ProfileViewModel: ObservableObject {
 	@Published var zipcode = ""
 	@Published var country = ""
 	@Published var isShowingSaveAlert = false
-    @Published var allergies = ""
-    @Published var emailAddresses = ""
-    @Published var messagingNumbers = ""
-    @Published var phoneNumbers = ""
-    @Published var otherContactInfo = ""
+  @Published var allergies = ""
+  @Published var emailAddresses = ""
+  @Published var messagingNumbers = ""
+  @Published var phoneNumbers = ""
+  @Published var otherContactInfo = ""
 	@Published var isPresentingAddTask = false
 	@Published var isPresentingContact = false
 	@Published var isPresentingImagePicker = false
