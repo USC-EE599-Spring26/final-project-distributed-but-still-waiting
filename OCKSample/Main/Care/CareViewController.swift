@@ -425,7 +425,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
         }
         .padding(.vertical, swiftUIPadding)
         .formattedHostingController()
-
         return surveyViewController
     }
 

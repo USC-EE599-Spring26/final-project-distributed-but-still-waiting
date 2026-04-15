@@ -35,6 +35,7 @@ class ProfileViewModel: ObservableObject {
     @Published var isPresentingImagePicker = false
     @Published var currentStreak: Int = 0
     @Published var isProfileCreated: Bool = false
+    @Published var badges: [Badge] = []
     @Published var profileUIImage = UIImage(systemName: "person.fill") {
         willSet {
             guard self.profileUIImage != newValue,
@@ -92,8 +93,13 @@ class ProfileViewModel: ObservableObject {
 
     // MARK: Helpers (public)
 
+    func loadBadges() {
+        badges = BadgeManager.shared.getBadges()
+    }
+
     func loadStreak() {
         currentStreak = StreakManager.shared.getCurrentStreak()
+        loadBadges()
     }
 
     func updatePatient(_ patient: OCKAnyPatient) {

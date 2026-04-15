@@ -26,40 +26,57 @@ struct ProfileView: View {
     @State var isPresentingContact = false
     @State var isPresentingImagePicker = false
     @State var isPresentingManageTasks = false
+    @State private var showPHQBanner = false
+    @State private var phqStreak = 0
     @State private var isEditing = false
 
     var body: some View {
         NavigationView {
             VStack {
 
-                VStack {
-                    if viewModel.isProfileCreated && !isEditing {
-                        // DISPLAY MODE
-                        MyContactView(profileImage: viewModel.profileUIImage,
-                                      name: "\(viewModel.firstName) \(viewModel.lastName)",
-                                      streak: viewModel.currentStreak)
-                    } else {
+                // SCROLLABLE CONTENT
+                if viewModel.isProfileCreated && !isEditing {
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            // PROFILE VIEW
+                            MyContactView(
+                                profileImage: viewModel.profileUIImage,
+                                name: "\(viewModel.firstName) \(viewModel.lastName)",
+                                streak: viewModel.currentStreak
+                            )
+                            .frame(height: 200)
+
+                            // ACHIEVEMENTS
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("ACHIEVEMENTS")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.secondary)
+                                    .frame(maxWidth: .infinity)
+                                    .multilineTextAlignment(.center)
+
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 16) {
+                                        ForEach(viewModel.badges) { badge in
+                                            BadgeView(badge: badge)
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    VStack {
                         ProfileImageView(viewModel: viewModel)
+
                         Form {
                             Section(header: Text("About")) {
-                                TextField("First Name",
-                                          text: $viewModel.firstName)
-                                .padding()
-                                .cornerRadius(20.0)
-                                .shadow(radius: 10.0, x: 20, y: 10)
-
-                                TextField("Last Name",
-                                          text: $viewModel.lastName)
-                                .padding()
-                                .cornerRadius(20.0)
-                                .shadow(radius: 10.0, x: 20, y: 10)
-
+                                TextField("First Name", text: $viewModel.firstName)
+                                TextField("Last Name", text: $viewModel.lastName)
                                 DatePicker("Birthday",
                                            selection: $viewModel.birthday,
-                                           displayedComponents: [DatePickerComponents.date])
-                                .padding()
-                                .cornerRadius(20.0)
-                                .shadow(radius: 10.0, x: 20, y: 10)
+                                           displayedComponents: [.date])
                             }
 
                             Section(header: Text("Contact")) {
@@ -70,22 +87,31 @@ struct ProfileView: View {
                             }
                         }
                     }
+                }
+                Spacer() //
 
-                    // Notice that "action" is a closure (which is essentially
-                    // a function as argument like we discussed in class)
-                    Button(action: {
-                        Task {
-                            await loginViewModel.logout()
+                Button(action: {
+                    Task {
+                        await loginViewModel.logout()
+                    }
+                }) {
+                    Text("Log Out")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                }
+                .background(Color.red)
+                .cornerRadius(15)
+                .padding()
+                .onChange(of: showPHQBanner) {
+                    if showPHQBanner {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                showPHQBanner = false
+                            }
                         }
-                    }, label: {
-                        Text("Log Out")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(width: 300, height: 50)
-                    })
-                    .background(Color(.red))
-                    .cornerRadius(15)
+                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -130,6 +156,7 @@ struct ProfileView: View {
         .onAppear {
             viewModel.loadStreak()
         }
+
     }
 
     struct ProfileView_Previews: PreviewProvider {

@@ -207,6 +207,14 @@
 		9126F1522F80C6C2000396FB /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1512F80C6B7000396FB /* Notification+Extensions.swift */; };
 		9126F1532F80C6C2000396FB /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1512F80C6B7000396FB /* Notification+Extensions.swift */; };
 		9126F1542F80C6C2000396FB /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1512F80C6B7000396FB /* Notification+Extensions.swift */; };
+		9126F1562F821F6B000396FB /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1552F821F65000396FB /* BadgeManager.swift */; };
+		9126F1572F821F6B000396FB /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1552F821F65000396FB /* BadgeManager.swift */; };
+		9126F1582F821F6B000396FB /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1552F821F65000396FB /* BadgeManager.swift */; };
+		9126F15A2F821F86000396FB /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1592F821F81000396FB /* Badge.swift */; };
+		9126F15B2F821F86000396FB /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1592F821F81000396FB /* Badge.swift */; };
+		9126F15C2F821F86000396FB /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F1592F821F81000396FB /* Badge.swift */; };
+		9126F15E2F8220FD000396FB /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F15D2F8220F5000396FB /* BadgeView.swift */; };
+		9126F15F2F8220FD000396FB /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126F15D2F8220F5000396FB /* BadgeView.swift */; };
 		9138666F2F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		913866702F540A5900B9BD74 /* CareKitTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */; };
 		913866722F540AB100B9BD74 /* CareKitTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913866712F540AB100B9BD74 /* CareKitTaskViewModel.swift */; };
@@ -456,6 +464,9 @@
 		9126F1212F7F3DE3000396FB /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		9126F14D2F80BE30000396FB /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
 		9126F1512F80C6B7000396FB /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
+		9126F1552F821F65000396FB /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
+		9126F1592F821F81000396FB /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		9126F15D2F8220F5000396FB /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
 		913866652F5408AE00B9BD74 /* OCKHealthKitTask+CareTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKHealthKitTask+CareTask.swift"; sourceTree = "<group>"; };
 		913866692F54090200B9BD74 /* OCKTask+CareTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKTask+CareTask.swift"; sourceTree = "<group>"; };
 		9138666E2F540A5900B9BD74 /* CareKitTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareKitTaskView.swift; sourceTree = "<group>"; };
@@ -679,6 +690,7 @@
 		7030887C258272E700FFABB6 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				9126F15D2F8220F5000396FB /* BadgeView.swift */,
 				913C9FA92F7F3C2000BE4680 /* ImagePickerView.swift */,
 				9126F1212F7F3DE3000396FB /* ProfileImageView.swift */,
 				7036E4C8256E1A6F006E9A3C /* ProfileView.swift */,
@@ -831,6 +843,7 @@
 		9126F1452F80BE1B000396FB /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				9126F1552F821F65000396FB /* BadgeManager.swift */,
 				9126F14D2F80BE30000396FB /* StreakManager.swift */,
 			);
 			path = Manager;
@@ -879,6 +892,7 @@
 		918FDEB3271B402F0045A0EF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9126F1592F821F81000396FB /* Badge.swift */,
 				3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */,
 				913866742F540C5400B9BD74 /* CareKitCard.swift */,
 				7099D1FE29E98D900037CD8E /* AppError.swift */,
@@ -1352,6 +1366,7 @@
 				707D29522DCBE68500980253 /* AppDelegateKey.swift in Sources */,
 				707D29532DCBE68500980253 /* Logger.swift in Sources */,
 				707D29542DCBE68500980253 /* TintColorFlipKey.swift in Sources */,
+				9126F15F2F8220FD000396FB /* BadgeView.swift in Sources */,
 				707D29552DCBE68500980253 /* Installation.swift in Sources */,
 				9126F1232F7F3DE3000396FB /* ProfileImageView.swift in Sources */,
 				913C9FA82F7F35BA00BE4680 /* CustomContactViewController.swift in Sources */,
@@ -1367,6 +1382,7 @@
 				3FF742EC2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */,
 				707D295B2DCBE68500980253 /* LoginView.swift in Sources */,
 				707D295C2DCBE68500980253 /* AppDelegate.swift in Sources */,
+				9126F15C2F821F86000396FB /* Badge.swift in Sources */,
 				707D295D2DCBE68500980253 /* LoginViewModel.swift in Sources */,
 				70B8E0A62F0EC1CA00440FCA /* Mutex.swift in Sources */,
 				3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */,
@@ -1386,6 +1402,7 @@
 				707D29662DCBE68500980253 /* UserType.swift in Sources */,
 				3FE2E9C32F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
 				707D29672DCBE68500980253 /* ContactView.swift in Sources */,
+				9126F1572F821F6B000396FB /* BadgeManager.swift in Sources */,
 				3F39358E2F7DF2D9004180FA /* Survey.swift in Sources */,
 				3FF742E62F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */,
 				3FF6C87F2F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
@@ -1440,6 +1457,7 @@
 				3FF742E92F7E82EA00F1F171 /* OCKAnyEvent+Custom.swift in Sources */,
 				70A98D62278A2683009B58F2 /* Styler.swift in Sources */,
 				91693818271B5E1600A634ED /* Constants.swift in Sources */,
+				9126F1562F821F6B000396FB /* BadgeManager.swift in Sources */,
 				70E3422B2DB0581C005124F9 /* MainTabView.swift in Sources */,
 				7075152028DE1BB400A57A0C /* LoginView.swift in Sources */,
 				70E342292DB05813005124F9 /* ProfileView.swift in Sources */,
@@ -1475,6 +1493,7 @@
 				7099D20C29E98E400037CD8E /* InstallationChannel.swift in Sources */,
 				913866752F540C5400B9BD74 /* CareKitCard.swift in Sources */,
 				9144B69D2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */,
+				9126F15A2F821F86000396FB /* Badge.swift in Sources */,
 				70308886258273D400FFABB6 /* LoginViewModel.swift in Sources */,
 				70F921B127CAC16E00368CEC /* SessionDelegate.swift in Sources */,
 				911AAF6A2F5A282000ADCBCD /* CareKitTaskView.swift in Sources */,
@@ -1513,6 +1532,7 @@
 				70F03AA827860E7700E5AFB4 /* FontColorKey.swift in Sources */,
 				9169381B271B64E100A634ED /* Styler.swift in Sources */,
 				70F921A827CA9A3A00368CEC /* CustomStylerKey.swift in Sources */,
+				9126F1582F821F6B000396FB /* BadgeManager.swift in Sources */,
 				70221F3428D8ABBE00971195 /* AppDelegate+UIApplicationDelegate.swift in Sources */,
 				3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */,
 				9169381D271B650700A634ED /* ColorStyler.swift in Sources */,
@@ -1533,11 +1553,13 @@
 				7099D1FF29E98D900037CD8E /* AppError.swift in Sources */,
 				3FF6C8812F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
 				70F0EFE828C2EC050005B5A2 /* OCKSampleApp.swift in Sources */,
+				9126F15B2F821F86000396FB /* Badge.swift in Sources */,
 				3FF742E22F7E6BC200F1F171 /* CarePlanID.swift in Sources */,
 				918FDEB7271B41FF0045A0EF /* Logger.swift in Sources */,
 				70221F2A28D7BE0600971195 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,
 				3F3935862F7DF243004180FA /* Consent.swift in Sources */,
 				7036E4D3256EBE35006E9A3C /* MainView.swift in Sources */,
+				9126F15E2F8220FD000396FB /* BadgeView.swift in Sources */,
 				918FDEC5271B4EA70045A0EF /* StoreCoordinatorKey.swift in Sources */,
 				91693822271B897200A634ED /* Utility.swift in Sources */,
 				707CC718254DA91900116728 /* OCKLocalization.swift in Sources */,

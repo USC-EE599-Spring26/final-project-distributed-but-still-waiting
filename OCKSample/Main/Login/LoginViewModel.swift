@@ -278,6 +278,7 @@ class LoginViewModel: ObservableObject {
      Logs out the currently logged in person *asynchronously*.
     */
     func logout() async {
+        StreakManager.shared.resetLocalStreak()
 		await Utility.logoutAndResetAppState()
         await self.checkStatus()
     }

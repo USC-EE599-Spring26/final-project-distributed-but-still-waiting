@@ -26,6 +26,12 @@ struct User: ParseUser {
     var lastTypeSelected: String?
     var userTypeUUIDs: [String: UUID]?
     var profilePicture: ParseFile?
+
+    // streak properties
+    var currentStreak: Int?
+    var longestStreak: Int?
+    var lastActiveDate: Date?
+
 }
 
 // MARK: Default Implementation
