@@ -14,6 +14,7 @@ import SwiftUI
 import os.log
 
 @MainActor
+// swiftlint:disable type_body_length
 class ProfileViewModel: ObservableObject {
 
 	// MARK: Public read/write properties
@@ -30,12 +31,18 @@ class ProfileViewModel: ObservableObject {
 	@Published var zipcode = ""
 	@Published var country = ""
 	@Published var isShowingSaveAlert = false
+  @Published var allergies = ""
+  @Published var emailAddresses = ""
+  @Published var messagingNumbers = ""
+  @Published var phoneNumbers = ""
+  @Published var otherContactInfo = ""
 	@Published var isPresentingAddTask = false
 	@Published var isPresentingContact = false
 	@Published var isPresentingImagePicker = false
 	@Published var currentStreak: Int = 0
 	@Published var isProfileCreated: Bool = false
 	@Published var badges: [Badge] = []
+	@Published private(set) var currentProfileID: String?
 	@Published var profileUIImage = UIImage(systemName: "person.fill") {
 		willSet {
 			guard self.profileUIImage != newValue,
@@ -92,25 +99,30 @@ class ProfileViewModel: ObservableObject {
 
 	// MARK: Properties
 
-	var patient: OCKPatient? {
-		willSet {
-			if let currentFirstName = newValue?.name.givenName {
-				firstName = currentFirstName
-			} else {
-				firstName = ""
-			}
-			if let currentLastName = newValue?.name.familyName {
-				lastName = currentLastName
-			} else {
-				lastName = ""
-			}
-			if let currentBirthday = newValue?.birthday {
-				birthday = currentBirthday
-			} else {
-				birthday = Date()
-			}
-		}
-	}
+    var patient: OCKPatient? {
+            willSet {
+                if let currentFirstName = newValue?.name.givenName {
+                    firstName = currentFirstName
+                } else {
+                    firstName = ""
+                }
+                if let currentLastName = newValue?.name.familyName {
+                    lastName = currentLastName
+                } else {
+                    lastName = ""
+                }
+                if let currentBirthday = newValue?.birthday {
+                    birthday = currentBirthday
+                } else {
+                    birthday = Date()
+                }
+                if let currentAllergies = newValue?.allergies {
+                    allergies = currentAllergies[0]
+                } else {
+                    allergies = ""
+                }
+            }
+        }
 
 	// MARK: Helpers (public)
 
@@ -125,8 +137,14 @@ class ProfileViewModel: ObservableObject {
 		loadBadges()
 	}
 
+	func loadCurrentProfileID() async {
+		currentProfileID = try? await Utility.getRemoteClockUUID().uuidString
+	}
+
 	func updatePatient(_ patient: OCKAnyPatient) {
 		guard let patient = patient as? OCKPatient,
+			  let currentProfileID,
+			  patient.id == currentProfileID,
 			  // Only update if we have a newer version.
 			  patient.uuid != self.patient?.uuid else {
 			return
@@ -144,16 +162,23 @@ class ProfileViewModel: ObservableObject {
 	}
 
 	func updateContact(_ contact: OCKAnyContact) {
-		guard let currentPatient = self.patient,
-			  let contact = contact as? OCKContact,
-			  // Has to be my contact.
-			  contact.id == currentPatient.id,
+		guard let contact = contact as? OCKContact,
+			  let currentProfileID,
+			  contact.id == currentProfileID,
 			  // Only update if we have a newer version.
 			  contact.uuid != self.contact?.uuid else {
 			return
 		}
 		self.contact = contact
 		self.isProfileCreated = true
+        self.street = contact.address?.street ?? ""
+        self.city = contact.address?.city ?? ""
+        self.state = contact.address?.state ?? ""
+        self.zipcode = contact.address?.postalCode ?? ""
+        self.emailAddresses = contact.emailAddresses?.first?.value ?? ""
+        self.messagingNumbers = contact.messagingNumbers?.first?.value ?? ""
+        self.phoneNumbers = contact.phoneNumbers?.first?.value ?? ""
+        self.otherContactInfo = contact.otherContactInfo?.first?.value ?? ""
 	}
 
 	@MainActor
@@ -199,46 +224,52 @@ class ProfileViewModel: ObservableObject {
 		}
 	}
 
-	@MainActor
-	func savePatient() async throws {
-		if var patientToUpdate = patient {
-			// If there is a currentPatient that was fetched, check to see if any of the fields changed
-			var patientHasBeenUpdated = false
+    @MainActor
+        func savePatient() async throws {
+            if var patientToUpdate = patient {
+                // If there is a currentPatient that was fetched, check to see if any of the fields changed
+                var patientHasBeenUpdated = false
 
-			if patient?.name.givenName != firstName {
-				patientHasBeenUpdated = true
-				patientToUpdate.name.givenName = firstName
-			}
+                if patient?.name.givenName != firstName {
+                    patientHasBeenUpdated = true
+                    patientToUpdate.name.givenName = firstName
+                }
 
-			if patient?.name.familyName != lastName {
-				patientHasBeenUpdated = true
-				patientToUpdate.name.familyName = lastName
-			}
+                if patient?.name.familyName != lastName {
+                    patientHasBeenUpdated = true
+                    patientToUpdate.name.familyName = lastName
+                }
 
-			if patient?.birthday != birthday {
-				patientHasBeenUpdated = true
-				patientToUpdate.birthday = birthday
-			}
+                if patient?.birthday != birthday {
+                    patientHasBeenUpdated = true
+                    patientToUpdate.birthday = birthday
+                }
 
-			if patient?.sex != sex {
-				patientHasBeenUpdated = true
-				patientToUpdate.sex = sex
-			}
+                if patient?.sex != sex {
+                    patientHasBeenUpdated = true
+                    patientToUpdate.sex = sex
+                }
 
-			let notes = [OCKNote(author: firstName,
-								 title: "New Note",
-								 content: note)]
-			if patient?.notes != notes {
-				patientHasBeenUpdated = true
-				patientToUpdate.notes = notes
-			}
+                // Temp allergies
+                if patient?.allergies != [allergies] {
+                    patientHasBeenUpdated = true
+                    patientToUpdate.allergies = [allergies]
+                }
 
-			if patientHasBeenUpdated {
-				_ = try await AppDelegateKey.defaultValue?.store.updateAnyPatient(patientToUpdate)
-				Logger.profile.info("Successfully updated patient")
-			}
+                let notes = [OCKNote(author: firstName,
+                                     title: "New Note",
+                                     content: note)]
+                if patient?.notes != notes {
+                    patientHasBeenUpdated = true
+                    patientToUpdate.notes = notes
+                }
 
-		} else {
+                if patientHasBeenUpdated {
+                    _ = try await AppDelegateKey.defaultValue?.store.updateAnyPatient(patientToUpdate)
+                    Logger.profile.info("Successfully updated patient")
+                }
+
+            } else {
 			guard let remoteUUID = (try? await Utility.getRemoteClockUUID())?.uuidString else {
 				Logger.profile.error("The user currently is not logged in")
 				return
@@ -282,6 +313,37 @@ class ProfileViewModel: ObservableObject {
 				contactHasBeenUpdated = true
 				contactToUpdate.address = potentialAddress
 			}
+            // Create a mutable temp email address to compare
+                        let potentialEmail = [OCKLabeledValue(label: "email", value: emailAddresses)]
+
+                        if contact?.emailAddresses != potentialEmail {
+                            contactHasBeenUpdated = true
+                            contactToUpdate.emailAddresses = potentialEmail
+                        }
+
+                        // Create a mutable temp messaging number to compare
+                        let potentialMessaging = [OCKLabeledValue(label: "message", value: messagingNumbers)]
+
+                        if contact?.messagingNumbers != potentialMessaging {
+                            contactHasBeenUpdated = true
+                            contactToUpdate.messagingNumbers = potentialMessaging
+                        }
+
+                        // Create a mutable temp phone number to compare
+                        let potentialPhone = [OCKLabeledValue(label: "phone", value: phoneNumbers)]
+
+                        if contact?.phoneNumbers != potentialPhone {
+                            contactHasBeenUpdated = true
+                            contactToUpdate.phoneNumbers = potentialPhone
+                        }
+
+                        // Create a mutable temp other contact info to compare
+                        let potentialOther = [OCKLabeledValue(label: "other", value: otherContactInfo)]
+
+                        if contact?.otherContactInfo != potentialOther {
+                            contactHasBeenUpdated = true
+                            contactToUpdate.otherContactInfo = potentialOther
+                        }
 
 			if contactHasBeenUpdated {
 				_ = try await AppDelegateKey.defaultValue?.store.updateAnyContact(contactToUpdate)

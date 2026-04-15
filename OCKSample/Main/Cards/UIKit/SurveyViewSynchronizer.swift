@@ -6,15 +6,17 @@
 //  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
-#if canImport(ResearchKit)
+#if canImport(ResearchKit) && canImport(ResearchKitUI)
 
 import CareKit
 import CareKitStore
 import CareKitUI
 import ResearchKit
-import ResearchKitActiveTask
 import UIKit
 import os.log
+#if canImport(ResearchKitActiveTask)
+import ResearchKitActiveTask
+#endif
 
 final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
 
@@ -24,26 +26,27 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
     ) {
         super.updateView(view, context: context)
 
-        if let event = context.viewModel.first?.first, event.outcome != nil {
-            view.instructionsLabel.isHidden = false
+        let event = context.viewModel.first?.first
+        let shouldShowInstructions = event?.outcome != nil
 
-            guard let task = event.task as? OCKTask else {
-                view.instructionsLabel.text = nil
-                return
-            }
-
+        var instructionsText: String?
+        if let event, let task = event.task as? OCKTask {
             switch task.id {
             case Onboard.identifier():
-                view.instructionsLabel.text = "Welcome to NeuroMallea. The application is set up and ready to use!"
+                instructionsText = "Welcome to NeuroMallea. The application is set up and ready to use!"
+            #if canImport(ResearchKitActiveTask)
             case RangeOfMotion.identifier():
                 let range = event.answer(kind: #keyPath(ORKRangeOfMotionResult.range))
-                view.instructionsLabel.text = "Your Range of Motion Result: \(Int(range))"
+                instructionsText = "Your Range of Motion Result: \(Int(range))"
+            #endif
             default:
-                view.instructionsLabel.isHidden = false
+                instructionsText = nil
             }
+        }
 
-        } else {
-            view.instructionsLabel.isHidden = true
+        MainActor.assumeIsolated {
+            view.instructionsLabel.isHidden = !shouldShowInstructions
+            view.instructionsLabel.text = instructionsText
         }
     }
 }
