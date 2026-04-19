@@ -26,6 +26,7 @@ class CustomContactViewController: OCKListViewController, @unchecked Sendable {
 
     /// The store the view controller uses for synchronization.
     fileprivate let store: OCKAnyStoreProtocol
+    #if os(iOS)
     fileprivate let viewSynchronizer: OCKSimpleContactViewSynchronizer
 
     /// Create an instance of the view controller. Will hook up the calendar to the tasks collection,
@@ -44,6 +45,7 @@ class CustomContactViewController: OCKListViewController, @unchecked Sendable {
         self.viewSynchronizer = viewSynchronizer
         super.init(nibName: nil, bundle: nil)
     }
+    #endif
 
     @available(*, unavailable)
     public required init?(coder: NSCoder) {
@@ -131,12 +133,15 @@ class CustomContactViewController: OCKListViewController, @unchecked Sendable {
             var query = OCKContactQuery(for: Date())
             query.ids = [contact.id]
             query.limit = 1
+#if os(iOS)
             let contactViewController = OCKSimpleContactViewController(
                 query: query,
                 store: store,
                 viewSynchronizer: viewSynchronizer
             )
             self.appendViewController(contactViewController, animated: false)
+            #endif
+            
         }
     }
 

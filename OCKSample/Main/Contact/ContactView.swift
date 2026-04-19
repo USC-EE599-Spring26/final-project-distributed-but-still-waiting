@@ -34,7 +34,7 @@ struct ContactView: UIViewControllerRepresentable {
     }
 
     func createViewController() -> UIViewController {
-//        #if os(iOS)
+        #if os(iOS)
 
         let currentContacts = contacts.latest
                 let viewController = CustomContactViewController(
@@ -43,9 +43,9 @@ struct ContactView: UIViewControllerRepresentable {
                     viewSynchronizer: OCKSimpleContactViewSynchronizer()
                 )
                 return viewController
-//        #else
-//        return UIViewController()
-//        #endif
+        #else
+        return UIViewController()
+        #endif
     }
     static func query() -> OCKContactQuery {
             let query = OCKContactQuery(for: Date())
