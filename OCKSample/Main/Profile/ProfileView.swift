@@ -26,8 +26,8 @@ struct ProfileView: View {
     @State var isPresentingContact = false
     @State var isPresentingImagePicker = false
     @State var isPresentingManageTasks = false
-    @State private var showPHQBanner = false
-    @State private var phqStreak = 0
+//    @State private var showPHQBanner = false
+//    @State private var phqStreak = 0
     @State private var isEditing = false
 
     var body: some View {
@@ -44,6 +44,7 @@ struct ProfileView: View {
                                 name: "\(viewModel.firstName) \(viewModel.lastName)",
                                 streak: viewModel.currentStreak
                             )
+                            .id(viewModel.currentStreak)
                             .frame(height: 200)
 
                             // ACHIEVEMENTS
@@ -104,15 +105,6 @@ struct ProfileView: View {
                 .background(Color.red)
                 .cornerRadius(15)
                 .padding()
-                .onChange(of: showPHQBanner) {
-                    if showPHQBanner {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            withAnimation {
-                                showPHQBanner = false
-                            }
-                        }
-                    }
-                }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(isEditing ? "Done" : "Edit") {

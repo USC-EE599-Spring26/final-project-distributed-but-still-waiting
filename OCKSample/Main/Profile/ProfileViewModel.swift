@@ -119,6 +119,20 @@ class ProfileViewModel: ObservableObject {
             }
         }
     }
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleStreakUpdate),
+            name: .streakUpdated,
+            object: nil
+        )
+    }
+    @objc private func handleStreakUpdate() {
+        loadStreak()
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     func updateContact(_ contact: OCKAnyContact) {
         guard let currentPatient = self.patient,
