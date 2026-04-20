@@ -38,9 +38,9 @@ struct BadgeView: View {
             }
         case .phq:
             switch badge.tier {
-            case .bronze: return "ph9_bronze_badge"
-            case .silver: return "ph9_silver_badge"
-            case .gold: return "ph9_gold_badge"
+            case .bronze: return "phq_bronze_badge"
+            case .silver: return "phq_silver_badge"
+            case .gold: return "phq_gold_badge"
             }
 
         default: return ""

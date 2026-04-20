@@ -36,7 +36,9 @@ final class ManageTasksViewModel: ObservableObject {
                         ($0 as? CareTask)?.priority ?? Int.max <
                         ($1 as? CareTask)?.priority ?? Int.max
                     }
+            Logger.careKitTask.info("Fetched \(self.tasks.count, privacy: .public) tasks for management")
         } catch {
+            Logger.careKitTask.error("Could not fetch tasks: \(error.localizedDescription, privacy: .public)")
             self.error = AppError.errorString(
                 "Could not fetch tasks: \(error.localizedDescription)"
             )
@@ -54,7 +56,9 @@ final class ManageTasksViewModel: ObservableObject {
         for task in deletedTasks {
             do {
                 try await store.deleteAnyTask(task)
+                Logger.careKitTask.info("Deleted task: \(task.id, privacy: .private)")
             } catch {
+                Logger.careKitTask.error("Could not delete task: \(error.localizedDescription, privacy: .public)")
                 self.error = AppError.errorString(
                     "Could not delete task: \(error.localizedDescription)"
                 )

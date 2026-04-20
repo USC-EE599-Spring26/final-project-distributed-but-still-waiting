@@ -16,13 +16,13 @@ import ResearchKitActiveTask
 import UIKit
 import os.log
 
+
 final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
 
     override func updateView(
         _ view: OCKInstructionsTaskView,
         context: OCKSynchronizationContext<OCKTaskEvents>
     ) {
-
         super.updateView(view, context: context)
 
         if let event = context.viewModel.first?.first, event.outcome != nil {

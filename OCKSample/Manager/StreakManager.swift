@@ -35,10 +35,15 @@ final class StreakManager {
         }
     }
 
+    func initializeStreak() async {
+        await loadFromParse()
+        handleAppLaunch()
+    }
+
     func recordActivity() -> Int {
         let today = calendar.startOfDay(for: Date())
         let lastDate = getLastActiveDate()
-        Logger.streak.info("Streak activity recorded")
+        Logger.streak.info("Recording streak activity for today")
         var currentStreak = getCurrentStreak()
         var longestStreak = getLongestStreak()
 
@@ -82,16 +87,17 @@ final class StreakManager {
             user.currentStreak = current
             user.longestStreak = longest
             user.lastActiveDate = lastDate
-            Logger.streak.info("User ID: \(user.objectId ?? "nil", privacy: .public)")
+            Logger.streak.debug("Saving streak for user: \(user.objectId ?? "nil", privacy: .public)")
 
             try await user.save()
 
-            Logger.streak.info("Streak saved to Parse")
+            Logger.streak.info("Str sent to Parse: \(current, privacy: .public), longest=\(longest, privacy: .public)")
 
         } catch {
             Logger.streak.error("Failed to save streak: \(error.localizedDescription, privacy: .public)")
         }
     }
+
     func loadFromParse() async {
         do {
             let user = try await User.current()
@@ -106,24 +112,21 @@ final class StreakManager {
             UserDefaults.standard.set(longest, forKey: longestKey)
             UserDefaults.standard.set(lastDate, forKey: lastDateKey)
 
-            Logger.streak.info("Streak loaded from Parse \(current, privacy: .public)")
+            Logger.streak.info("Str loaded :\(current, privacy: .public), longest=\(longest, privacy: .public)")
 
         } catch {
-            Logger.streak.error("Failed to load streak from Parse")
+            Logger.streak.error("Failed to load streak from Parse: \(error.localizedDescription, privacy: .public)")
         }
     }
+
     func resetLocalStreak() {
         UserDefaults.standard.removeObject(forKey: streakKey)
         UserDefaults.standard.removeObject(forKey: lastDateKey)
         UserDefaults.standard.removeObject(forKey: longestKey)
 
-        Logger.streak.info("🧹 Local streak reset")
+        Logger.streak.info("Local streak reset")
 
         NotificationCenter.default.post(name: .streakUpdated, object: nil)
-    }
-    func initializeStreak() async {
-        await loadFromParse()
-        handleAppLaunch()
     }
 
     // MARK: - Private
@@ -133,7 +136,7 @@ final class StreakManager {
     }
 
     private func save(streak: Int, lastDate: Date, longest: Int) {
-        Logger.streak.info("called save method")
+        Logger.streak.debug("Saving str locally:\(streak, privacy: .public), longest=\(longest, privacy: .public)")
         UserDefaults.standard.set(streak, forKey: streakKey)
         UserDefaults.standard.set(lastDate, forKey: lastDateKey)
         UserDefaults.standard.set(longest, forKey: longestKey)

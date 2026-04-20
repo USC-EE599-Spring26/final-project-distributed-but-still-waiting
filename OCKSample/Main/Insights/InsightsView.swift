@@ -21,7 +21,7 @@ struct InsightsView: View {
 	@State var configurations: [CKEDataSeriesConfiguration] = []
 	@State var sortedTaskIDs: [String: Int] = [:]
 
-    var body: some View {
+	var body: some View {
 		NavigationStack {
 			dateIntervalSegmentView
 				.padding()
@@ -148,7 +148,7 @@ struct InsightsView: View {
 			}
 #endif
 		}
-    }
+	}
 
 	private var orderedEvents: [CareStoreFetchedResult<OCKAnyEvent>] {
 		events.latest.sorted(by: { left, right in
@@ -289,7 +289,7 @@ struct InsightsView: View {
 }
 
 #Preview {
-    InsightsView()
+	InsightsView()
 		.environment(\.careStore, Utility.createPreviewStore())
 		.careKitStyle(Styler())
 }

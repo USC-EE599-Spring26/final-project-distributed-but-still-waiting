@@ -99,7 +99,7 @@ struct MyCustomCardView: CareKitEssentialView {
                     "Updated event by removing outcome values: \(updatedOutcome.values)"
                 )
             } catch {
-                Logger.myCustomCardView.info(
+                Logger.myCustomCardView.error(
                     "Error saving value: \(error)"
                 )
             }

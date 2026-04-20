@@ -119,7 +119,7 @@ struct EnergyCardView: CareKitEssentialView {
                     let updatedOutcome = try await saveOutcomeValues(
                         newValues,
                         event: event)
-                    Logger.EnergyCardView.info(
+                    Logger.energyCardView.info(
                         "Updated event by setting outcome values: \(updatedOutcome.values)"
                     )
                     return
@@ -130,11 +130,11 @@ struct EnergyCardView: CareKitEssentialView {
                     event: event
                 )
 
-                Logger.EnergyCardView.info(
+                Logger.energyCardView.info(
                     "Updated event by removing outcome values: \(updatedOutcome.values)"
                 )
             } catch {
-                Logger.EnergyCardView.error(
+                Logger.energyCardView.error(
                     "Error saving value: \(error)"
                 )
             }
