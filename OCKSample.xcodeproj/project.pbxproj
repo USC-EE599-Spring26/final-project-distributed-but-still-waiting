@@ -52,6 +52,9 @@
 		3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
 		3FF6C8862F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
 		3FF6C8872F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
+		B1A0D5022F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */; };
+		B1A0D5032F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */; };
+		B1A0D5042F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */; };
 		3FF742E02F7E6BC200F1F171 /* CarePlanID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */; };
 		3FF742E12F7E6BC200F1F171 /* CarePlanID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */; };
 		3FF742E22F7E6BC200F1F171 /* CarePlanID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */; };
@@ -407,6 +410,7 @@
 		3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEnabledEnvironmentKey.swift; sourceTree = "<group>"; };
 		3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomCardView.swift; sourceTree = "<group>"; };
 		3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyCardView.swift; sourceTree = "<group>"; };
+		B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCustomCardView.swift; sourceTree = "<group>"; };
 		3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarePlanID.swift; sourceTree = "<group>"; };
 		3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ORKTask+ResearchKit.swift"; sourceTree = "<group>"; };
 		3FF742E72F7E82DD00F1F171 /* OCKAnyEvent+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKAnyEvent+Custom.swift"; sourceTree = "<group>"; };
@@ -801,6 +805,7 @@
 			isa = PBXGroup;
 			children = (
 				3FF742EE2F7E83A300F1F171 /* UIKit */,
+				B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */,
 				3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */,
 				3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */,
 				A8F9C6D42F6E8A9001B2C3D4 /* LinkCardView.swift */,
@@ -1366,6 +1371,7 @@
 				707D29712DCBE6A000980253 /* OCKLocalization.swift in Sources */,
 				707D294C2DCBE68500980253 /* StoreCoordinatorKey.swift in Sources */,
 				707D294D2DCBE68500980253 /* InsightsView.swift in Sources */,
+				B1A0D5042F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */,
 				707D294E2DCBE68500980253 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				707D294F2DCBE68500980253 /* OCKStore+SampleData.swift in Sources */,
 				3FF6C8832F72B37700C49E6D /* MyCustomCardView.swift in Sources */,
@@ -1479,6 +1485,7 @@
 				7083A857279CA40F00B3832E /* PCKUtility.swift in Sources */,
 				3FE2E9BE2F57AE4200462DA1 /* AnimationStyler.swift in Sources */,
 				705572402DC1EAEE008E5B0A /* InsightsView.swift in Sources */,
+				B1A0D5032F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */,
 				911AAF5F2F5A276C00ADCBCD /* DimensionStyler.swift in Sources */,
 				91AD923924A4C42D00925D4D /* OCKWatchSampleApp.swift in Sources */,
 				70F03AA627860B2500E5AFB4 /* OCKPatient+Parse.swift in Sources */,
@@ -1531,6 +1538,7 @@
 				70F921AC27CABE3000368CEC /* SessionDelegate.swift in Sources */,
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
 				7055723F2DC1E63A008E5B0A /* InsightsView.swift in Sources */,
+				B1A0D5022F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */,
 				9126F1532F80C6C2000396FB /* Notification+Extensions.swift in Sources */,
 				7036E64025717F85006E9A3C /* Constants.swift in Sources */,
 				7099D20529E98DFF0037CD8E /* TaskID.swift in Sources */,

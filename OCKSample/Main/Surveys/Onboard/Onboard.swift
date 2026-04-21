@@ -142,8 +142,10 @@ extension Onboard {
         )
 
         requestPermissionsStep.title = "Sleep and Health Data Permission"
-        // swiftlint:disable:next line_length
-        requestPermissionsStep.text = "Review the following sleep and health data below and provide permissions to allow us to tailor your care to your health."
+        requestPermissionsStep.text = """
+        Review the following sleep and health data below and provide permissions to allow us to tailor your care to \
+        your health.
+        """
 
         // Completion Step
         let completionStep = ORKCompletionStep(
@@ -151,8 +153,10 @@ extension Onboard {
         )
 
         completionStep.title = "NeuroMallea is now live!"
-        // swiftlint:disable:next line_length
-        completionStep.text = "Begin working towards your health and well-being with the NeuroMallea app. We look forward to supporting you on this journey!"
+        completionStep.text = """
+        Begin working towards your health and well-being with the NeuroMallea app. We look forward to supporting you \
+        on this journey!
+        """
 
         let surveyTask = ORKOrderedTask(
             identifier: identifier(),

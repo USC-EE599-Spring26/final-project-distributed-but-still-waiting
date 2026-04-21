@@ -213,8 +213,11 @@ class LoginViewModel: ObservableObject {
 				self.loginError = parseError
 
 			default:
-				// swiftlint:disable:next line_length
-				Logger.login.error("*** Error Signing up as user for Parse Server. Are you running parse-hipaa and is the initialization complete? Check http://localhost:1337 in your browser. If you are still having problems check for help here: https://github.com/netreconlab/parse-postgres#getting-started ***")
+				Logger.login.error("""
+					*** Error signing up for Parse Server. Are you running parse-hipaa and is the initialization \
+					complete? Check http://localhost:1337 in your browser. For help, visit:
+					https://github.com/netreconlab/parse-postgres#getting-started ***
+					""")
 				self.loginError = parseError
 			}
 		}
@@ -246,8 +249,10 @@ class LoginViewModel: ObservableObject {
 				Logger.login.error("Error saving the patient after signup: \(error, privacy: .public)")
 			}
 		} catch {
-			// swiftlint:disable:next line_length
-			Logger.login.error("*** Error logging into Parse Server. If you are still having problems check for help here: https://github.com/netreconlab/parse-hipaa#getting-started ***")
+			Logger.login.error("""
+				*** Error logging into Parse Server. If you are still having problems, check for help here:
+				https://github.com/netreconlab/parse-hipaa#getting-started ***
+				""")
 			Logger.login.error("Error details: \(error)")
 			guard let parseError = error as? ParseError else {
 				// Handle unknow error, right now it's silent
@@ -276,8 +281,10 @@ class LoginViewModel: ObservableObject {
 														   )
 			try? await finishCompletingSignIn(patient)
 		} catch {
-			// swiftlint:disable:next line_length
-			Logger.login.error("*** Error logging into Parse Server. If you are still having problems check for help here: https://github.com/netreconlab/parse-hipaa#getting-started ***")
+			Logger.login.error("""
+				*** Error logging into Parse Server. If you are still having problems, check for help here:
+				https://github.com/netreconlab/parse-hipaa#getting-started ***
+				""")
 			Logger.login.error("Error details: \(String(describing: error))")
 			guard let parseError = error as? ParseError else {
 				return

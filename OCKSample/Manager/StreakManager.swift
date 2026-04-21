@@ -102,12 +102,12 @@ final class StreakManager {
             if longest > serverLongest {
                 user.longestStreak = longest
                 try await user.save()
-                // swiftlint:disable:next line_length
-                Logger.streak.info("Str sent to Parse: \(current, privacy: .public), longest=\(longest, privacy: .public)")
+                Logger.streak.info("Str sent to Parse: \(current, privacy: .public)")
+                Logger.streak.info("Longest streak sent to Parse: \(longest, privacy: .public)")
             } else {
                 try await user.save()
-                // swiftlint:disable:next line_length
-                Logger.streak.info("Str sent to Parse: \(current, privacy: .public), longest kept server version=\(serverLongest, privacy: .public)")
+                Logger.streak.info("Str sent to Parse: \(current, privacy: .public)")
+                Logger.streak.info("Longest streak kept server version: \(serverLongest, privacy: .public)")
                 if serverLongest > longest {
                     UserDefaults.standard.set(serverLongest, forKey: longestKey)
                     NotificationCenter.default.post(name: .streakUpdated, object: nil)

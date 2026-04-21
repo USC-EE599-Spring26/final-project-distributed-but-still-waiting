@@ -8,8 +8,6 @@
 
 import Foundation
 
-// swiftlint:disable line_length
-
 let informedConsentHTML = """
     <!DOCTYPE html>
     <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -26,9 +24,15 @@ let informedConsentHTML = """
         <h1>NeuroMallea Informed Consent</h1>
         <h3>Study Expectations</h3>
         <ul>
-            <li>You will be asked to complete various study tasks such as surveys, exercises, or report mental health.</li>
+            <li>
+                You will be asked to complete various study tasks such as surveys, exercises, or report mental
+                health.
+            </li>
             <li>The study will send you notifications to remind you to complete these study tasks.</li>
-            <li>You will be asked to share various health data types to support the study goals including: behavioral information, mental health, sleep tracking, and physical health data.</li>
+            <li>
+                You will be asked to share various health data types to support the study goals including:
+                behavioral information, mental health, sleep tracking, and physical health data.
+            </li>
             <li>If prescribed, you will be expected to consume prescribed medication.</li>
             <li>The study is expected to last 1 year.</li>
             <li>The study may reach out to you for future research opportunities.</li>
@@ -42,7 +46,11 @@ let informedConsentHTML = """
             <li>Must be the only user of the device on which you are participating in the study.</li>
             <li>Must be able to sign your own consent form.</li>
         </ul>
-        <p>By signing below, I acknowledge that I have read this consent carefully, that I understand all of its terms, and that I enter into this study voluntarily. I understand that my information will only be used and disclosed for the purposes described in the consent and I can withdraw from the study at any time.</p>
+        <p>
+            By signing below, I acknowledge that I have read this consent carefully, that I understand all of its
+            terms, and that I enter into this study voluntarily. I understand that my information will only be used
+            and disclosed for the purposes described in the consent and I can withdraw from the study at any time.
+        </p>
         <p>Please sign using your finger below.</p>
         <br>
     </body>

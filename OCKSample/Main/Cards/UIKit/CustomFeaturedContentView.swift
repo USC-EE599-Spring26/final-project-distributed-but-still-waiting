@@ -2,7 +2,7 @@
 //  CustomFeaturedContentView.swift
 //  OCKSample
 //
-//  Created by Corey Baker on 11/24/20.
+//  Created by Jai Shah on 11/24/20.
 //  Copyright © 2020 Network Reconnaissance Lab. All rights reserved.
 //
 
