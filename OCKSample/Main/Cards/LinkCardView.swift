@@ -42,11 +42,11 @@ struct LinkCardView: CareKitEssentialView {
            !linkString.isEmpty {
             // If it looks like a web link, prefer the website variant
             if linkString.lowercased().hasPrefix("http") {
-                return [LinkItem.website(linkString, title: "Get Help Now")]
+                return [LinkItem.website(linkString, title: String(localized: "GET_HELP_NOW"))]
             }
             // Otherwise, try to convert to URL
             if let url = URL(string: linkString) {
-                return [LinkItem.url(url, title: "Get Help Now", symbol: "link.circle")]
+                return [LinkItem.url(url, title: String(localized: "GET_HELP_NOW"), symbol: "link.circle")]
             }
         }
 
