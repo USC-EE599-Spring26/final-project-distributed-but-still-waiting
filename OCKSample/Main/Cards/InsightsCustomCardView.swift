@@ -20,17 +20,20 @@ struct InsightsCustomCardView: View {
 
 	let title: String
 	let subtitle: String
+	let intervalSelected: Int
 	let taskIDs: [String]
 	@Binding var dateInterval: DateInterval
 
 	init(
 		title: String = "Outcome Trends",
 		subtitle: String,
+		intervalSelected: Int,
 		dateInterval: Binding<DateInterval>,
 		taskIDs: [String] = Self.defaultTaskIDs
 	) {
 		self.title = title
 		self.subtitle = subtitle
+		self.intervalSelected = intervalSelected
 		self.taskIDs = taskIDs
 		_dateInterval = dateInterval
 	}
@@ -72,14 +75,14 @@ struct InsightsCustomCardView: View {
 	private var chartView: some View {
 		Chart(chartPoints) { point in
 			LineMark(
-				x: .value("Date", point.date, unit: .day),
+				x: .value("Date", point.date, unit: timeline.dateUnit),
 				y: .value("Average Outcome", point.value)
 			)
 			.foregroundStyle(by: .value("Task", point.taskTitle))
 			.interpolationMethod(.catmullRom)
 
 			PointMark(
-				x: .value("Date", point.date, unit: .day),
+				x: .value("Date", point.date, unit: timeline.dateUnit),
 				y: .value("Average Outcome", point.value)
 			)
 			.foregroundStyle(by: .value("Task", point.taskTitle))
@@ -88,7 +91,7 @@ struct InsightsCustomCardView: View {
 		}
 		.chartYScale(domain: yAxisDomain)
 		.chartXAxis {
-			AxisMarks(values: .automatic(desiredCount: 4))
+			AxisMarks(values: .automatic(desiredCount: timeline.desiredAxisMarkCount))
 		}
 		.chartYAxis {
 			AxisMarks(position: .leading)
@@ -118,9 +121,9 @@ struct InsightsCustomCardView: View {
 			.flatMap { rawOutcomePoints(for: $0.result) }
 
 		let buckets = rawPoints.reduce(into: [OutcomeChartBucket: [Double]]()) { result, rawPoint in
-			let day = Calendar.current.startOfDay(for: rawPoint.date)
+			let bucketDate = bucketStartDate(for: rawPoint.date)
 			let bucket = OutcomeChartBucket(
-				date: day,
+				date: bucketDate,
 				taskID: rawPoint.taskID,
 				taskTitle: rawPoint.taskTitle
 			)
@@ -153,6 +156,10 @@ struct InsightsCustomCardView: View {
 		return 0...(maxValue * 1.1)
 	}
 
+	private var timeline: InsightsChartTimeline {
+		InsightsChartTimeline(selection: intervalSelected)
+	}
+
 	private func rawOutcomePoints(for event: OCKAnyEvent) -> [RawOutcomePoint] {
 		guard let outcome = event.outcome else {
 			return []
@@ -175,6 +182,13 @@ struct InsightsCustomCardView: View {
 				value: numericValue
 			)
 		}
+	}
+
+	private func bucketStartDate(for date: Date) -> Date {
+		Calendar.current.dateInterval(
+			of: timeline.bucketComponent,
+			for: date
+		)?.start ?? date
 	}
 
 	private func updateQuery() {
@@ -243,6 +257,63 @@ private struct OutcomeChartPoint: Identifiable {
 	}
 }
 
+private enum InsightsChartTimeline {
+	case today
+	case week
+	case month
+	case year
+
+	init(selection: Int) {
+		switch selection {
+		case 0:
+			self = .today
+		case 1:
+			self = .week
+		case 2:
+			self = .month
+		case 3:
+			self = .year
+		default:
+			self = .week
+		}
+	}
+
+	var bucketComponent: Calendar.Component {
+		switch self {
+		case .today:
+			return .hour
+		case .week, .month:
+			return .day
+		case .year:
+			return .month
+		}
+	}
+
+	var dateUnit: Calendar.Component {
+		switch self {
+		case .today:
+			return .hour
+		case .week, .month:
+			return .day
+		case .year:
+			return .month
+		}
+	}
+
+	var desiredAxisMarkCount: Int {
+		switch self {
+		case .today:
+			return 6
+		case .week:
+			return 7
+		case .month:
+			return 5
+		case .year:
+			return 6
+		}
+	}
+}
+
 struct InsightsCustomCardView_Previews: PreviewProvider {
 	static var previews: some View {
 		InsightsCustomCardViewPreview()
@@ -258,6 +329,7 @@ private struct InsightsCustomCardViewPreview: View {
 	var body: some View {
 		InsightsCustomCardView(
 			subtitle: "WEEK",
+			intervalSelected: 1,
 			dateInterval: $dateInterval
 		)
 		.environment(\.careStore, Utility.createPreviewStore())

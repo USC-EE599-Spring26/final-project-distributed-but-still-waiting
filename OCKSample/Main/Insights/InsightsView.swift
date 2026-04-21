@@ -29,6 +29,7 @@ struct InsightsView: View {
 				VStack {
 					InsightsCustomCardView(
 						subtitle: subtitle,
+						intervalSelected: intervalSelected,
 						dateInterval: $chartInterval
 					)
 
