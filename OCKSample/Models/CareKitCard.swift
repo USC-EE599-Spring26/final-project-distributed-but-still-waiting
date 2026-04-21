@@ -16,7 +16,6 @@ enum CareKitCard: String, CaseIterable, Identifiable {
 	case grid = "Grid"
 	case instruction = "Instruction"
 	case labeledValue = "Labeled Value"
-	case link = "Link"
 	case numericProgress = "Numeric Progress"
 	case simple = "Simple"
     case survey = "Survey"

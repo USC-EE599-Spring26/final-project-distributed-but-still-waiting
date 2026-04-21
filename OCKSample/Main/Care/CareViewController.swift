@@ -57,7 +57,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
     // UI References
     private var sliderHostingController: UIHostingController<CarePlanSliderView>?
     #if os(iOS)
-    private var tipView: TipView?
+    private var tipView: CustomFeaturedContentView?
     #endif
 
 	private let swiftUIPadding: CGFloat = 15
@@ -237,17 +237,23 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 					// Add a non-CareKit view into the list
 					let tipTitle = "Benefits of CBT Exercises"
 					let tipText = "Learn how CBT exercises can decrease symptoms of depression and anxiety."
-					let tip = TipView()
-					tip.headerView.titleLabel.text = tipTitle
-					tip.headerView.detailLabel.text = tipText
-					tip.imageView.image = UIImage(named: "NeuroMalleaBackground")
+					let tip = CustomFeaturedContentView(
+						title: tipTitle,
+						detail: tipText,
+						image: UIImage(named: "NeuroMalleaBackground")
+					)
 					tip.customStyle = CustomStylerKey.defaultValue
                     self.tipView = tip
 					listViewController.appendView(tip, animated: false)
 				}
 			}
-	            #endif
+            #endif
 
+			let linkCard = LinkCardView()
+				.careKitStyle(style)
+				.padding(.vertical, swiftUIPadding)
+				.formattedHostingController()
+			listViewController.appendViewController(linkCard, animated: false)
 			await fetchAndDisplayTasks(on: listViewController, for: date)
 		}
 	}
@@ -280,6 +286,12 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
             listViewController.appendView(tip, animated: false)
         }
         #endif
+
+        let linkCard = LinkCardView()
+            .careKitStyle(style)
+            .padding(.vertical, swiftUIPadding)
+            .formattedHostingController()
+        listViewController.appendViewController(linkCard, animated: false)
 
         let allTasks: [any OCKAnyTask]
         if let cachedTasks = tasksByDate[date] {
@@ -384,9 +396,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				.formattedHostingController()
 
 				return [card]
-
-			case .link:
-				return nil
 
 			case .simple:
 
