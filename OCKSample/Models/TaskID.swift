@@ -14,7 +14,6 @@ enum TaskID {
     static let stretch = "stretch"
     static let kegels = "kegels"
     static let steps = "steps"
-    static let ovulationTestResult = "ovulationTestResult"
     static let lexapro = "lexapro"
     static let cbtExercises = "cbtExercises"
     static let sleepResult = "sleepResult"
@@ -29,7 +28,7 @@ enum TaskID {
     }
 
     static var orderedObjective: [String] {
-        [ Self.steps, Self.ovulationTestResult, Self.sleepResult]
+        [ Self.steps, Self.sleepResult]
     }
 
     static var orderedSubjective: [String] {

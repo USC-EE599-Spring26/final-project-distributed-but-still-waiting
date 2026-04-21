@@ -50,30 +50,7 @@ extension OCKHealthKitPassthroughStore {
         sleepResult.priority = 0
         sleepResult.impactsAdherence = false
 
-        let ovulationTestResultSchedule = OCKSchedule.dailyAtTime(
-            hour: 8,
-            minutes: 0,
-            start: startDate,
-            end: nil,
-            text: nil,
-            duration: .allDay,
-            targetValues: []
-        )
-        var ovulationTestResult = OCKHealthKitTask(
-            id: TaskID.ovulationTestResult,
-            title: String(localized: "OVULATION_TEST_RESULT"),
-            carePlanUUID: carePlanUUIDs[.wellness],
-            schedule: ovulationTestResultSchedule,
-            healthKitLinkage: OCKHealthKitLinkage(
-                categoryIdentifier: .ovulationTestResult
-            )
-        )
-        ovulationTestResult.asset = "circle.dotted"
-        ovulationTestResult.card = .labeledValue
-        ovulationTestResult.priority = 1
-        ovulationTestResult.impactsAdherence = false
-
-        let tasks = [ sleepResult, ovulationTestResult ]
+        let tasks = [ sleepResult ]
 
         _ = try await addTasksIfNotPresent(tasks)
 
