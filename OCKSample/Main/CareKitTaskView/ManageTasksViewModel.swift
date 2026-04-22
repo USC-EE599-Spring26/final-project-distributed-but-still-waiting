@@ -31,11 +31,13 @@ final class ManageTasksViewModel: ObservableObject {
 
         do {
             let fetchedTasks = try await store.fetchAnyTasks(query: query)
+            let managementTasks = fetchedTasks.filter { $0.id != Onboard.identifier() }
 
-                    tasks = fetchedTasks.sorted {
-                        ($0 as? CareTask)?.priority ?? Int.max <
-                        ($1 as? CareTask)?.priority ?? Int.max
-                    }
+            tasks = managementTasks.sorted { firstTask, secondTask in
+                let firstPriority = (firstTask as? CareTask)?.priority ?? Int.max
+                let secondPriority = (secondTask as? CareTask)?.priority ?? Int.max
+                return firstPriority < secondPriority
+            }
             Logger.careKitTask.info("Fetched \(self.tasks.count, privacy: .public) tasks for management")
         } catch {
             Logger.careKitTask.error("Could not fetch tasks: \(error.localizedDescription, privacy: .public)")
