@@ -27,6 +27,12 @@ struct InsightsView: View {
 				.padding()
 			ScrollView {
 				VStack {
+					InsightsCustomCardView(
+						subtitle: subtitle,
+						intervalSelected: intervalSelected,
+						dateInterval: $chartInterval
+					)
+
 					// This is for loop is useful when you want a chart for
 					// for every task which may not always be the case.
 					ForEach(orderedEvents) { event in

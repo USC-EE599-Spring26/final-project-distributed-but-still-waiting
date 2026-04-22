@@ -17,8 +17,9 @@ extension AppDelegate: UIApplicationDelegate {
             if isSyncingWithRemote {
                 do {
                     // Parse-Server setup
-                    // swiftlint:disable:next line_length
-                    try await PCKUtility.configureParse(fileName: Constants.parseConfigFileName) { _, completionHandler in
+                    try await PCKUtility.configureParse(
+                        fileName: Constants.parseConfigFileName
+                    ) { _, completionHandler in
                         completionHandler(.performDefaultHandling, nil)
                     }
                 } catch {
@@ -34,8 +35,9 @@ extension AppDelegate: UIApplicationDelegate {
                         try? await setupRemotes(uuid: uuid)
                         parseRemote.automaticallySynchronizes = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            // swiftlint:disable:next line_length
-                            NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.requestSync)))
+                            NotificationCenter.default.post(
+                                .init(name: Notification.Name(rawValue: Constants.requestSync))
+                            )
                         }
                     } catch {
                         Logger.appDelegate.error("User is logged in, but missing remoteId: \(error)")

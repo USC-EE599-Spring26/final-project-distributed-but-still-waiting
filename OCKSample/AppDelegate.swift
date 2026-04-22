@@ -165,9 +165,9 @@ final class AppDelegate: UIResponder, ObservableObject {
 
 				/* do {
 					try await store.populateDefaultCarePlansTasksContacts(startDate: historicalStart)
-					print("Seeded CareKit tasks starting:", historicalStart)
+					Logger.appDelegate.info("Seeded CareKit tasks starting: \(historicalStart)")
 				} catch {
-					print("Tasks already exist or failed to seed:", error)
+					Logger.appDelegate.error("Tasks already exist or failed to seed: \(error)")
 				} */
 			} else {
 				let store = OCKStore(name: Constants.iOSLocalCareStoreName,

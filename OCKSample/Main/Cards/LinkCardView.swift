@@ -1,7 +1,9 @@
 //
 //  LinkCardView.swift
 //  OCKSample
+//
 //  Created by Jai Shah on 4/20/26.
+//  Copyright © 2026 Network Reconnaissance Lab. All rights reserved.
 //
 
 import CareKitUI
