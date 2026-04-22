@@ -235,7 +235,9 @@ extension OCKStore {
 		energy.instructions = String(localized: "ENERGY_INSTRUCTIONS")
 		energy.asset = "figure.flexibility"
 		energy.priority = 10
-		energy.card = .customEnergy
+		energy.card = .twoButton
+		energy.userInfo?[Constants.twoButtonPositiveTitleKey] = "HIGH_ENERGY"
+		energy.userInfo?[Constants.twoButtonNegativeTitleKey] = "LOW_ENERGY"
 
 		let phq = createPHQSurveyTask(carePlanUUID: carePlanUUIDs[.mentalHealth])
 

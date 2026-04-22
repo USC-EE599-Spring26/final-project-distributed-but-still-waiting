@@ -1,5 +1,5 @@
 //
-//  EnergyCardView.swift
+//  TwoButtonCardView.swift
 //  OCKSample
 //
 //  Created by Student on 3/24/26.
@@ -13,7 +13,7 @@ import CareKitUI
 import os.log
 import SwiftUI
 
-struct EnergyCardView: CareKitEssentialView {
+struct TwoButtonCardView: CareKitEssentialView {
     @Environment(\.careStore) var store
     @Environment(\.customStyler) var style
     @Environment(\.isCardEnabled) private var isCardEnabled
@@ -38,17 +38,15 @@ struct EnergyCardView: CareKitEssentialView {
 
                 VStack(alignment: .center) {
                     HStack(alignment: .center, spacing: 12) {
-
-                        // High Energy Button
                         Button(action: {
-                            saveEnergyLevel(high: true)
+                            saveSelectedValue(isPositive: true)
                         }) {
                             RectangularCompletionView(
-                                isComplete: isHighEnergy
+                                isComplete: isPositiveSelected
                             ) {
                                 Spacer()
-                                Text(highEnergyButtonText)
-                                    .foregroundColor(highEnergyForegroundColor)
+                                Text(positiveButtonText)
+                                    .foregroundColor(positiveForegroundColor)
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                 Spacer()
@@ -56,16 +54,15 @@ struct EnergyCardView: CareKitEssentialView {
                         }
                         .buttonStyle(NoHighlightStyle())
 
-                        // Low Energy Button
                         Button(action: {
-                            saveEnergyLevel(high: false)
+                            saveSelectedValue(isPositive: false)
                         }) {
                             RectangularCompletionView(
-                                isComplete: isLowEnergy
+                                isComplete: isNegativeSelected
                             ) {
                                 Spacer()
-                                Text(lowEnergyButtonText)
-                                    .foregroundColor(lowEnergyForegroundColor)
+                                Text(negativeButtonText)
+                                    .foregroundColor(negativeForegroundColor)
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                 Spacer()
@@ -82,44 +79,59 @@ struct EnergyCardView: CareKitEssentialView {
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var savedEnergyValue: Int? {
+    private var savedButtonValue: Int? {
         event.outcome?.values.first?.integerValue
     }
 
-    private var isHighEnergy: Bool {
-        savedEnergyValue == 1
+    private var isPositiveSelected: Bool {
+        savedButtonValue == 1
     }
 
-    private var isLowEnergy: Bool {
-        savedEnergyValue == 0
+    private var isNegativeSelected: Bool {
+        savedButtonValue == 0
     }
 
-    private var highEnergyButtonText: LocalizedStringKey {
-        isHighEnergy ? "HIGH_ENERGY" : "HIGH_ENERGY"
+    private var positiveButtonText: LocalizedStringKey {
+        LocalizedStringKey(positiveButtonTitleKey)
     }
 
-    private var lowEnergyButtonText: LocalizedStringKey {
-        isLowEnergy ? "LOW_ENERGY" : "LOW_ENERGY"
+    private var negativeButtonText: LocalizedStringKey {
+        LocalizedStringKey(negativeButtonTitleKey)
     }
 
-    private var highEnergyForegroundColor: Color {
-        isHighEnergy && !isLowEnergy ? .accentColor : .white
+    private var positiveForegroundColor: Color {
+        isPositiveSelected && !isNegativeSelected ? .accentColor : .white
     }
 
-    private var lowEnergyForegroundColor: Color {
-        isLowEnergy && !isHighEnergy ? .accentColor : .white
+    private var negativeForegroundColor: Color {
+        isNegativeSelected && !isPositiveSelected ? .accentColor : .white
     }
 
-    private func saveEnergyLevel(high: Bool) {
+    private var positiveButtonTitleKey: String {
+        buttonTitleKey(for: Constants.twoButtonPositiveTitleKey, defaultValue: "HIGH_ENERGY")
+    }
+
+    private var negativeButtonTitleKey: String {
+        buttonTitleKey(for: Constants.twoButtonNegativeTitleKey, defaultValue: "LOW_ENERGY")
+    }
+
+    private func buttonTitleKey(for key: String, defaultValue: String) -> String {
+        let userInfo = (event.task as? CareTask)?.userInfo
+        return userInfo?[key] ?? defaultValue
+    }
+
+    private func saveSelectedValue(isPositive: Bool) {
         Task {
             do {
                 guard event.isComplete else {
-                    let newOutcomeValue = OCKOutcomeValue(high ? 1 : 0)
-                    let newValues = savedEnergyValue == (high ? 1 : 0) ? [] : [newOutcomeValue]
+                    let selectedValue = isPositive ? 1 : 0
+                    let newOutcomeValue = OCKOutcomeValue(selectedValue)
+                    let newValues = savedButtonValue == selectedValue ? [] : [newOutcomeValue]
                     let updatedOutcome = try await saveOutcomeValues(
                         newValues,
-                        event: event)
-                    Logger.energyCardView.info(
+                        event: event
+                    )
+                    Logger.twoButtonCardView.info(
                         "Updated event by setting outcome values: \(updatedOutcome.values)"
                     )
                     return
@@ -130,11 +142,11 @@ struct EnergyCardView: CareKitEssentialView {
                     event: event
                 )
 
-                Logger.energyCardView.info(
+                Logger.twoButtonCardView.info(
                     "Updated event by removing outcome values: \(updatedOutcome.values)"
                 )
             } catch {
-                Logger.energyCardView.error(
+                Logger.twoButtonCardView.error(
                     "Error saving value: \(error)"
                 )
             }
@@ -144,7 +156,7 @@ struct EnergyCardView: CareKitEssentialView {
 
 #if !os(watchOS)
 
-extension EnergyCardView: EventViewable {
+extension TwoButtonCardView: EventViewable {
 
     public init?(
         event: OCKAnyEvent,
@@ -158,7 +170,7 @@ extension EnergyCardView: EventViewable {
 
 #endif
 
-struct EnergyCardView_Previews: PreviewProvider {
+struct TwoButtonCardView_Previews: PreviewProvider {
     static var store = Utility.createPreviewStore()
     static var query: OCKEventQuery {
         var query = OCKEventQuery(for: Date())
@@ -170,7 +182,7 @@ struct EnergyCardView_Previews: PreviewProvider {
         VStack {
             @CareStoreFetchRequest(query: query) var events
             if let event = events.latest.first {
-                EnergyCardView(event: event.result)
+                TwoButtonCardView(event: event.result)
             }
         }
         .environment(\.careStore, store)

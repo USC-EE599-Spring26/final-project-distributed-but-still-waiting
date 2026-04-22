@@ -444,8 +444,8 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
 				return [card]
 
-			case .customEnergy:
-				let card = EventQueryView<EnergyCardView>(
+			case .twoButton:
+				let card = EventQueryView<TwoButtonCardView>(
 					query: query
 				)
 				.formattedHostingController()

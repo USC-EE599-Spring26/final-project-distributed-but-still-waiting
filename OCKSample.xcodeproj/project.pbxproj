@@ -50,8 +50,8 @@
 		3FF6C8812F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */; };
 		3FF6C8832F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
 		3FF6C8842F72B37700C49E6D /* MyCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */; };
-		3FF6C8862F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
-		3FF6C8872F731AD200C49E6D /* EnergyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */; };
+		3FF6C8862F731AD200C49E6D /* TwoButtonCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* TwoButtonCardView.swift */; };
+		3FF6C8872F731AD200C49E6D /* TwoButtonCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6C8852F731ACB00C49E6D /* TwoButtonCardView.swift */; };
 		B1A0D5022F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */; };
 		B1A0D5032F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */; };
 		B1A0D5042F97A00100C0D3E1 /* InsightsCustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */; };
@@ -409,7 +409,7 @@
 		3FF6C8262F72A15900C49E6D /* ResearchKitSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ResearchKitSwiftUI.xcodeproj; path = ResearchKit/ResearchKitSwiftUI/ResearchKitSwiftUI.xcodeproj; sourceTree = SOURCE_ROOT; };
 		3FF6C87E2F72B33800C49E6D /* CardEnabledEnvironmentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEnabledEnvironmentKey.swift; sourceTree = "<group>"; };
 		3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomCardView.swift; sourceTree = "<group>"; };
-		3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyCardView.swift; sourceTree = "<group>"; };
+		3FF6C8852F731ACB00C49E6D /* TwoButtonCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoButtonCardView.swift; sourceTree = "<group>"; };
 		B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCustomCardView.swift; sourceTree = "<group>"; };
 		3FF742D82F7E6BBD00F1F171 /* CarePlanID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarePlanID.swift; sourceTree = "<group>"; };
 		3FF742E32F7E6C8500F1F171 /* ORKTask+ResearchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ORKTask+ResearchKit.swift"; sourceTree = "<group>"; };
@@ -806,7 +806,7 @@
 			children = (
 				3FF742EE2F7E83A300F1F171 /* UIKit */,
 				B1A0D5002F97A00100C0D3E1 /* InsightsCustomCardView.swift */,
-				3FF6C8852F731ACB00C49E6D /* EnergyCardView.swift */,
+				3FF6C8852F731ACB00C49E6D /* TwoButtonCardView.swift */,
 				3FF6C8822F72B37100C49E6D /* MyCustomCardView.swift */,
 				A8F9C6D42F6E8A9001B2C3D4 /* LinkCardView.swift */,
 				70E3422D2DB0626A005124F9 /* Modifiers */,
@@ -1361,7 +1361,7 @@
 				9138686A2F59AE8600B9BD74 /* OCKTask+CareTask.swift in Sources */,
 				9126F14F2F80BE41000396FB /* StreakManager.swift in Sources */,
 				9138686B2F59AE8600B9BD74 /* OCKHealthKitTask+CareTask.swift in Sources */,
-				3FF6C8872F731AD200C49E6D /* EnergyCardView.swift in Sources */,
+				3FF6C8872F731AD200C49E6D /* TwoButtonCardView.swift in Sources */,
 				707D29462DCBE68500980253 /* MainTabView.swift in Sources */,
 				707D29472DCBE68500980253 /* User.swift in Sources */,
 				707D29482DCBE68500980253 /* FontColorKey.swift in Sources */,
@@ -1533,7 +1533,7 @@
 				9138666F2F540A5900B9BD74 /* CareKitTaskView.swift in Sources */,
 				918FDEB5271B40590045A0EF /* Installation.swift in Sources */,
 				911AAF612F5A276C00ADCBCD /* DimensionStyler.swift in Sources */,
-				3FF6C8862F731AD200C49E6D /* EnergyCardView.swift in Sources */,
+				3FF6C8862F731AD200C49E6D /* TwoButtonCardView.swift in Sources */,
 				7099D20829E98E200037CD8E /* UserType.swift in Sources */,
 				70F921AC27CABE3000368CEC /* SessionDelegate.swift in Sources */,
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
