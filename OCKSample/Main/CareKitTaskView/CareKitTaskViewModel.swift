@@ -12,14 +12,29 @@ import HealthKit
 import os.log
 
 // ADDED
-enum TaskCardType: String, CaseIterable, Identifiable {
+enum TaskCardType: CaseIterable, Identifiable {
     var id: Self { self }
 
-    case button = "Button"
-    case checklist = "Checklist"
-    case instruction = "Instruction"
-    case simple = "Simple"
-    case healthKitNumeric = "HealthKit Numeric Progress"
+    case button
+    case checklist
+    case instruction
+    case simple
+    case healthKitNumeric
+
+    var displayTitle: String {
+        switch self {
+        case .button:
+            return String(localized: "TASK_CARD_BUTTON")
+        case .checklist:
+            return String(localized: "TASK_CARD_CHECKLIST")
+        case .instruction:
+            return String(localized: "TASK_CARD_INSTRUCTION")
+        case .simple:
+            return String(localized: "TASK_CARD_SIMPLE")
+        case .healthKitNumeric:
+            return String(localized: "TASK_CARD_HEALTHKIT_NUMERIC")
+        }
+    }
 
     var card: CareKitCard {
         switch self {
@@ -36,18 +51,65 @@ enum TaskCardType: String, CaseIterable, Identifiable {
         }
     }
 
+    var defaultAsset: String {
+        switch self {
+        case .button:
+            return "checkmark.circle.fill"
+        case .checklist:
+            return "checklist"
+        case .instruction:
+            return "book.closed.fill"
+        case .simple:
+            return "square.grid.2x2.fill"
+        case .healthKitNumeric:
+            return "heart.fill"
+        }
+    }
+
+    var defaultInstructions: String {
+        switch self {
+        case .button:
+            return String(localized: "TASK_INSTRUCTIONS_BUTTON")
+        case .checklist:
+            return String(localized: "TASK_INSTRUCTIONS_CHECKLIST")
+        case .instruction:
+            return String(localized: "TASK_INSTRUCTIONS_INSTRUCTION")
+        case .simple:
+            return String(localized: "TASK_INSTRUCTIONS_SIMPLE")
+        case .healthKitNumeric:
+            return String(localized: "TASK_INSTRUCTIONS_HEALTHKIT_NUMERIC")
+        }
+    }
+
 }
 
 // ADDED
-enum HealthKitQuantityOption: String, CaseIterable, Identifiable {
+enum HealthKitQuantityOption: CaseIterable, Identifiable {
     var id: Self { self }
 
-    case stepCount = "Step Count"
-    case heartRate = "Heart Rate"
-    case activeEnergyBurned = "Active Energy Burned"
-    case distanceWalkingRunning = "Walking + Running Distance"
-    case bodyMass = "Body Mass"
-    case electrodermalActivity = "Electrodermal Activity"
+    case stepCount
+    case heartRate
+    case activeEnergyBurned
+    case distanceWalkingRunning
+    case bodyMass
+    case electrodermalActivity
+
+    var displayTitle: String {
+        switch self {
+        case .stepCount:
+            return String(localized: "HEALTHKIT_QUANTITY_STEP_COUNT")
+        case .heartRate:
+            return String(localized: "HEALTHKIT_QUANTITY_HEART_RATE")
+        case .activeEnergyBurned:
+            return String(localized: "HEALTHKIT_QUANTITY_ACTIVE_ENERGY_BURNED")
+        case .distanceWalkingRunning:
+            return String(localized: "HEALTHKIT_QUANTITY_DISTANCE_WALKING_RUNNING")
+        case .bodyMass:
+            return String(localized: "HEALTHKIT_QUANTITY_BODY_MASS")
+        case .electrodermalActivity:
+            return String(localized: "HEALTHKIT_QUANTITY_ELECTRODERMAL_ACTIVITY")
+        }
+    }
 
     var identifier: HKQuantityTypeIdentifier {
         switch self {
@@ -91,18 +153,69 @@ enum HealthKitQuantityOption: String, CaseIterable, Identifiable {
             return .average
         }
     }
+
+    var defaultAsset: String {
+        switch self {
+        case .stepCount:
+            return "figure.walk"
+        case .heartRate:
+            return "heart.fill"
+        case .activeEnergyBurned:
+            return "flame.fill"
+        case .distanceWalkingRunning:
+            return "figure.walk.motion"
+        case .bodyMass:
+            return "scalemass.fill"
+        case .electrodermalActivity:
+            return "waveform.path.ecg"
+        }
+    }
+
+    var defaultInstructions: String {
+        switch self {
+        case .stepCount:
+            return String(localized: "HEALTHKIT_INSTRUCTIONS_STEP_COUNT")
+        case .heartRate:
+            return String(localized: "HEALTHKIT_INSTRUCTIONS_HEART_RATE")
+        case .activeEnergyBurned:
+            return String(localized: "HEALTHKIT_INSTRUCTIONS_ACTIVE_ENERGY_BURNED")
+        case .distanceWalkingRunning:
+            return String(localized: "HEALTHKIT_INSTRUCTIONS_DISTANCE_WALKING_RUNNING")
+        case .bodyMass:
+            return String(localized: "HEALTHKIT_INSTRUCTIONS_BODY_MASS")
+        case .electrodermalActivity:
+            return String(localized: "HEALTHKIT_INSTRUCTIONS_ELECTRODERMAL_ACTIVITY")
+        }
+    }
 }
 
 // ADDED
-enum HealthKitUnitOption: String, CaseIterable, Identifiable {
+enum HealthKitUnitOption: CaseIterable, Identifiable {
     var id: Self { self }
 
-    case count = "count"
-    case countPerMinute = "count/min"
-    case kilocalorie = "kcal"
-    case meter = "m"
-    case kilogram = "kg"
-    case siemens = "S"
+    case count
+    case countPerMinute
+    case kilocalorie
+    case meter
+    case kilogram
+    case siemens
+
+    var displayTitle: String {
+        switch self {
+        case .count:
+            return String(localized: "HEALTHKIT_UNIT_COUNT")
+        case .countPerMinute:
+            return String(localized: "HEALTHKIT_UNIT_COUNT_PER_MINUTE")
+        case .kilocalorie:
+            return String(localized: "HEALTHKIT_UNIT_KILOCALORIE")
+        case .meter:
+            return String(localized: "HEALTHKIT_UNIT_METER")
+        case .kilogram:
+            return String(localized: "HEALTHKIT_UNIT_KILOGRAM")
+        case .siemens:
+            return String(localized: "HEALTHKIT_UNIT_SIEMENS")
+        }
+    }
 
     var unit: HKUnit {
         switch self {
@@ -123,11 +236,20 @@ enum HealthKitUnitOption: String, CaseIterable, Identifiable {
 }
 
 // ADDED
-enum HealthKitAggregationOption: String, CaseIterable, Identifiable {
+enum HealthKitAggregationOption: CaseIterable, Identifiable {
     var id: Self { self }
 
-    case sum = "Sum"
-    case average = "Average"
+    case sum
+    case average
+
+    var displayTitle: String {
+        switch self {
+        case .sum:
+            return String(localized: "HEALTHKIT_AGGREGATION_SUM")
+        case .average:
+            return String(localized: "HEALTHKIT_AGGREGATION_AVERAGE")
+        }
+    }
 
     var quantityType: OCKHealthKitLinkage.QuantityType {
         switch self {
@@ -146,20 +268,24 @@ class NewTaskViewModel: ObservableObject {
     @Published var selectedCarePlanUUID: UUID?
     @Published var availableCarePlans: [OCKCarePlan] = []
     @Published var title = ""
-    @Published var instructions = ""
+    @Published var instructions = TaskCardType.button.defaultInstructions
     @Published var selectedCardType: TaskCardType = .button {
         didSet {
             resetIrrelevantFields()
         }
     }
-    @Published var priority = 100
-    @Published var asset = "pills.fill"
+    @Published var priority = 25
+    @Published var asset = TaskCardType.button.defaultAsset
     @Published var scheduleDate = Date()
     @Published var checklistItems: [String] = [""]
     @Published var healthKitQuantity: HealthKitQuantityOption = .stepCount {
         didSet {
             healthKitUnit = healthKitQuantity.defaultUnit
             healthKitAggregation = healthKitQuantity.defaultAggregation
+            if selectedCardType == .healthKitNumeric {
+                asset = healthKitQuantity.defaultAsset
+                instructions = healthKitQuantity.defaultInstructions
+            }
         }
     }
     @Published var healthKitUnit: HealthKitUnitOption = .count
@@ -193,7 +319,7 @@ class NewTaskViewModel: ObservableObject {
             return false
         }
         guard canAddTask else {
-            error = AppError.errorString("Please complete the required task fields.")
+            error = AppError.errorString(String(localized: "ERROR_COMPLETE_REQUIRED_TASK_FIELDS"))
             return false
         }
 
@@ -204,10 +330,10 @@ class NewTaskViewModel: ObservableObject {
             carePlanUUID: selectedCarePlanUUID,
             schedule: makeSchedule(for: selectedCardType)
         )
-        task.instructions = cleanedInstructions
+        task.instructions = resolvedInstructions
         task.card = selectedCardType.card
         task.priority = priority
-        task.asset = asset
+        task.asset = resolvedAsset
         task.impactsAdherence = true
 
         do {
@@ -216,7 +342,12 @@ class NewTaskViewModel: ObservableObject {
             NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.shouldRefreshView)))
             return true
         } catch {
-            self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
+            self.error = AppError.errorString(
+                String(
+                    format: String(localized: "ERROR_COULD_NOT_ADD_TASK"),
+                    error.localizedDescription
+                )
+            )
             return false
         }
     }
@@ -227,7 +358,7 @@ class NewTaskViewModel: ObservableObject {
             return false
         }
         guard canAddTask else {
-            error = AppError.errorString("Please complete the required HealthKit task fields.")
+            error = AppError.errorString(String(localized: "ERROR_COMPLETE_REQUIRED_HEALTHKIT_FIELDS"))
             return false
         }
 
@@ -243,10 +374,10 @@ class NewTaskViewModel: ObservableObject {
                 unit: healthKitUnit.unit
             )
         )
-        healthKitTask.instructions = cleanedInstructions
+        healthKitTask.instructions = resolvedInstructions
         healthKitTask.card = CareKitCard.numericProgress
         healthKitTask.priority = priority
-        healthKitTask.asset = asset
+        healthKitTask.asset = resolvedAsset
         healthKitTask.impactsAdherence = true
 
         do {
@@ -258,7 +389,12 @@ class NewTaskViewModel: ObservableObject {
             #endif
             return true
         } catch {
-            self.error = AppError.errorString("Could not add task: \(error.localizedDescription)")
+            self.error = AppError.errorString(
+                String(
+                    format: String(localized: "ERROR_COULD_NOT_ADD_TASK"),
+                    error.localizedDescription
+                )
+            )
             return false
         }
     }
@@ -295,6 +431,16 @@ class NewTaskViewModel: ObservableObject {
         instructions.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    private var resolvedInstructions: String {
+        if !cleanedInstructions.isEmpty {
+            return cleanedInstructions
+        }
+        if selectedCardType == .healthKitNumeric {
+            return healthKitQuantity.defaultInstructions
+        }
+        return selectedCardType.defaultInstructions
+    }
+
     private var cleanedChecklistItems: [String] {
         checklistItems
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -305,13 +451,27 @@ class NewTaskViewModel: ObservableObject {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    private var resolvedAsset: String {
+        let cleanedAsset = asset.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !cleanedAsset.isEmpty {
+            return cleanedAsset
+        }
+        if selectedCardType == .healthKitNumeric {
+            return healthKitQuantity.defaultAsset
+        }
+        return selectedCardType.defaultAsset
+    }
+
     private func resetIrrelevantFields() {
         if selectedCardType == .healthKitNumeric {
-            instructions = ""
+            instructions = healthKitQuantity.defaultInstructions
+            asset = healthKitQuantity.defaultAsset
         }
 
         if selectedCardType != .healthKitNumeric {
             healthKitQuantity = .stepCount
+            instructions = selectedCardType.defaultInstructions
+            asset = selectedCardType.defaultAsset
         }
 
         switch selectedCardType {

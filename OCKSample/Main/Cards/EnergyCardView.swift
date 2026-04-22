@@ -79,7 +79,7 @@ struct EnergyCardView: CareKitEssentialView {
         }
         .careKitStyle(style)
         .frame(maxWidth: .infinity)
-        .padding(.vertical)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private var savedEnergyValue: Int? {

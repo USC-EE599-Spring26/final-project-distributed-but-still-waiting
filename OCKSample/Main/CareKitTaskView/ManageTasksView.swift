@@ -33,13 +33,13 @@ struct ManageTasksView: View {
                         VStack(alignment: .leading) {
 
                             HStack {
-                                Text(task.title ?? "Untitled Task")
+                                Text(task.title ?? String(localized: "UNTITLED_TASK"))
                                     .font(.headline)
 
                                 Spacer()
 
                                 if let priority = (task as? CareTask)?.priority {
-                                    Text("P\(priority)")
+                                    Text(String(format: String(localized: "TASK_PRIORITY_SHORT_FORMAT"), priority))
                                         .font(.caption)
                                         .padding(.horizontal, 6)
                                         .padding(.vertical, 2)
@@ -61,7 +61,7 @@ struct ManageTasksView: View {
                     }
                 }
             }
-            .navigationTitle("Manage Tasks")
+            .navigationTitle(String(localized: "MANAGE_TASKS"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

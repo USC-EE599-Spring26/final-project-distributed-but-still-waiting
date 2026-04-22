@@ -105,16 +105,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "CBT_EXERCISES" = "CBT Exercises";
 "CBT_INSTRUCTIONS" = "Perform guided meditation for 10 minutes.";
 "ENERGY" = "Energy Level";
+"ENERGY_INSTRUCTIONS" = "Record whether your energy feels high or low today.";
 "LOW_ENERGY" = "Low Energy";
 "HIGH_ENERGY" = "High Energy";
 "SLEEP" = "Sleep Duration";
 "SLEEP_RESULT" = "Sleep Result";
+"SLEEP_RESULT_INSTRUCTIONS" = "Review your sleep result from HealthKit.";
+"TASK_DUE" = "Task Due!";
+"ONBOARD" = "Onboard";
+"ONBOARD_INSTRUCTIONS" = "Review and agree to the terms and conditions before getting started.";
+"RANGE_OF_MOTION" = "Range Of Motion";
+"RANGE_OF_MOTION_INSTRUCTIONS" = "Complete the range of motion survey.";
+"PHQ_SURVEY" = "PHQ Survey";
+"PHQ_INSTRUCTIONS" = "Complete the weekly PHQ survey.";
+"PHQ_QUESTION1" = "Little interest or pleasure in doing things";
+"PHQ_QUESTION2" = "Feeling down, depressed, or hopeless";
+"PHQ_QUESTION3" = "Trouble falling or staying asleep, or sleeping too much";
+"PHQ_LAST_QUESTION" = "If you checked any problems, how difficult did they make work, home tasks, or relationships?";
 "PH9_SURVEY" = "PH9 Survey";
 "PH9_INSTRUCTIONS" = "Take Weekly PH-9 Survey";
 "PH9_QUESTION1" = "Little interest or pleasure in doing things";
 "PH9_QUESTION2" = "Feeling down, depressed, or hopeless";
 "PH9_QUESTION3" = "Trouble falling or staying asleep, or sleeping too much";
-"PH9_LAST_QUESTION" = "If you checked any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?";
+"PH9_LAST_QUESTION" = "If you checked any problems, how difficult did they make work, home tasks, or relationships?";
 "ANSWER_DIFFICULT" = "Difficult";
 "ANSWER_NOT_DIFFICULT" = "Not Difficult";
 "TRACK_DEPRESSION" = "Track your depression";
@@ -125,6 +138,78 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "QUALITY_OF_LIFE_STRESS_DETAIL" = "0 is no stress, 10 is extremely high stress.";
 "ANSWER_YES" = "Yes";
 "ANSWER_NO" = "No";
+
+// MARK: Manage Tasks
+"MANAGE_TASKS" = "Manage Tasks";
+"UNTITLED_TASK" = "Untitled Task";
+"TASK_PRIORITY_SHORT_FORMAT" = "P%d";
+"CARE_PLAN" = "Care Plan";
+"NO_CARE_PLAN" = "No Care Plan";
+"UNKNOWN_CARE_PLAN" = "Unknown Care Plan";
+"NONE" = "None";
+"OK" = "OK";
+"ERROR_COULD_NOT_FETCH_CARE_PLANS" = "Could not fetch care plans: %@";
+"ERROR_COULD_NOT_FETCH_TASKS" = "Could not fetch tasks: %@";
+"ERROR_COULD_NOT_DELETE_TASK" = "Could not delete task: %@";
+
+// MARK: Add Tasks
+"ADD_TASK_CARD_SECTION" = "Card";
+"ADD_TASK_CARD_VIEW" = "Card View";
+"ADD_TASK_DETAILS_SECTION" = "Details";
+"ADD_TASK_TITLE" = "Title";
+"ADD_TASK_INSTRUCTIONS" = "Instructions";
+"ADD_TASK_ICON_SECTION" = "Icon";
+"ADD_TASK_ICON" = "Icon";
+"ADD_TASK_PRIORITY_FORMAT" = "Priority: %d";
+"ADD_TASK_TASK_SECTION" = "Task";
+"ADD_TASK_ADD_BUTTON" = "Add";
+"ADD_TASK_SUCCESS" = "Task has been added";
+"ADD_TASK_SCHEDULE_SECTION" = "Schedule";
+"ADD_TASK_STARTS" = "Starts";
+"ADD_TASK_CHECKLIST_ITEMS_SECTION" = "Checklist Items";
+"ADD_TASK_CHECKLIST_ITEM" = "Item";
+"ADD_TASK_ADD_ITEM" = "Add Item";
+"ADD_TASK_HEALTHKIT_SECTION" = "HealthKit";
+"ADD_TASK_HEALTHKIT_QUANTITY" = "Quantity";
+"ADD_TASK_HEALTHKIT_UNIT" = "Unit";
+"ADD_TASK_HEALTHKIT_AGGREGATION" = "Aggregation";
+"ERROR_COMPLETE_REQUIRED_TASK_FIELDS" = "Please complete the required task fields.";
+"ERROR_COMPLETE_REQUIRED_HEALTHKIT_FIELDS" = "Please complete the required HealthKit task fields.";
+"ERROR_COULD_NOT_ADD_TASK" = "Could not add task: %@";
+
+// MARK: Task Card Types
+"TASK_CARD_BUTTON" = "Button";
+"TASK_CARD_CHECKLIST" = "Checklist";
+"TASK_CARD_INSTRUCTION" = "Instruction";
+"TASK_CARD_SIMPLE" = "Simple";
+"TASK_CARD_HEALTHKIT_NUMERIC" = "HealthKit Numeric Progress";
+"TASK_INSTRUCTIONS_BUTTON" = "Tap the button when this task is complete.";
+"TASK_INSTRUCTIONS_CHECKLIST" = "Complete each checklist item for this task.";
+"TASK_INSTRUCTIONS_INSTRUCTION" = "Review the instructions for this task.";
+"TASK_INSTRUCTIONS_SIMPLE" = "Mark this task complete when you are done.";
+"TASK_INSTRUCTIONS_HEALTHKIT_NUMERIC" = "Track this value from HealthKit.";
+
+// MARK: HealthKit Task Options
+"HEALTHKIT_QUANTITY_STEP_COUNT" = "Step Count";
+"HEALTHKIT_QUANTITY_HEART_RATE" = "Heart Rate";
+"HEALTHKIT_QUANTITY_ACTIVE_ENERGY_BURNED" = "Active Energy Burned";
+"HEALTHKIT_QUANTITY_DISTANCE_WALKING_RUNNING" = "Walking + Running Distance";
+"HEALTHKIT_QUANTITY_BODY_MASS" = "Body Mass";
+"HEALTHKIT_QUANTITY_ELECTRODERMAL_ACTIVITY" = "Electrodermal Activity";
+"HEALTHKIT_INSTRUCTIONS_STEP_COUNT" = "Track your step count from HealthKit.";
+"HEALTHKIT_INSTRUCTIONS_HEART_RATE" = "Track your heart rate from HealthKit.";
+"HEALTHKIT_INSTRUCTIONS_ACTIVE_ENERGY_BURNED" = "Track your active energy burned from HealthKit.";
+"HEALTHKIT_INSTRUCTIONS_DISTANCE_WALKING_RUNNING" = "Track your walking and running distance from HealthKit.";
+"HEALTHKIT_INSTRUCTIONS_BODY_MASS" = "Track your body mass from HealthKit.";
+"HEALTHKIT_INSTRUCTIONS_ELECTRODERMAL_ACTIVITY" = "Track your electrodermal activity from HealthKit.";
+"HEALTHKIT_UNIT_COUNT" = "count";
+"HEALTHKIT_UNIT_COUNT_PER_MINUTE" = "count/min";
+"HEALTHKIT_UNIT_KILOCALORIE" = "kcal";
+"HEALTHKIT_UNIT_METER" = "m";
+"HEALTHKIT_UNIT_KILOGRAM" = "kg";
+"HEALTHKIT_UNIT_SIEMENS" = "S";
+"HEALTHKIT_AGGREGATION_SUM" = "Sum";
+"HEALTHKIT_AGGREGATION_AVERAGE" = "Average";
 // MARK: BADGEs
 
 "badge_streak_3_title" = "Streak - 3 Day";

@@ -26,9 +26,9 @@ final class ManageTasksViewModel: ObservableObject {
 
     func carePlanTitle(for task: OCKAnyTask) -> String {
         guard let carePlanUUID = carePlanUUID(for: task) else {
-            return "No Care Plan"
+            return String(localized: "NO_CARE_PLAN")
         }
-        return carePlanTitlesByUUID[carePlanUUID] ?? "Unknown Care Plan"
+        return carePlanTitlesByUUID[carePlanUUID] ?? String(localized: "UNKNOWN_CARE_PLAN")
     }
 
     // MARK: Fetch Care Plans
@@ -42,7 +42,10 @@ final class ManageTasksViewModel: ObservableObject {
         } catch {
             Logger.careKitTask.error("Could not fetch care plans: \(error.localizedDescription, privacy: .public)")
             self.error = AppError.errorString(
-                "Could not fetch care plans: \(error.localizedDescription)"
+                String(
+                    format: String(localized: "ERROR_COULD_NOT_FETCH_CARE_PLANS"),
+                    error.localizedDescription
+                )
             )
         }
     }
@@ -66,7 +69,10 @@ final class ManageTasksViewModel: ObservableObject {
         } catch {
             Logger.careKitTask.error("Could not fetch tasks: \(error.localizedDescription, privacy: .public)")
             self.error = AppError.errorString(
-                "Could not fetch tasks: \(error.localizedDescription)"
+                String(
+                    format: String(localized: "ERROR_COULD_NOT_FETCH_TASKS"),
+                    error.localizedDescription
+                )
             )
         }
     }
@@ -86,7 +92,10 @@ final class ManageTasksViewModel: ObservableObject {
             } catch {
                 Logger.careKitTask.error("Could not delete task: \(error.localizedDescription, privacy: .public)")
                 self.error = AppError.errorString(
-                    "Could not delete task: \(error.localizedDescription)"
+                    String(
+                        format: String(localized: "ERROR_COULD_NOT_DELETE_TASK"),
+                        error.localizedDescription
+                    )
                 )
             }
         }

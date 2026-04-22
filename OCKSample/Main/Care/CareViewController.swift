@@ -60,7 +60,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
     private var tipView: CustomFeaturedContentView?
     #endif
 
-	private let swiftUIPadding: CGFloat = 15
 	private var style: Styler {
 		CustomStylerKey.defaultValue
 	}
@@ -251,7 +250,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
 			let linkCard = LinkCardView()
 				.careKitStyle(style)
-				.padding(.vertical, swiftUIPadding)
 				.formattedHostingController()
 			listViewController.appendViewController(linkCard, animated: false)
 			await fetchAndDisplayTasks(on: listViewController, for: date)
@@ -289,7 +287,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
         let linkCard = LinkCardView()
             .careKitStyle(style)
-            .padding(.vertical, swiftUIPadding)
             .formattedHostingController()
         listViewController.appendViewController(linkCard, animated: false)
 
@@ -392,7 +389,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				let card = EventQueryView<InstructionsTaskView>(
 					query: query
 				)
-				.padding(.vertical, swiftUIPadding)
 				.formattedHostingController()
 
 				return [card]
@@ -402,7 +398,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				let card = EventQueryView<SimpleTaskView>(
 					query: query
 				)
-				.padding(.vertical, swiftUIPadding)
 				.formattedHostingController()
 
 				Logger.feed.debug("Successfully created simple task view for task: \(task.id, privacy: .public)")
@@ -445,7 +440,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				let card = EventQueryView<MyCustomCardView>(
 					query: query
 				)
-				.padding(.vertical, swiftUIPadding)
 				.formattedHostingController()
 
 				return [card]
@@ -454,7 +448,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				let card = EventQueryView<EnergyCardView>(
 					query: query
 				)
-				.padding(.vertical, swiftUIPadding)
 				.formattedHostingController()
 
 				return [card]
@@ -473,7 +466,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				let card = EventQueryView<NumericProgressTaskView>(
 					query: query
 				)
-				.padding(.vertical, swiftUIPadding)
 				.formattedHostingController()
 
 				return [card]
@@ -513,7 +505,6 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				}
 			}
 		}
-		.padding(.vertical, swiftUIPadding)
 		.formattedHostingController()
 		return surveyViewController
 	}
@@ -630,6 +621,7 @@ private extension View {
 	func formattedHostingController() -> UIHostingController<Self> {
 		let viewController = UIHostingController(rootView: self)
 		viewController.view.backgroundColor = .clear
+		viewController.sizingOptions = .intrinsicContentSize
 		return viewController
 	}
 }
