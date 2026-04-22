@@ -15,11 +15,7 @@ struct CareKitTaskView: View {
 	@State var isAddingTask = false
 
 	// MARK: View
-	@StateObject var viewModel = CareKitTaskViewModel()
-	@State var title = ""
-	@State var instructions = ""
-	@State var selectedCard: CareKitCard = .button
-    @State var priority: Int = 100
+	@StateObject var viewModel = NewTaskViewModel()
     private let sfSymbols: [String] = [
         "pills.fill",
         "bandage.fill",
@@ -32,18 +28,32 @@ struct CareKitTaskView: View {
         "syringe.fill",
         "thermometer"
     ]
-    @State var asset = "pills.fill"
 
 	var body: some View {
 
 		NavigationView {
 			Form {
-				TextField("Title",
-						  text: $title)
-				TextField("Instructions",
-						  text: $instructions)
+                Section("Card") {
+                    Picker("Card View", selection: $viewModel.selectedCardType) {
+                        ForEach(TaskCardType.allCases) { item in
+                            Text(item.rawValue)
+                                .tag(item)
+                        }
+                    }
+                }
+
+                Section("Details") {
+                    TextField("Title", text: $viewModel.title)
+
+                    if showsInstructions {
+                        TextField("Instructions", text: $viewModel.instructions)
+                    }
+                }
+
+                cardSpecificFields
+
                 Section("Icon") {
-                    Picker("Icon", selection: $asset) {
+                    Picker("Icon", selection: $viewModel.asset) {
                         ForEach(sfSymbols, id: \.self) { symbol in
                             HStack {
                                 Image(systemName: symbol)
@@ -58,12 +68,7 @@ struct CareKitTaskView: View {
                     .pickerStyle(.menu)
 #endif
                 }
-				Picker("Card View", selection: $selectedCard) {
-					ForEach(CareKitCard.allCases) { item in
-						Text(item.rawValue)
-                    }
-                }
-                Stepper("Priority: \(priority)", value: $priority, in: 1...100)
+                Stepper("Priority: \(viewModel.priority)", value: $viewModel.priority, in: 1...100)
                 Section(header: Text("Care Plan")) {
                     Picker("Care Plan", selection: $viewModel.selectedCarePlanUUID) {
                         Text("None").tag(UUID?.none)
@@ -82,13 +87,7 @@ struct CareKitTaskView: View {
                 Section("Task") {
                     Button("Add") {
                         addTask {
-                            await viewModel.addTask(
-                                title,
-                                instructions: instructions,
-                                cardType: selectedCard,
-                                priority: priority,
-                                asset: asset
-                            )
+                            await viewModel.addTask()
                         }
                     }.alert(
                         "Task has been added",
@@ -97,39 +96,99 @@ struct CareKitTaskView: View {
                         Button("OK") {
                             isShowingAlert = false
                         }
-                    }.disabled(isAddingTask)
+                    }.disabled(isAddingTask || !viewModel.canAddTask)
+
+                    if let error = viewModel.error {
+                        Text(error.localizedDescription)
+                            .foregroundStyle(.red)
+                    }
                 }
-                Section("HealthKitTask") {
-                    Button("Add") {
-                        addTask {
-                            await viewModel.addHealthKitTask(
-                                title,
-                                instructions: instructions,
-                                cardType: selectedCard,
-                                priority: priority,
-                                asset: asset
-                            )
-                        }
-                    }.alert(
-                        "HealthKitTask has been added",
-                        isPresented: $isShowingAlert
-                    ) {
-                        Button("OK") {
-                            isShowingAlert = false
-                        }
-                    }.disabled(isAddingTask)
+            }
+        }
+    }
+
+    // MODIFIED
+    @ViewBuilder
+    private var cardSpecificFields: some View {
+        switch viewModel.selectedCardType {
+        case .button:
+            scheduleFields
+        case .checklist:
+            checklistFields
+        case .instruction, .simple:
+            scheduleFields
+        case .healthKitNumeric:
+            healthKitFields
+            scheduleFields
+        }
+    }
+
+    private var showsInstructions: Bool {
+        switch viewModel.selectedCardType {
+        case .button, .checklist, .instruction, .simple:
+            return true
+        case .healthKitNumeric:
+            return false
+        }
+    }
+
+    private var scheduleFields: some View {
+        Section("Schedule") {
+            DatePicker(
+                "Starts",
+                selection: $viewModel.scheduleDate,
+                displayedComponents: [.date, .hourAndMinute]
+            )
+        }
+    }
+
+    private var checklistFields: some View {
+        Section("Checklist Items") {
+            ForEach(viewModel.checklistItems.indices, id: \.self) { index in
+                TextField("Item", text: $viewModel.checklistItems[index])
+            }
+            .onDelete { offsets in
+                viewModel.removeChecklistItems(at: offsets)
+            }
+
+            Button("Add Item") {
+                viewModel.addChecklistItem()
+            }
+        }
+    }
+
+    private var healthKitFields: some View {
+        Section("HealthKit") {
+            Picker("Quantity", selection: $viewModel.healthKitQuantity) {
+                ForEach(HealthKitQuantityOption.allCases) { quantity in
+                    Text(quantity.rawValue)
+                        .tag(quantity)
+                }
+            }
+
+            Picker("Unit", selection: $viewModel.healthKitUnit) {
+                ForEach(HealthKitUnitOption.allCases) { unit in
+                    Text(unit.rawValue)
+                        .tag(unit)
+                }
+            }
+
+            Picker("Aggregation", selection: $viewModel.healthKitAggregation) {
+                ForEach(HealthKitAggregationOption.allCases) { aggregation in
+                    Text(aggregation.rawValue)
+                        .tag(aggregation)
                 }
             }
         }
     }
 
     // MARK: Helpers
-    func addTask(_ task: @escaping (() async -> Void)) {
+    func addTask(_ task: @escaping (() async -> Bool)) {
         isAddingTask = true
         Task {
-            await task()
+            let didAddTask = await task()
             isAddingTask = false
-            isShowingAlert = true
+            isShowingAlert = didAddTask
         }
     }
 

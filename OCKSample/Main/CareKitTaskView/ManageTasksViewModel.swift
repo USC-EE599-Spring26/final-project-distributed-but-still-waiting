@@ -15,12 +15,36 @@ final class ManageTasksViewModel: ObservableObject {
 
     @Published var tasks: [OCKAnyTask] = []
     @Published var orderedTasks: [OCKAnyTask] = []
+    @Published var carePlanTitlesByUUID: [UUID: String] = [:]
     @Published var error: AppError?
 
     private let store: any OCKAnyTaskStore
 
     init(store: OCKAnyTaskStore) {
         self.store = store
+    }
+
+    func carePlanTitle(for task: OCKAnyTask) -> String {
+        guard let carePlanUUID = carePlanUUID(for: task) else {
+            return "No Care Plan"
+        }
+        return carePlanTitlesByUUID[carePlanUUID] ?? "Unknown Care Plan"
+    }
+
+    // MARK: Fetch Care Plans
+    func fetchCarePlans(store: OCKAnyStoreProtocol) async {
+        do {
+            let carePlans = try await store.fetchAnyCarePlans(query: OCKCarePlanQuery())
+            let concreteCarePlans = carePlans.compactMap { $0 as? OCKCarePlan }
+            carePlanTitlesByUUID = concreteCarePlans.reduce(into: [:]) { titlesByUUID, carePlan in
+                titlesByUUID[carePlan.uuid] = carePlan.title
+            }
+        } catch {
+            Logger.careKitTask.error("Could not fetch care plans: \(error.localizedDescription, privacy: .public)")
+            self.error = AppError.errorString(
+                "Could not fetch care plans: \(error.localizedDescription)"
+            )
+        }
     }
 
     // MARK: Fetch Tasks
@@ -73,5 +97,15 @@ final class ManageTasksViewModel: ObservableObject {
         NotificationCenter.default.post(
             .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
         )
+    }
+
+    private func carePlanUUID(for task: OCKAnyTask) -> UUID? {
+        if let standardTask = task as? OCKTask {
+            return standardTask.carePlanUUID
+        }
+        if let healthTask = task as? OCKHealthKitTask {
+            return healthTask.carePlanUUID
+        }
+        return nil
     }
 }

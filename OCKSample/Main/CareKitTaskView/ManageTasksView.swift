@@ -13,9 +13,7 @@ struct ManageTasksView: View {
 
     @Environment(\.careStore) private var store
     @StateObject private var viewModel: ManageTasksViewModel
-    @StateObject private var addTaskViewModel = CareKitTaskViewModel()
     @State private var isPresentingAddTask = false
-    @State private var newTaskTitle = ""
 
     init(store: OCKAnyTaskStore) {
         _viewModel = StateObject(wrappedValue: ManageTasksViewModel(store: store))
@@ -49,6 +47,10 @@ struct ManageTasksView: View {
                                         .cornerRadius(6)
                                 }
                             }
+
+                            Text(viewModel.carePlanTitle(for: task))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                     }
                     .padding(.vertical, 4)
@@ -74,6 +76,7 @@ struct ManageTasksView: View {
 
             }
             .task {
+                await viewModel.fetchCarePlans(store: store)
                 await viewModel.fetchTasks()
             }
         }
