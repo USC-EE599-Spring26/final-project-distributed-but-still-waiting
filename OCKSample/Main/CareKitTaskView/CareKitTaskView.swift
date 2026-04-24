@@ -15,35 +15,52 @@ struct CareKitTaskView: View {
 	@State var isAddingTask = false
 
 	// MARK: View
-	@StateObject var viewModel = CareKitTaskViewModel()
-	@State var title = ""
-	@State var instructions = ""
-	@State var selectedCard: CareKitCard = .button
-    @State var priority: Int = 100
+	@StateObject var viewModel = NewTaskViewModel()
     private let sfSymbols: [String] = [
+        "checkmark.circle.fill",
+        "checklist",
+        "book.closed.fill",
+        "square.grid.2x2.fill",
         "pills.fill",
         "bandage.fill",
         "stethoscope",
         "heart.fill",
+        "flame.fill",
+        "scalemass.fill",
         "bed.double",
         "figure.walk",
+        "figure.walk.motion",
         "cross.case.fill",
         "waveform.path.ecg",
         "syringe.fill",
         "thermometer"
     ]
-    @State var asset = "pills.fill"
 
 	var body: some View {
 
 		NavigationView {
 			Form {
-				TextField("Title",
-						  text: $title)
-				TextField("Instructions",
-						  text: $instructions)
-                Section("Icon") {
-                    Picker("Icon", selection: $asset) {
+                Section(String(localized: "ADD_TASK_CARD_SECTION")) {
+                    Picker(String(localized: "ADD_TASK_CARD_VIEW"), selection: $viewModel.selectedCardType) {
+                        ForEach(TaskCardType.allCases) { item in
+                            Text(item.displayTitle)
+                                .tag(item)
+                        }
+                    }
+                }
+
+                Section(String(localized: "ADD_TASK_DETAILS_SECTION")) {
+                    TextField(String(localized: "ADD_TASK_TITLE"), text: $viewModel.title)
+
+                    if showsInstructions {
+                        TextField(String(localized: "ADD_TASK_INSTRUCTIONS"), text: $viewModel.instructions)
+                    }
+                }
+
+                cardSpecificFields
+
+                Section(String(localized: "ADD_TASK_ICON_SECTION")) {
+                    Picker(String(localized: "ADD_TASK_ICON"), selection: $viewModel.asset) {
                         ForEach(sfSymbols, id: \.self) { symbol in
                             HStack {
                                 Image(systemName: symbol)
@@ -58,15 +75,14 @@ struct CareKitTaskView: View {
                     .pickerStyle(.menu)
 #endif
                 }
-				Picker("Card View", selection: $selectedCard) {
-					ForEach(CareKitCard.allCases) { item in
-						Text(item.rawValue)
-                    }
-                }
-                Stepper("Priority: \(priority)", value: $priority, in: 1...100)
-                Section(header: Text("Care Plan")) {
-                    Picker("Care Plan", selection: $viewModel.selectedCarePlanUUID) {
-                        Text("None").tag(UUID?.none)
+                Stepper(
+                    String(format: String(localized: "ADD_TASK_PRIORITY_FORMAT"), viewModel.priority),
+                    value: $viewModel.priority,
+                    in: 1...100
+                )
+                Section(header: Text(String(localized: "CARE_PLAN"))) {
+                    Picker(String(localized: "CARE_PLAN"), selection: $viewModel.selectedCarePlanUUID) {
+                        Text(String(localized: "NONE")).tag(UUID?.none)
 
                         ForEach(viewModel.availableCarePlans, id: \.uuid) { plan in
                             Text(plan.title )
@@ -79,57 +95,109 @@ struct CareKitTaskView: View {
                         await viewModel.loadCarePlans(store: careStore)
                     }
                 }
-                Section("Task") {
-                    Button("Add") {
+                Section(String(localized: "ADD_TASK_TASK_SECTION")) {
+                    Button(String(localized: "ADD_TASK_ADD_BUTTON")) {
                         addTask {
-                            await viewModel.addTask(
-                                title,
-                                instructions: instructions,
-                                cardType: selectedCard,
-                                priority: priority,
-                                asset: asset
-                            )
+                            await viewModel.addTask()
                         }
                     }.alert(
-                        "Task has been added",
+                        String(localized: "ADD_TASK_SUCCESS"),
                         isPresented: $isShowingAlert
                     ) {
-                        Button("OK") {
+                        Button(String(localized: "OK")) {
                             isShowingAlert = false
                         }
-                    }.disabled(isAddingTask)
+                    }.disabled(isAddingTask || !viewModel.canAddTask)
+
+                    if let error = viewModel.error {
+                        Text(error.localizedDescription)
+                            .foregroundStyle(.red)
+                    }
                 }
-                Section("HealthKitTask") {
-                    Button("Add") {
-                        addTask {
-                            await viewModel.addHealthKitTask(
-                                title,
-                                instructions: instructions,
-                                cardType: selectedCard,
-                                priority: priority,
-                                asset: asset
-                            )
-                        }
-                    }.alert(
-                        "HealthKitTask has been added",
-                        isPresented: $isShowingAlert
-                    ) {
-                        Button("OK") {
-                            isShowingAlert = false
-                        }
-                    }.disabled(isAddingTask)
+            }
+        }
+    }
+
+    // MODIFIED
+    @ViewBuilder
+    private var cardSpecificFields: some View {
+        switch viewModel.selectedCardType {
+        case .button:
+            scheduleFields
+        case .checklist:
+            checklistFields
+        case .instruction, .simple:
+            scheduleFields
+        case .healthKitNumeric:
+            healthKitFields
+            scheduleFields
+        }
+    }
+
+    private var showsInstructions: Bool {
+        switch viewModel.selectedCardType {
+        case .button, .checklist, .instruction, .simple, .healthKitNumeric:
+            return true
+        }
+    }
+
+    private var scheduleFields: some View {
+        Section(String(localized: "ADD_TASK_SCHEDULE_SECTION")) {
+            DatePicker(
+                String(localized: "ADD_TASK_STARTS"),
+                selection: $viewModel.scheduleDate,
+                displayedComponents: [.date, .hourAndMinute]
+            )
+        }
+    }
+
+    private var checklistFields: some View {
+        Section(String(localized: "ADD_TASK_CHECKLIST_ITEMS_SECTION")) {
+            ForEach(viewModel.checklistItems.indices, id: \.self) { index in
+                TextField(String(localized: "ADD_TASK_CHECKLIST_ITEM"), text: $viewModel.checklistItems[index])
+            }
+            .onDelete { offsets in
+                viewModel.removeChecklistItems(at: offsets)
+            }
+
+            Button(String(localized: "ADD_TASK_ADD_ITEM")) {
+                viewModel.addChecklistItem()
+            }
+        }
+    }
+
+    private var healthKitFields: some View {
+        Section(String(localized: "ADD_TASK_HEALTHKIT_SECTION")) {
+            Picker(String(localized: "ADD_TASK_HEALTHKIT_QUANTITY"), selection: $viewModel.healthKitQuantity) {
+                ForEach(HealthKitQuantityOption.allCases) { quantity in
+                    Text(quantity.displayTitle)
+                        .tag(quantity)
+                }
+            }
+
+            Picker(String(localized: "ADD_TASK_HEALTHKIT_UNIT"), selection: $viewModel.healthKitUnit) {
+                ForEach(HealthKitUnitOption.allCases) { unit in
+                    Text(unit.displayTitle)
+                        .tag(unit)
+                }
+            }
+
+            Picker(String(localized: "ADD_TASK_HEALTHKIT_AGGREGATION"), selection: $viewModel.healthKitAggregation) {
+                ForEach(HealthKitAggregationOption.allCases) { aggregation in
+                    Text(aggregation.displayTitle)
+                        .tag(aggregation)
                 }
             }
         }
     }
 
     // MARK: Helpers
-    func addTask(_ task: @escaping (() async -> Void)) {
+    func addTask(_ task: @escaping (() async -> Bool)) {
         isAddingTask = true
         Task {
-            await task()
+            let didAddTask = await task()
             isAddingTask = false
-            isShowingAlert = true
+            isShowingAlert = didAddTask
         }
     }
 

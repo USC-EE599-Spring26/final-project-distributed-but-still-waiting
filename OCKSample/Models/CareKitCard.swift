@@ -10,6 +10,7 @@ import Foundation
 
 enum CareKitCard: String, CaseIterable, Identifiable {
 	var id: Self { self }
+
 	case button = "Button"
 	case checklist = "Checklist"
 	case featured = "Featured"
@@ -18,8 +19,8 @@ enum CareKitCard: String, CaseIterable, Identifiable {
 	case labeledValue = "Labeled Value"
 	case numericProgress = "Numeric Progress"
 	case simple = "Simple"
-    case survey = "Survey"
-    case custom = "Custom"
-    case customEnergy = "Custom Energy"
-    case uiKitSurvey = "UIKitSurvey"
+	case survey = "Survey"
+	case custom = "Custom"
+	case twoButton = "Two Button"
+	case uiKitSurvey = "UIKitSurvey"
 }

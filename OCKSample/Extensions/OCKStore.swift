@@ -188,8 +188,9 @@ extension OCKStore {
 		)
 		cbtExercises.impactsAdherence = true
 		cbtExercises.instructions = String(localized: "CBT_INSTRUCTIONS")
+		cbtExercises.asset = "brain.head.profile"
 		cbtExercises.card = .instruction
-		cbtExercises.priority = 2
+		cbtExercises.priority = 4
 
 		let depressionSchedule = OCKSchedule(
 			composing: [
@@ -214,7 +215,7 @@ extension OCKStore {
 		depression.instructions = String(localized: "DEPRESSION_INSTRUCTIONS")
 		depression.asset = "bed.double"
 		depression.card = .instruction
-		depression.priority = 3
+		depression.priority = 7
 
 		let energyElement = OCKScheduleElement(
 			start: beforeBreakfast,
@@ -231,9 +232,12 @@ extension OCKStore {
 			schedule: energySchedule
 		)
 		energy.impactsAdherence = true
+		energy.instructions = String(localized: "ENERGY_INSTRUCTIONS")
 		energy.asset = "figure.flexibility"
-		energy.priority = 4
-		energy.card = .customEnergy
+		energy.priority = 10
+		energy.card = .twoButton
+		energy.userInfo?[Constants.twoButtonPositiveTitleKey] = "HIGH_ENERGY"
+		energy.userInfo?[Constants.twoButtonNegativeTitleKey] = "LOW_ENERGY"
 
 		let phq = createPHQSurveyTask(carePlanUUID: carePlanUUIDs[.mentalHealth])
 
@@ -442,10 +446,11 @@ extension OCKStore {
 			schedule: phqSurveySchedule
 		)
 		phqSurvey.impactsAdherence = true
+		phqSurvey.instructions = String(localized: "PHQ_INSTRUCTIONS")
 		phqSurvey.asset = "brain.head.profile"
 		phqSurvey.card = .survey
 		phqSurvey.surveySteps = [stepOne]
-		phqSurvey.priority = 1
+		phqSurvey.priority = 13
 
 		return phqSurvey
 	}
@@ -455,18 +460,20 @@ extension OCKStore {
 		let onboardSchedule = OCKSchedule.dailyAtTime(
 			hour: 0, minutes: 0,
 			start: Date(), end: nil,
-			text: "Task Due!",
+			text: String(localized: "TASK_DUE"),
 			duration: .allDay
 		)
 
 		var onboardTask = OCKTask(
 			id: Onboard.identifier(),
-			title: "Onboard",
+			title: String(localized: "ONBOARD"),
 			carePlanUUID: carePlanUUID,
 			schedule: onboardSchedule
 		)
-		onboardTask.instructions = "You'll need to agree to some terms and conditions before we get started!"
+		onboardTask.instructions = String(localized: "ONBOARD_INSTRUCTIONS")
 		onboardTask.impactsAdherence = false
+		onboardTask.priority = 0
+		onboardTask.asset = "doc.text.fill"
 		onboardTask.card = .uiKitSurvey
 		onboardTask.uiKitSurvey = .onboard
 
@@ -512,11 +519,12 @@ extension OCKStore {
 
 		var rangeOfMotionTask = OCKTask(
 			id: RangeOfMotion.identifier(),
-			title: "Range Of Motion",
+			title: String(localized: "RANGE_OF_MOTION"),
 			carePlanUUID: carePlanUUID,
 			schedule: rangeOfMotionCheckSchedule
 		)
-		rangeOfMotionTask.priority = 2
+		rangeOfMotionTask.priority = 19
+		rangeOfMotionTask.instructions = String(localized: "RANGE_OF_MOTION_INSTRUCTIONS")
 		rangeOfMotionTask.asset = "figure.walk.motion"
 		rangeOfMotionTask.card = .uiKitSurvey
 		rangeOfMotionTask.uiKitSurvey = .rangeOfMotion

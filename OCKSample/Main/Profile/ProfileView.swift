@@ -11,6 +11,7 @@ import CareKitStore
 import CareKit
 import os.log
 import SwiftUI
+import UIKit
 
 struct ProfileView: View {
 
@@ -40,7 +41,10 @@ struct ProfileView: View {
                                 MyContactView(
                                     profileImage: viewModel.profileUIImage,
                                     name: "\(viewModel.firstName) \(viewModel.lastName)",
-                                    streak: viewModel.currentStreak
+                                    streak: viewModel.currentStreak,
+                                    onSelectContact: {
+                                        isPresentingContact = true
+                                    }
                                 )
                                 .id(viewModel.currentStreak)
                                 .frame(height: 200)
@@ -154,6 +158,18 @@ struct ProfileView: View {
             .sheet(isPresented: $viewModel.isPresentingImagePicker) {
                 ImagePickerView(image: $viewModel.profileUIImage)
             }
+            .sheet(isPresented: $isPresentingContact) {
+                if let contactID = viewModel.currentProfileID {
+                    ProfileContactDetailView(contactID: contactID)
+                } else {
+                    Text("Contact unavailable")
+                        .font(.headline)
+                        .padding()
+                        .onAppear {
+                            Logger.profile.error("Could not present profile contact because contact ID is nil")
+                        }
+                }
+            }
             .alert(isPresented: $viewModel.isShowingSaveAlert) {
                 return Alert(title: Text("Update"),
                              message: Text(viewModel.alertMessage),
@@ -179,6 +195,42 @@ struct ProfileView: View {
                     }
                 }
             }
+        }
+    }
+
+    private struct ProfileContactDetailView: UIViewControllerRepresentable {
+        @Environment(\.careStore) private var careStore
+
+        let contactID: String
+
+        func makeUIViewController(context: Context) -> UINavigationController {
+            UINavigationController(rootViewController: createContactViewController())
+        }
+
+        func updateUIViewController(
+            _ uiViewController: UINavigationController,
+            context: Context
+        ) {
+            uiViewController.setViewControllers(
+                [createContactViewController()],
+                animated: false
+            )
+        }
+
+        private func createContactViewController() -> UIViewController {
+            #if os(iOS)
+            var query = OCKContactQuery(for: Date())
+            query.ids = [contactID]
+            query.limit = 1
+
+            return OCKSimpleContactViewController(
+                query: query,
+                store: careStore,
+                viewSynchronizer: OCKSimpleContactViewSynchronizer()
+            )
+            #else
+            return UIViewController()
+            #endif
         }
     }
 

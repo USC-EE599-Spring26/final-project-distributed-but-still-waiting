@@ -13,9 +13,7 @@ struct ManageTasksView: View {
 
     @Environment(\.careStore) private var store
     @StateObject private var viewModel: ManageTasksViewModel
-    @StateObject private var addTaskViewModel = CareKitTaskViewModel()
     @State private var isPresentingAddTask = false
-    @State private var newTaskTitle = ""
 
     init(store: OCKAnyTaskStore) {
         _viewModel = StateObject(wrappedValue: ManageTasksViewModel(store: store))
@@ -35,13 +33,13 @@ struct ManageTasksView: View {
                         VStack(alignment: .leading) {
 
                             HStack {
-                                Text(task.title ?? "Untitled Task")
+                                Text(task.title ?? String(localized: "UNTITLED_TASK"))
                                     .font(.headline)
 
                                 Spacer()
 
                                 if let priority = (task as? CareTask)?.priority {
-                                    Text("P\(priority)")
+                                    Text(String(format: String(localized: "TASK_PRIORITY_SHORT_FORMAT"), priority))
                                         .font(.caption)
                                         .padding(.horizontal, 6)
                                         .padding(.vertical, 2)
@@ -49,6 +47,10 @@ struct ManageTasksView: View {
                                         .cornerRadius(6)
                                 }
                             }
+
+                            Text(viewModel.carePlanTitle(for: task))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                     }
                     .padding(.vertical, 4)
@@ -59,7 +61,7 @@ struct ManageTasksView: View {
                     }
                 }
             }
-            .navigationTitle("Manage Tasks")
+            .navigationTitle(String(localized: "MANAGE_TASKS"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -74,6 +76,7 @@ struct ManageTasksView: View {
 
             }
             .task {
+                await viewModel.fetchCarePlans(store: store)
                 await viewModel.fetchTasks()
             }
         }

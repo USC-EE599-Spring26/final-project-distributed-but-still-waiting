@@ -45,9 +45,10 @@ extension OCKHealthKitPassthroughStore {
                 categoryIdentifier: .sleepAnalysis
             )
         )
-        sleepResult.asset = "figure.walk"
+        sleepResult.instructions = String(localized: "SLEEP_RESULT_INSTRUCTIONS")
+        sleepResult.asset = "bed.double.fill"
         sleepResult.card = .labeledValue
-        sleepResult.priority = 0
+        sleepResult.priority = 22
         sleepResult.impactsAdherence = false
 
         let tasks = [ sleepResult ]
