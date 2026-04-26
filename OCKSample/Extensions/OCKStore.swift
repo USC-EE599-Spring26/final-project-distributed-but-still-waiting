@@ -245,8 +245,8 @@ extension OCKStore {
 			String(localized: "TAKE_A_WARM_SHOWER"),
 			String(localized: "READ_FOR_10_MINUTES"),
 			String(localized: "MEDITATION")
-		].enumerated().map { index, text in
-			return OCKScheduleElement(
+		].map { text in
+			OCKScheduleElement(
 				start: Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: thisMorning) ?? thisMorning,
 				end: nil,
 				interval: DateComponents(day: 1),

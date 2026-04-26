@@ -38,6 +38,7 @@ enum TaskID {
     }
 
     static var orderedWatchOS: [String] {
-        [ Self.doxylamine, Self.kegels, Self.energy, Self.phqSurvey, Self.cbtExercises, Self.lexapro, Self.depression, Self.bedtimeChecklist]
+        [ Self.doxylamine, Self.kegels, Self.energy, Self.phqSurvey, Self.cbtExercises, Self.lexapro,
+          Self.depression, Self.bedtimeChecklist]
     }
 }
