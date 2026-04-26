@@ -47,7 +47,7 @@ extension OCKHealthKitPassthroughStore {
         )
         sleepResult.instructions = String(localized: "SLEEP_RESULT_INSTRUCTIONS")
         sleepResult.asset = "bed.double.fill"
-        sleepResult.card = .labeledValue
+        sleepResult.card = .numericProgress
         sleepResult.priority = 22
         sleepResult.impactsAdherence = false
 
