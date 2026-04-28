@@ -217,6 +217,8 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 			// queries are correct.
 			let date = modifyDateIfNeeded(date)
 
+			await Utility.syncSleepHours(for: date)
+
 			let isCurrentDay = isSameDay(as: date)
 
             // 1. Add the Care Plan Slider
@@ -401,6 +403,14 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 				.formattedHostingController()
 
 				Logger.feed.debug("Successfully created simple task view for task: \(task.id, privacy: .public)")
+				return [card]
+
+			case .numericProgress:
+				let card = EventQueryView<NumericProgressTaskView>(
+					query: query
+				)
+				.formattedHostingController()
+
 				return [card]
 
 			case .survey:

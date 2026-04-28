@@ -12,6 +12,7 @@ import CareKitStore
 enum Survey: String, CaseIterable, Identifiable {
     var id: Self { self }
     case onboard = "Onboard"
+    case phq9 = "PHQ-9"
     case rangeOfMotion = "Range of Motion"
     case stroop = "Stroop"
 
@@ -19,6 +20,8 @@ enum Survey: String, CaseIterable, Identifiable {
         switch self {
         case .onboard:
             return Onboard()
+        case .phq9:
+            return PHQ9Survey()
         case .rangeOfMotion:
             return RangeOfMotion()
         case .stroop:

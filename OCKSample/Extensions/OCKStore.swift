@@ -10,6 +10,7 @@ import Foundation
 import CareKitEssentials
 import CareKitStore
 import Contacts
+import HealthKit
 import os.log
 import ParseSwift
 import ParseCareKit
@@ -225,6 +226,20 @@ extension OCKStore {
 		let energySchedule = OCKSchedule(
 			composing: [energyElement]
 		)
+		let sleepSchedule = OCKSchedule.dailyAtTime(
+			hour: 0,
+			minutes: 0,
+			start: startDate,
+			end: nil,
+			text: nil,
+			duration: .allDay,
+			targetValues: [
+				OCKOutcomeValue(
+					8.0,
+					units: HKUnit.hour().unitString
+				)
+			]
+		)
 		var energy = OCKTask(
 			id: TaskID.energy,
 			title: String(localized: "ENERGY"),
@@ -238,6 +253,18 @@ extension OCKStore {
 		energy.card = .twoButton
 		energy.userInfo?[Constants.twoButtonPositiveTitleKey] = "HIGH_ENERGY"
 		energy.userInfo?[Constants.twoButtonNegativeTitleKey] = "LOW_ENERGY"
+
+		var sleepResult = OCKTask(
+			id: TaskID.sleepResult,
+			title: String(localized: "SLEEP_RESULT"),
+			carePlanUUID: carePlanUUIDs[.sleepHealth],
+			schedule: sleepSchedule
+		)
+		sleepResult.instructions = String(localized: "SLEEP_RESULT_INSTRUCTIONS")
+		sleepResult.asset = "bed.double.fill"
+		sleepResult.card = .numericProgress
+		sleepResult.priority = 22
+		sleepResult.impactsAdherence = false
 
 		let bedtimeChecklistElements = [
 			String(localized: "DIM_THE_LIGHTS"),
@@ -268,7 +295,14 @@ extension OCKStore {
 		bedtimeChecklist.asset = "moon.stars.fill"
 		bedtimeChecklist.priority = 11
 
-		let phq = createPHQSurveyTask(carePlanUUID: carePlanUUIDs[.mentalHealth])
+		let phq = createPHQSurveyTask(
+			carePlanUUID: carePlanUUIDs[.mentalHealth],
+			startDate: startDate
+		)
+
+		try await migrateSleepTaskIfNeeded(
+			sleepTaskID: TaskID.sleepResult
+		)
 
 		_ = try await addTasksIfNotPresent(
 			[
@@ -276,6 +310,7 @@ extension OCKStore {
 				lexapro,
 				cbtExercises,
 				energy,
+				sleepResult,
 				bedtimeChecklist,
 				phq
 			]
@@ -402,84 +437,34 @@ extension OCKStore {
 //		return qualityOfLife
 //	}
 
-	func createPHQSurveyTask(carePlanUUID: UUID?) -> OCKTask {
-		let phqSurveyTaskId = TaskID.phq
-		let thisMorning = Calendar.current.startOfDay(for: Date())
-		let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
-		let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
+	func createPHQSurveyTask(
+		carePlanUUID: UUID?,
+		startDate: Date = Date()
+	) -> OCKTask {
+		let phqSurveyTaskId = TaskID.phq9Survey
+		let thisMorning = Calendar.current.startOfDay(for: startDate)
 		let phqElement = OCKScheduleElement(
-			start: beforeBreakfast,
+			start: thisMorning,
 			end: nil,
-			interval: DateComponents(day: 1)
+			interval: DateComponents(weekOfYear: 1),
+			text: String(localized: "ANYTIME_DURING_DAY"),
+			targetValues: [],
+			duration: .allDay
 		)
 		let phqSurveySchedule = OCKSchedule(
 			composing: [phqElement]
 		)
-		let textChoiceDifficultText = String(localized: "ANSWER_DIFFICULT")
-		let textChoiceNotDifficultText = String(localized: "ANSWER_NOT_DIFFICULT")
-		let difficultValue = "Difficult"
-		let notDifficultValue = "NotDifficult"
-		let choices: [TextChoice] = [
-			.init(
-				id: "\(phqSurveyTaskId)_0",
-				choiceText: textChoiceDifficultText,
-				value: difficultValue
-			),
-			.init(
-				id: "\(phqSurveyTaskId)_1",
-				choiceText: textChoiceNotDifficultText,
-				value: notDifficultValue
-			)
-
-		]
-		let questionOne = SurveyQuestion(
-			id: "\(phqSurveyTaskId)-q1",
-			type: .slider,
-			required: false,
-			title: String(localized: "PHQ_QUESTION1"),
-			integerRange: 0...3,
-			sliderStepValue: 1
-		)
-		let questionTwo = SurveyQuestion(
-			id: "\(phqSurveyTaskId)-q2",
-			type: .slider,
-			required: false,
-			title: String(localized: "PHQ_QUESTION2"),
-			integerRange: 0...3,
-			sliderStepValue: 1
-		)
-		let questionThree = SurveyQuestion(
-			id: "\(phqSurveyTaskId)-q3",
-			type: .slider,
-			required: false,
-			title: String(localized: "PHQ_QUESTION3"),
-			integerRange: 0...3,
-			sliderStepValue: 1
-		)
-		let questionFour = SurveyQuestion(
-			id: "\(phqSurveyTaskId)-q4",
-			type: .multipleChoice,
-			required: true,
-			title: String(localized: "PHQ_LAST_QUESTION"),
-			textChoices: choices,
-			choiceSelectionLimit: .single
-		)
-		let questions = [questionOne, questionTwo, questionThree, questionFour]
-		let stepOne = SurveyStep(
-			id: "\(phqSurveyTaskId)-step-1",
-			questions: questions
-		)
 		var phqSurvey = OCKTask(
-			id: "\(phqSurveyTaskId)-phq",
-			title: String(localized: "PHQ_SURVEY"),
+			id: phqSurveyTaskId,
+			title: String(localized: "PHQ9_TASK_TITLE"),
 			carePlanUUID: carePlanUUID,
 			schedule: phqSurveySchedule
 		)
 		phqSurvey.impactsAdherence = true
-		phqSurvey.instructions = String(localized: "PHQ_INSTRUCTIONS")
+		phqSurvey.instructions = String(localized: "PHQ9_TASK_INSTRUCTIONS")
 		phqSurvey.asset = "brain.head.profile"
-		phqSurvey.card = .survey
-		phqSurvey.surveySteps = [stepOne]
+		phqSurvey.card = .uiKitSurvey
+		phqSurvey.uiKitSurvey = .phq9
 		phqSurvey.priority = 13
 
 		return phqSurvey
@@ -587,5 +572,22 @@ extension OCKStore {
 		rangeOfMotionTask.impactsAdherence = true
 
 		return try await addTasksIfNotPresent([stroopTask, rangeOfMotionTask])
+	}
+
+	private func migrateSleepTaskIfNeeded(
+		sleepTaskID: String
+	) async throws {
+		var query = OCKTaskQuery()
+		query.ids = [sleepTaskID]
+		let existingTasks = try await fetchAnyTasks(query: query)
+		let healthKitSleepTasks = existingTasks.compactMap { task in
+			task as? OCKHealthKitTask
+		}
+
+		guard !healthKitSleepTasks.isEmpty else {
+			return
+		}
+
+		_ = try await deleteAnyTasks(healthKitSleepTasks)
 	}
 }

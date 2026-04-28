@@ -12,6 +12,9 @@
 		3F3935862F7DF243004180FA /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935842F7DF241004180FA /* Consent.swift */; };
 		3F3935882F7DF289004180FA /* Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935872F7DF285004180FA /* Onboard.swift */; };
 		3F3935892F7DF289004180FA /* Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935872F7DF285004180FA /* Onboard.swift */; };
+		3F72F0012FA25A8F00C0DE01 /* PHQ9Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F72F0002FA25A8F00C0DE01 /* PHQ9Survey.swift */; };
+		3F72F0022FA25A8F00C0DE01 /* PHQ9Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F72F0002FA25A8F00C0DE01 /* PHQ9Survey.swift */; };
+		3F72F0032FA25A8F00C0DE01 /* PHQ9Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F72F0002FA25A8F00C0DE01 /* PHQ9Survey.swift */; };
 		3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
 		3F39358C2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
 		3FA1B0022FA1B00100C0DE01 /* Stroop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1B0012FA1B00100C0DE01 /* Stroop.swift */; };
@@ -127,6 +130,7 @@
 		707D295C2DCBE68500980253 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72B2C09226939E3009A9438 /* AppDelegate.swift */; };
 		707D295D2DCBE68500980253 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7036E4BE256DA089006E9A3C /* LoginViewModel.swift */; };
 		707D295E2DCBE68500980253 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91693821271B897200A634ED /* Utility.swift */; };
+		707D295F2DCBE68500980253 /* Utility+SleepSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5052F97D11100C0D3E1 /* Utility+SleepSync.swift */; };
 		707D29602DCBE68500980253 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F921AB27CABE3000368CEC /* SessionDelegate.swift */; };
 		707D29612DCBE68500980253 /* Styler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169381A271B64E100A634ED /* Styler.swift */; };
 		707D29622DCBE68500980253 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7036E516256F2413006E9A3C /* ProfileViewModel.swift */; };
@@ -166,6 +170,7 @@
 		70B8E0A62F0EC1CA00440FCA /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B8E0A42F0EC1CA00440FCA /* Mutex.swift */; };
 		70B8E0A72F0EC1CA00440FCA /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B8E0A42F0EC1CA00440FCA /* Mutex.swift */; };
 		70C0D474279BA492003DA141 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91693821271B897200A634ED /* Utility.swift */; };
+		70C0D475279BA492003DA141 /* Utility+SleepSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5052F97D11100C0D3E1 /* Utility+SleepSync.swift */; };
 		70CF66E428E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CF66E328E1E74C00FAE977 /* TintColorFlipKey.swift */; };
 		70CF66E528E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CF66E328E1E74C00FAE977 /* TintColorFlipKey.swift */; };
 		70DFD80B2567074500B9DB12 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD2B1E254B44DB0030B424 /* LoginView.swift */; };
@@ -251,6 +256,7 @@
 		9169381D271B650700A634ED /* ColorStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169381C271B650700A634ED /* ColorStyler.swift */; };
 		91693820271B80EA00A634ED /* CONTRIBUTING.md in Resources */ = {isa = PBXBuildFile; fileRef = 9169381F271B80EA00A634ED /* CONTRIBUTING.md */; };
 		91693822271B897200A634ED /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91693821271B897200A634ED /* Utility.swift */; };
+		91693823271B897200A634ED /* Utility+SleepSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0D5052F97D11100C0D3E1 /* Utility+SleepSync.swift */; };
 		918FDEAF271B3F8F0045A0EF /* ParseCareKit in Frameworks */ = {isa = PBXBuildFile; productRef = 918FDEAE271B3F8F0045A0EF /* ParseCareKit */; };
 		918FDEB1271B3F9B0045A0EF /* ParseCareKit in Frameworks */ = {isa = PBXBuildFile; productRef = 918FDEB0271B3F9B0045A0EF /* ParseCareKit */; };
 		918FDEB5271B40590045A0EF /* Installation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918FDEB4271B40590045A0EF /* Installation.swift */; };
@@ -400,6 +406,7 @@
 		0520468223C3C1F2004F0F36 /* OCKSample.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OCKSample.xctestplan; sourceTree = "<group>"; };
 		3F3935842F7DF241004180FA /* Consent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consent.swift; sourceTree = "<group>"; };
 		3F3935872F7DF285004180FA /* Onboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard.swift; sourceTree = "<group>"; };
+		3F72F0002FA25A8F00C0DE01 /* PHQ9Survey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHQ9Survey.swift; sourceTree = "<group>"; };
 		3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeOfMotion.swift; sourceTree = "<group>"; };
 		3FA1B0012FA1B00100C0DE01 /* Stroop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroop.swift; sourceTree = "<group>"; };
 		3F39358D2F7DF2D7004180FA /* Survey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
@@ -491,6 +498,7 @@
 		9169381C271B650700A634ED /* ColorStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyler.swift; sourceTree = "<group>"; };
 		9169381F271B80EA00A634ED /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		91693821271B897200A634ED /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		B1A0D5052F97D11100C0D3E1 /* Utility+SleepSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Utility+SleepSync.swift"; sourceTree = "<group>"; };
 		918FDEB4271B40590045A0EF /* Installation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Installation.swift; sourceTree = "<group>"; };
 		918FDEB6271B41FF0045A0EF /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		918FDEC4271B4EA70045A0EF /* StoreCoordinatorKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCoordinatorKey.swift; sourceTree = "<group>"; };
@@ -594,6 +602,7 @@
 			children = (
 				3F3935902F7DF2EA004180FA /* Surveyable.swift */,
 				3F39358D2F7DF2D7004180FA /* Survey.swift */,
+				3F72F0002FA25A8F00C0DE01 /* PHQ9Survey.swift */,
 				3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */,
 				3FA1B0012FA1B00100C0DE01 /* Stroop.swift */,
 				3F3935832F7D060E004180FA /* Onboard */,
@@ -1032,6 +1041,7 @@
 				7036E63F25717F85006E9A3C /* Constants.swift */,
 				70F0EFE728C2EC050005B5A2 /* OCKSampleApp.swift */,
 				91693821271B897200A634ED /* Utility.swift */,
+				B1A0D5052F97D11100C0D3E1 /* Utility+SleepSync.swift */,
 				918FDEC1271B4E710045A0EF /* Environment */,
 				918FDEBA271B4DF60045A0EF /* Extensions */,
 				703088772582727500FFABB6 /* Main */,
@@ -1406,11 +1416,13 @@
 				9126F15C2F821F86000396FB /* Badge.swift in Sources */,
 				707D295D2DCBE68500980253 /* LoginViewModel.swift in Sources */,
 				70B8E0A62F0EC1CA00440FCA /* Mutex.swift in Sources */,
+				3F72F0012FA25A8F00C0DE01 /* PHQ9Survey.swift in Sources */,
 				3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */,
 				3FA1B0022FA1B00100C0DE01 /* Stroop.swift in Sources */,
 				913C9FAB2F7F3C2000BE4680 /* ImagePickerView.swift in Sources */,
 				3F3935882F7DF289004180FA /* Onboard.swift in Sources */,
 				707D295E2DCBE68500980253 /* Utility.swift in Sources */,
+				707D295F2DCBE68500980253 /* Utility+SleepSync.swift in Sources */,
 				913866772F540C5400B9BD74 /* CareKitCard.swift in Sources */,
 				707D29602DCBE68500980253 /* SessionDelegate.swift in Sources */,
 				9144B69B2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */,
@@ -1505,10 +1517,12 @@
 				70CF66E528E1E74C00FAE977 /* TintColorFlipKey.swift in Sources */,
 				70F03A9C27860A2000E5AFB4 /* OCKStore.swift in Sources */,
 				70C0D474279BA492003DA141 /* Utility.swift in Sources */,
+				70C0D475279BA492003DA141 /* Utility+SleepSync.swift in Sources */,
 				3FE2E9C22F57AE5100462DA1 /* AppearanceStyler.swift in Sources */,
 				3F3935932F7DF334004180FA /* Surveyable.swift in Sources */,
 				3F3935942F7DF334004180FA /* Survey.swift in Sources */,
 				9126F1522F80C6C2000396FB /* Notification+Extensions.swift in Sources */,
+				3F72F0022FA25A8F00C0DE01 /* PHQ9Survey.swift in Sources */,
 				3F3935952F7DF334004180FA /* RangeOfMotion.swift in Sources */,
 				3FA1B0032FA1B00100C0DE01 /* Stroop.swift in Sources */,
 				91AD923D24A4C42D00925D4D /* AppDelegate.swift in Sources */,
@@ -1589,6 +1603,7 @@
 				9126F15E2F8220FD000396FB /* BadgeView.swift in Sources */,
 				918FDEC5271B4EA70045A0EF /* StoreCoordinatorKey.swift in Sources */,
 				91693822271B897200A634ED /* Utility.swift in Sources */,
+				91693823271B897200A634ED /* Utility+SleepSync.swift in Sources */,
 				707CC718254DA91900116728 /* OCKLocalization.swift in Sources */,
 				913866732F540AB200B9BD74 /* CareKitTaskViewModel.swift in Sources */,
 				E7C37849228F887800E982D8 /* CustomFeaturedContentView.swift in Sources */,
@@ -1605,6 +1620,7 @@
 				70F921AE27CABE7700368CEC /* RemoteSessionDelegate.swift in Sources */,
 				70F03A952786093B00E5AFB4 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				3F3935892F7DF289004180FA /* Onboard.swift in Sources */,
+				3F72F0032FA25A8F00C0DE01 /* PHQ9Survey.swift in Sources */,
 				3FF742ED2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */,
 				3FA1B0042FA1B00100C0DE01 /* Stroop.swift in Sources */,
 				9126F1222F7F3DE3000396FB /* ProfileImageView.swift in Sources */,

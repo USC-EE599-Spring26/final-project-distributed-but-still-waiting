@@ -27,40 +27,61 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
         super.updateView(view, context: context)
 
         let event = context.viewModel.first?.first
-        let shouldShowInstructions = event?.outcome != nil
 
         var instructionsText: String?
         if let event, let task = event.task as? OCKTask {
+            instructionsText = task.instructions
+
             switch task.id {
             case Onboard.identifier():
-                instructionsText = String(localized: "SURVEY_ONBOARD_COMPLETE_MESSAGE")
+                if event.outcome != nil {
+                    instructionsText = String(localized: "SURVEY_ONBOARD_COMPLETE_MESSAGE")
+                }
+            case PHQ9Survey.identifier():
+                if event.outcome != nil {
+                    let score = Int(event.answer(kind: PHQ9OutcomeKind.totalScore))
+                    let severity = PHQ9Severity(score: score).localizedTitle
+                    instructionsText = String(
+                        format: String(localized: "PHQ9_RESULTS_SUMMARY_FORMAT"),
+                        score,
+                        severity
+                    )
+                }
             #if canImport(ResearchKitActiveTask)
             case Stroop.identifier():
-                let correct = Int(event.answer(kind: "correct"))
-                let incorrect = Int(event.answer(kind: "incorrect"))
-                let reactionTime = event.answer(kind: "reactionTime")
-                let formattedReactionTime = String(format: "%.2f", reactionTime)
-                instructionsText = String(
-                    format: String(localized: "STROOP_RESULTS_SUMMARY_FORMAT"),
-                    correct,
-                    incorrect,
-                    formattedReactionTime
-                )
+                if event.outcome != nil {
+                    let correct = Int(event.answer(kind: "correct"))
+                    let incorrect = Int(event.answer(kind: "incorrect"))
+                    let reactionTime = event.answer(kind: "reactionTime")
+                    let formattedReactionTime = String(format: "%.2f", reactionTime)
+                    instructionsText = String(
+                        format: String(localized: "STROOP_RESULTS_SUMMARY_FORMAT"),
+                        correct,
+                        incorrect,
+                        formattedReactionTime
+                    )
+                }
             case RangeOfMotion.identifier():
-                let range = event.answer(kind: #keyPath(ORKRangeOfMotionResult.range))
-                instructionsText = String(
-                    format: String(localized: "RANGE_OF_MOTION_RESULT_FORMAT"),
-                    Int(range)
-                )
+                if event.outcome != nil {
+                    let range = event.answer(kind: #keyPath(ORKRangeOfMotionResult.range))
+                    instructionsText = String(
+                        format: String(localized: "RANGE_OF_MOTION_RESULT_FORMAT"),
+                        Int(range)
+                    )
+                }
             #endif
             default:
-                instructionsText = nil
+                break
             }
         }
+
+        let shouldShowInstructions = !(instructionsText?.isEmpty ?? true)
 
         MainActor.assumeIsolated {
             view.instructionsLabel.isHidden = !shouldShowInstructions
             view.instructionsLabel.text = instructionsText
+            view.instructionsLabel.font = .preferredFont(forTextStyle: .footnote)
+            view.instructionsLabel.textColor = .secondaryLabel
         }
     }
 }

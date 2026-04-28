@@ -29,13 +29,6 @@ struct TwoButtonCardView: CareKitEssentialView {
                     event: event
                 )
 
-                event.instructionsText
-                    .fixedSize(
-                        horizontal: false,
-                        vertical: true
-                    )
-                    .padding(.vertical)
-
                 VStack(alignment: .center) {
                     HStack(alignment: .center, spacing: 12) {
                         Button(action: {
@@ -71,6 +64,15 @@ struct TwoButtonCardView: CareKitEssentialView {
                         .buttonStyle(NoHighlightStyle())
                     }
                 }
+
+                event.instructionsText
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(
+                        horizontal: false,
+                        vertical: true
+                    )
+                    .padding(.top)
             }
             .padding(isCardEnabled ? [.all] : [])
         }

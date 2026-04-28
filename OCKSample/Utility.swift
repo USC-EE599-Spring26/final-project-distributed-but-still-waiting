@@ -9,6 +9,7 @@
 import Foundation
 import CareKit
 import CareKitStore
+import HealthKit
 import ParseCareKit
 import ParseSwift
 import os.log
@@ -228,13 +229,33 @@ class Utility {
 	@MainActor
 	static func requestHealthKitPermissions() {
 		AppDelegateKey.defaultValue?.healthKitStore.requestHealthKitPermissionsForAllTasksInStore { error in
-			guard let error = error else {
+			if let error {
+				Logger.utility.error("Error requesting HealthKit permissions: \(error)")
+			}
+
+			guard let sleepType = HKObjectType.categoryType(
+				forIdentifier: .sleepAnalysis
+			) else {
 				DispatchQueue.main.async {
 					NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission)))
 				}
 				return
 			}
-			Logger.utility.error("Error requesting HealthKit permissions: \(error)")
+
+			HKHealthStore().requestAuthorization(
+				toShare: [],
+				read: Set<HKObjectType>([sleepType])
+			) { _, sleepError in
+				if let sleepError {
+					Logger.utility.error("Error requesting sleep permissions: \(sleepError)")
+				}
+				Task {
+					await Utility.syncSleepHours()
+				}
+				DispatchQueue.main.async {
+					NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission)))
+				}
+			}
 		}
 	}
 	#endif

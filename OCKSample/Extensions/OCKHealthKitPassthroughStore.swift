@@ -7,10 +7,7 @@
 //
 
 import Foundation
-import CareKitEssentials
 import CareKitStore
-import HealthKit
-import os.log
 
 extension OCKHealthKitPassthroughStore {
 
@@ -18,42 +15,7 @@ extension OCKHealthKitPassthroughStore {
         _ patientUUID: UUID? = nil,
         startDate: Date = Date()
 	) async throws {
-
-        let carePlanUUIDs = try await OCKStore.getCarePlanUUIDs()
-
-        let countUnit = HKUnit.count()
-        let sleepResultTargetValue = OCKOutcomeValue(
-            8.0,
-            units: countUnit.unitString
-        )
-        let sleepResultTargetValues = [ sleepResultTargetValue ]
-        let sleepResultSchedule = OCKSchedule.dailyAtTime(
-            hour: 0,
-            minutes: 0,
-            start: startDate,
-            end: nil,
-            text: nil,
-            duration: .allDay,
-            targetValues: sleepResultTargetValues
-        )
-        var sleepResult = OCKHealthKitTask(
-            id: TaskID.sleepResult,
-            title: String(localized: "SLEEP_RESULT"),
-            carePlanUUID: carePlanUUIDs[.sleepHealth],
-            schedule: sleepResultSchedule,
-            healthKitLinkage: OCKHealthKitLinkage(
-                categoryIdentifier: .sleepAnalysis
-            )
-        )
-        sleepResult.instructions = String(localized: "SLEEP_RESULT_INSTRUCTIONS")
-        sleepResult.asset = "bed.double.fill"
-        sleepResult.card = .numericProgress
-        sleepResult.priority = 22
-        sleepResult.impactsAdherence = false
-
-        let tasks = [ sleepResult ]
-
-        _ = try await addTasksIfNotPresent(tasks)
-
+        _ = patientUUID
+        _ = startDate
     }
 }
