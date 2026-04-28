@@ -547,6 +547,32 @@ extension OCKStore {
 			composing: [dailyElement, weeklyElement]
 		)
 
+		let stroopSchedule = OCKSchedule(
+			composing: [
+				OCKScheduleElement(
+					start: thisMorning,
+					end: nil,
+					interval: DateComponents(day: 1),
+					text: nil,
+					targetValues: [],
+					duration: .allDay
+				)
+			]
+		)
+
+		var stroopTask = OCKTask(
+			id: TaskID.stroop,
+			title: String(localized: "STROOP_TASK_TITLE_CUSTOM"),
+			carePlanUUID: carePlanUUID,
+			schedule: stroopSchedule
+		)
+		stroopTask.priority = 18
+		stroopTask.instructions = String(localized: "STROOP_TASK_INSTRUCTIONS_CUSTOM")
+		stroopTask.asset = "brain.head.profile"
+		stroopTask.card = .uiKitSurvey
+		stroopTask.uiKitSurvey = .stroop
+		stroopTask.impactsAdherence = true
+
 		var rangeOfMotionTask = OCKTask(
 			id: RangeOfMotion.identifier(),
 			title: String(localized: "RANGE_OF_MOTION"),
@@ -560,6 +586,6 @@ extension OCKStore {
 		rangeOfMotionTask.uiKitSurvey = .rangeOfMotion
 		rangeOfMotionTask.impactsAdherence = true
 
-		return try await addTasksIfNotPresent([rangeOfMotionTask])
+		return try await addTasksIfNotPresent([stroopTask, rangeOfMotionTask])
 	}
 }

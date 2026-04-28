@@ -122,8 +122,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "TASK_DUE" = "Task Due!";
 "ONBOARD" = "Onboard";
 "ONBOARD_INSTRUCTIONS" = "Review and agree to the terms and conditions before getting started.";
+"SURVEY_ONBOARD_COMPLETE_MESSAGE" = "Welcome to NeuroMallea. The application is set up and ready to use!";
 "RANGE_OF_MOTION" = "Range Of Motion";
 "RANGE_OF_MOTION_INSTRUCTIONS" = "Complete the range of motion survey.";
+"RANGE_OF_MOTION_RESULT_FORMAT" = "Your Range of Motion Result: %d";
+"STROOP_TASK_TITLE_CUSTOM" = "Focus Test";
+"STROOP_TASK_INSTRUCTIONS_CUSTOM" = "Identify the color of each word as quickly as possible.";
+"STROOP_INTENDED_USE" = "This task measures attention, focus, and cognitive control.";
+"STROOP_COMPLETION_TITLE" = "All done!";
+"STROOP_COMPLETION_DETAIL" = "Thanks for completing the focus test.";
+"STROOP_RESULTS_SUMMARY_FORMAT" = "Correct: %d  Incorrect: %d  Avg. response: %@s";
 "PHQ_SURVEY" = "PHQ Survey";
 "PHQ_INSTRUCTIONS" = "Complete the weekly PHQ survey.";
 "PHQ_QUESTION1" = "Little interest or pleasure in doing things";

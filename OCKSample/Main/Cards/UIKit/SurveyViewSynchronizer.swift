@@ -11,9 +11,9 @@
 import CareKit
 import CareKitStore
 import CareKitUI
+import Foundation
 import ResearchKit
 import UIKit
-import os.log
 #if canImport(ResearchKitActiveTask)
 import ResearchKitActiveTask
 #endif
@@ -33,11 +33,25 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
         if let event, let task = event.task as? OCKTask {
             switch task.id {
             case Onboard.identifier():
-                instructionsText = "Welcome to NeuroMallea. The application is set up and ready to use!"
+                instructionsText = String(localized: "SURVEY_ONBOARD_COMPLETE_MESSAGE")
             #if canImport(ResearchKitActiveTask)
+            case Stroop.identifier():
+                let correct = Int(event.answer(kind: "correct"))
+                let incorrect = Int(event.answer(kind: "incorrect"))
+                let reactionTime = event.answer(kind: "reactionTime")
+                let formattedReactionTime = String(format: "%.2f", reactionTime)
+                instructionsText = String(
+                    format: String(localized: "STROOP_RESULTS_SUMMARY_FORMAT"),
+                    correct,
+                    incorrect,
+                    formattedReactionTime
+                )
             case RangeOfMotion.identifier():
                 let range = event.answer(kind: #keyPath(ORKRangeOfMotionResult.range))
-                instructionsText = "Your Range of Motion Result: \(Int(range))"
+                instructionsText = String(
+                    format: String(localized: "RANGE_OF_MOTION_RESULT_FORMAT"),
+                    Int(range)
+                )
             #endif
             default:
                 instructionsText = nil

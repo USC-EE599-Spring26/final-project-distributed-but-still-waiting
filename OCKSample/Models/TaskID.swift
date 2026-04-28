@@ -23,6 +23,7 @@ enum TaskID {
     static let phq = "ph9"
     static let energy = "energy"
     static let bedtimeChecklist = "bedtimeChecklist"
+    static let stroop = "stroop-task"
 
     static var ordered: [String] {
         orderedObjective + orderedSubjective

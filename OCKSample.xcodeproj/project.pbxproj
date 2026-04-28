@@ -14,6 +14,9 @@
 		3F3935892F7DF289004180FA /* Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935872F7DF285004180FA /* Onboard.swift */; };
 		3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
 		3F39358C2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */; };
+		3FA1B0022FA1B00100C0DE01 /* Stroop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1B0012FA1B00100C0DE01 /* Stroop.swift */; };
+		3FA1B0032FA1B00100C0DE01 /* Stroop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1B0012FA1B00100C0DE01 /* Stroop.swift */; };
+		3FA1B0042FA1B00100C0DE01 /* Stroop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1B0012FA1B00100C0DE01 /* Stroop.swift */; };
 		3F39358E2F7DF2D9004180FA /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358D2F7DF2D7004180FA /* Survey.swift */; };
 		3F39358F2F7DF2D9004180FA /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39358D2F7DF2D7004180FA /* Survey.swift */; };
 		3F3935912F7DF2EC004180FA /* Surveyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935902F7DF2EA004180FA /* Surveyable.swift */; };
@@ -398,6 +401,7 @@
 		3F3935842F7DF241004180FA /* Consent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consent.swift; sourceTree = "<group>"; };
 		3F3935872F7DF285004180FA /* Onboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard.swift; sourceTree = "<group>"; };
 		3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeOfMotion.swift; sourceTree = "<group>"; };
+		3FA1B0012FA1B00100C0DE01 /* Stroop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroop.swift; sourceTree = "<group>"; };
 		3F39358D2F7DF2D7004180FA /* Survey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
 		3F3935902F7DF2EA004180FA /* Surveyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surveyable.swift; sourceTree = "<group>"; };
 		3FBBC2802F5A3DDB007F0AEE /* ManageTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTasksView.swift; sourceTree = "<group>"; };
@@ -591,6 +595,7 @@
 				3F3935902F7DF2EA004180FA /* Surveyable.swift */,
 				3F39358D2F7DF2D7004180FA /* Survey.swift */,
 				3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */,
+				3FA1B0012FA1B00100C0DE01 /* Stroop.swift */,
 				3F3935832F7D060E004180FA /* Onboard */,
 			);
 			path = Surveys;
@@ -1402,6 +1407,7 @@
 				707D295D2DCBE68500980253 /* LoginViewModel.swift in Sources */,
 				70B8E0A62F0EC1CA00440FCA /* Mutex.swift in Sources */,
 				3F39358B2F7DF2BE004180FA /* RangeOfMotion.swift in Sources */,
+				3FA1B0022FA1B00100C0DE01 /* Stroop.swift in Sources */,
 				913C9FAB2F7F3C2000BE4680 /* ImagePickerView.swift in Sources */,
 				3F3935882F7DF289004180FA /* Onboard.swift in Sources */,
 				707D295E2DCBE68500980253 /* Utility.swift in Sources */,
@@ -1504,6 +1510,7 @@
 				3F3935942F7DF334004180FA /* Survey.swift in Sources */,
 				9126F1522F80C6C2000396FB /* Notification+Extensions.swift in Sources */,
 				3F3935952F7DF334004180FA /* RangeOfMotion.swift in Sources */,
+				3FA1B0032FA1B00100C0DE01 /* Stroop.swift in Sources */,
 				91AD923D24A4C42D00925D4D /* AppDelegate.swift in Sources */,
 				9126F14E2F80BE41000396FB /* StreakManager.swift in Sources */,
 				91AD924124A4C42D00925D4D /* NotificationView.swift in Sources */,
@@ -1599,6 +1606,7 @@
 				70F03A952786093B00E5AFB4 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				3F3935892F7DF289004180FA /* Onboard.swift in Sources */,
 				3FF742ED2F7E833600F1F171 /* SurveyViewSynchronizer.swift in Sources */,
+				3FA1B0042FA1B00100C0DE01 /* Stroop.swift in Sources */,
 				9126F1222F7F3DE3000396FB /* ProfileImageView.swift in Sources */,
 				7036E4BF256DA089006E9A3C /* LoginViewModel.swift in Sources */,
 				7036E517256F2413006E9A3C /* ProfileViewModel.swift in Sources */,
