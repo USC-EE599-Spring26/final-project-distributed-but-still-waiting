@@ -13,6 +13,10 @@ import os.log
 
 #if os(iOS) || os(visionOS)
 
+enum SleepOutcomeKind {
+	static let hours = "sleepHours"
+}
+
 extension Utility {
 	static func syncSleepHours(
 		for date: Date = Date()
@@ -135,7 +139,7 @@ extension Utility {
 			sleepHours,
 			units: HKUnit.hour().unitString
 		)
-		outcomeValue.kind = "sleepHours"
+		outcomeValue.kind = SleepOutcomeKind.hours
 		outcomeValue.createdDate = interval.start
 
 		if var outcome = event.outcome {

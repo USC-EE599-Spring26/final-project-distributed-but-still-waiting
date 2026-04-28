@@ -22,7 +22,7 @@ struct PHQ9Survey: Surveyable {
 }
 
 enum PHQ9OutcomeKind {
-    static let totalScore = "score"
+    static let totalScore = "phq9Score"
     static let functionalImpact = "functionalImpact"
     static let timestamp = "timestamp"
     static let q9PositiveFlag = "q9PositiveFlag"
@@ -279,6 +279,24 @@ private func extractChoiceAnswer(identifier: String, from result: ORKTaskResult)
     }
 
     return answer.intValue
+}
+
+func phq9Score(from event: OCKAnyEvent) -> Int? {
+    guard let outcomeValue = event.outcome?.values.first(where: {
+        $0.kind == PHQ9OutcomeKind.totalScore
+    }) else {
+        return nil
+    }
+
+    if let integerValue = outcomeValue.integerValue {
+        return integerValue
+    }
+
+    if let doubleValue = outcomeValue.doubleValue {
+        return Int(doubleValue)
+    }
+
+    return nil
 }
 
 #endif

@@ -39,7 +39,7 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
                 }
             case PHQ9Survey.identifier():
                 if event.outcome != nil {
-                    let score = Int(event.answer(kind: PHQ9OutcomeKind.totalScore))
+                    let score = phq9Score(from: event) ?? 0
                     let severity = PHQ9Severity(score: score).localizedTitle
                     instructionsText = String(
                         format: String(localized: "PHQ9_RESULTS_SUMMARY_FORMAT"),
