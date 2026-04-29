@@ -266,6 +266,25 @@ extension OCKStore {
 		sleepResult.priority = 22
 		sleepResult.impactsAdherence = false
 
+		let heartRateSchedule = OCKSchedule.dailyAtTime(
+			hour: 0,
+			minutes: 0,
+			start: startDate,
+			end: nil,
+			text: nil
+		)
+		var heartRate = OCKTask(
+			id: TaskID.heartRate,
+			title: String(localized: "HEART_RATE"),
+			carePlanUUID: carePlanUUIDs[.mentalHealth],
+			schedule: heartRateSchedule
+		)
+		heartRate.instructions = String(localized: "HEART_RATE_INSTRUCTIONS")
+		heartRate.asset = "heart.fill"
+		heartRate.card = .heartRate
+		heartRate.priority = 23
+		heartRate.impactsAdherence = false
+
 		let bedtimeChecklistElements = [
 			String(localized: "DIM_THE_LIGHTS"),
 			String(localized: "NO_SCREENS"),
@@ -311,6 +330,7 @@ extension OCKStore {
 				cbtExercises,
 				energy,
 				sleepResult,
+				heartRate,
 				bedtimeChecklist,
 				phq
 			]
@@ -369,73 +389,6 @@ extension OCKStore {
 			]
 		)
 	}
-
-//	func createQualityOfLifeSurveyTask(carePlanUUID: UUID?) -> OCKTask {
-//		let qualityOfLifeTaskId = TaskID.qualityOfLife
-//		let thisMorning = Calendar.current.startOfDay(for: Date())
-//		let aFewDaysAgo = Calendar.current.date(byAdding: .day, value: -4, to: thisMorning)!
-//		let beforeBreakfast = Calendar.current.date(byAdding: .hour, value: 8, to: aFewDaysAgo)!
-//		let qualityOfLifeElement = OCKScheduleElement(
-//			start: beforeBreakfast,
-//			end: nil,
-//			interval: DateComponents(day: 1)
-//		)
-//		let qualityOfLifeSchedule = OCKSchedule(
-//			composing: [qualityOfLifeElement]
-//		)
-//		let textChoiceYesText = String(localized: "ANSWER_YES")
-//		let textChoiceNoText = String(localized: "ANSWER_NO")
-//		let yesValue = "Yes"
-//		let noValue = "No"
-//		let choices: [TextChoice] = [
-//			.init(
-//				id: "\(qualityOfLifeTaskId)_0",
-//				choiceText: textChoiceYesText,
-//				value: yesValue
-//			),
-//			.init(
-//				id: "\(qualityOfLifeTaskId)_1",
-//				choiceText: textChoiceNoText,
-//				value: noValue
-//			)
-//
-//		]
-//		let questionOne = SurveyQuestion(
-//			id: "\(qualityOfLifeTaskId)-managing-time",
-//			type: .multipleChoice,
-//			required: true,
-//			title: String(localized: "QUALITY_OF_LIFE_TIME"),
-//			textChoices: choices,
-//			choiceSelectionLimit: .single
-//		)
-//		let questionTwo = SurveyQuestion(
-//			id: qualityOfLifeTaskId,
-//			type: .slider,
-//			required: false,
-//			title: String(localized: "QUALITY_OF_LIFE_STRESS"),
-//			detail: String(localized: "QUALITY_OF_LIFE_STRESS_DETAIL"),
-//			integerRange: 0...10,
-//			sliderStepValue: 1
-//		)
-//		let questions = [questionOne, questionTwo]
-//		let stepOne = SurveyStep(
-//			id: "\(qualityOfLifeTaskId)-step-1",
-//			questions: questions
-//		)
-//		var qualityOfLife = OCKTask(
-//			id: "\(qualityOfLifeTaskId)-stress",
-//			title: String(localized: "QUALITY_OF_LIFE"),
-//			carePlanUUID: carePlanUUID,
-//			schedule: qualityOfLifeSchedule
-//		)
-//		qualityOfLife.impactsAdherence = true
-//		qualityOfLife.asset = "brain.head.profile"
-//		qualityOfLife.card = .survey
-//		qualityOfLife.surveySteps = [stepOne]
-//		qualityOfLife.priority = 1
-//
-//		return qualityOfLife
-//	}
 
 	func createPHQSurveyTask(
 		carePlanUUID: UUID?,

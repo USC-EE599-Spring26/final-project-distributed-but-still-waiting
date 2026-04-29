@@ -24,13 +24,14 @@ enum TaskID {
     static let energy = "energy"
     static let bedtimeChecklist = "bedtimeChecklist"
     static let stroop = "stroop-task"
+    static let heartRate = "heartRate"
 
     static var ordered: [String] {
         orderedObjective + orderedSubjective
     }
 
     static var orderedObjective: [String] {
-        [ Self.steps, Self.sleepResult]
+        [ Self.steps, Self.sleepResult, Self.heartRate]
     }
 
     static var orderedSubjective: [String] {

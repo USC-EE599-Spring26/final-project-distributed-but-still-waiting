@@ -218,6 +218,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 			let date = modifyDateIfNeeded(date)
 
 			await Utility.syncSleepHours(for: date)
+			await Utility.syncHeartRate(for: date)
 
 			let isCurrentDay = isSameDay(as: date)
 
@@ -456,6 +457,14 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
 			case .twoButton:
 				let card = EventQueryView<TwoButtonCardView>(
+					query: query
+				)
+				.formattedHostingController()
+
+				return [card]
+
+			case .heartRate:
+				let card = EventQueryView<HeartRateCardView>(
 					query: query
 				)
 				.formattedHostingController()
