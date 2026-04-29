@@ -36,7 +36,7 @@ struct HeartRateCardView: CareKitEssentialView {
                     Text(averageHeartRateText)
                         .font(.system(size: 48, weight: .bold, design: .rounded))
                         .foregroundColor(.accentColor)
-                    
+
                     Text("bpm")
                         .font(.title3)
                         .fontWeight(.medium)
