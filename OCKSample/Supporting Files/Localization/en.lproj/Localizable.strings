@@ -111,6 +111,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "SLEEP" = "Sleep Duration";
 "SLEEP_RESULT" = "Sleep Result";
 "SLEEP_RESULT_INSTRUCTIONS" = "Review your sleep result from HealthKit.";
+"HEART_RATE" = "Current Heart Rate";
+"HEART_RATE_INSTRUCTIONS" = "Review your heart rate from HealthKit";
 "STEPS_INSTRUCTIONS" = "Track your step count from HealthKit.";
 "BEDTIME_CHECKLIST" = "Bedtime Checklist";
 "BEDTIME_CHECKLIST_INSTRUCTIONS" = "Complete your bedtime checklist before going to sleep.";

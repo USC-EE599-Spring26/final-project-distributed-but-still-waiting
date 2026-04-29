@@ -58,15 +58,15 @@ extension Utility {
         guard let hrType = HKObjectType.quantityType(forIdentifier: .heartRate) else {
             return nil
         }
-        
+
         let predicate = HKQuery.predicateForSamples(
             withStart: interval.start,
             end: interval.end,
             options: .strictStartDate
         )
-        
+
         let healthStore = HKHealthStore()
-        
+
         return try await withCheckedThrowingContinuation { continuation in
             let query = HKStatisticsQuery(
                 quantityType: hrType,
@@ -77,12 +77,12 @@ extension Utility {
                     continuation.resume(throwing: error)
                     return
                 }
-                
+
                 guard let averageQuantity = result?.averageQuantity() else {
                     continuation.resume(returning: nil)
                     return
                 }
-                
+
                 let unit = HKUnit.count().unitDivided(by: .minute())
                 let avgValue = averageQuantity.doubleValue(for: unit)
                 continuation.resume(returning: avgValue)
