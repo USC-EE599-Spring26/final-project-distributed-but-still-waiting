@@ -65,6 +65,15 @@ private extension InsightsView {
 				period: $period,
 				configurations: phq9Configurations(for: eventResult.task.id)
 			)
+		} else if eventResult.task.id == TaskID.cbtExercises
+			|| eventResult.task.id == TaskID.energy {
+			CareKitEssentialChartView(
+				title: eventResult.title,
+				subtitle: subtitle,
+				dateInterval: $chartInterval,
+				period: $period,
+				configurations: binaryOutcomeConfigurations(for: eventResult.task.id)
+			)
 		} else if eventResult.task.id == TaskID.sleepResult {
 			CareKitEssentialChartView(
 				title: eventResult.title,
@@ -138,6 +147,71 @@ private extension InsightsView {
 			averageConfiguration,
 			totalConfiguration
 		]
+	}
+
+	func binaryOutcomeConfigurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
+		let averageConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .mean,
+			mark: .bar,
+			legendTitle: String(localized: "AVERAGE"),
+			showMarkWhenHighlighted: true,
+			showMeanMark: false,
+			showMedianMark: false,
+			color: Color.accentColor,
+			gradientStartColor: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			binaryOutcomeProgress(
+				for: event,
+				taskID: taskID
+			)
+		}
+
+		let totalConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .sum,
+			mark: .bar,
+			legendTitle: String(localized: "TOTAL"),
+			color: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			binaryOutcomeProgress(
+				for: event,
+				taskID: taskID
+			)
+		}
+
+		return [
+			averageConfiguration,
+			totalConfiguration
+		]
+	}
+
+	func binaryOutcomeProgress(
+		for event: OCKAnyEvent,
+		taskID: String
+	) -> LinearCareTaskProgress {
+		switch taskID {
+		case TaskID.cbtExercises:
+			return LinearCareTaskProgress(
+				value: event.outcome == nil ? 0.0 : 1.0
+			)
+		case TaskID.energy:
+			if let integerValue = event.outcome?.values.first?.integerValue {
+				return LinearCareTaskProgress(
+					value: Double(integerValue)
+				)
+			}
+
+			if let doubleValue = event.outcome?.values.first?.doubleValue {
+				return LinearCareTaskProgress(
+					value: doubleValue
+				)
+			}
+
+			return LinearCareTaskProgress(value: 0.0)
+		default:
+			return LinearCareTaskProgress(value: 0.0)
+		}
 	}
 
 	func sleepConfigurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
