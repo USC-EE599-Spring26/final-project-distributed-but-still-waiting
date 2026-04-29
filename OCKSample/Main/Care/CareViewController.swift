@@ -218,6 +218,7 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 			let date = modifyDateIfNeeded(date)
 
 			await Utility.syncSleepHours(for: date)
+			await Utility.syncHeartRate(for: date)
 
 			let isCurrentDay = isSameDay(as: date)
 
