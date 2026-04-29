@@ -40,23 +40,23 @@ import WatchConnectivity
 @MainActor
 final class AppDelegate: UIResponder, ObservableObject {
 
-    // MARK: Public read/write properties
+	// MARK: Public read/write properties
 
-    @Published var isFirstTimeLogin = false
+	@Published var isFirstTimeLogin = false
 
-    // MARK: Public read private write properties
+	// MARK: Public read private write properties
 
-    @Published private(set) var storeCoordinator: OCKStoreCoordinator = .init() {
-        willSet {
-            StoreCoordinatorKey.defaultValue = newValue
-            self.objectWillChange.send()
-        }
-    }
+	@Published private(set) var storeCoordinator: OCKStoreCoordinator = .init() {
+		willSet {
+			StoreCoordinatorKey.defaultValue = newValue
+			self.objectWillChange.send()
+		}
+	}
 	@Published private(set) var store: OCKStore! = OCKStore(
 		name: Constants.noCareStoreName,
 		type: .inMemory
 	)
-    private(set) var healthKitStore: OCKHealthKitPassthroughStore! {
+	private(set) var healthKitStore: OCKHealthKitPassthroughStore! {
 		get {
 			return state.withLock { $0.healthKitStore }
 		}
@@ -64,7 +64,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 			state.withLock { $0.healthKitStore = newValue }
 		}
 	}
-    private(set) var parseRemote: ParseRemote! {
+	private(set) var parseRemote: ParseRemote! {
 		get {
 			return state.withLock { $0.parseRemote }
 		}
@@ -73,7 +73,7 @@ final class AppDelegate: UIResponder, ObservableObject {
 		}
 	}
 
-    // MARK: Private read/write properties
+	// MARK: Private read/write properties
 
 	fileprivate var watchRemote: OCKWatchConnectivityPeer {
 		get {
@@ -106,81 +106,91 @@ final class AppDelegate: UIResponder, ObservableObject {
 	private let state = Mutex<State>(.init())
 	fileprivate let sessionDelegateLock = NSLock()
 
-    // MARK: Helpers
+	// MARK: Helpers
 
 	func setFirstTimeLogin(_ isFirstTimeLogin: Bool) {
 		self.isFirstTimeLogin = isFirstTimeLogin
 	}
 
-    func resetAppToInitialState() {
-        do {
-            try storeCoordinator.reset()
-        } catch {
-            Logger.appDelegate.error("Could not delete Coordinator Store: \(error)")
-        }
+	func resetAppToInitialState() {
+		do {
+			try storeCoordinator.reset()
+		} catch {
+			Logger.appDelegate.error("Could not delete Coordinator Store: \(error)")
+		}
 
-        do {
-            try self.store?.delete()
-        } catch {
-            Logger.utility.error("Could not delete local OCKStore because of error: \(error)")
-        }
+		do {
+			try self.store?.delete()
+		} catch {
+			Logger.appDelegate.error("Could not delete local OCKStore because of error: \(error)")
+		}
 
-        storeCoordinator = .init()
-        healthKitStore = nil
-        parseRemote = nil
+		storeCoordinator = .init()
+		healthKitStore = nil
+		parseRemote = nil
 
-        let store = OCKStore(
+		let store = OCKStore(
 			name: Constants.noCareStoreName,
 			type: .inMemory
 		)
 		sessionDelegate?.store.setValue(store)
-        self.store = store
-        PCKUtility.removeCache()
-    }
+		self.store = store
+		PCKUtility.removeCache()
+	}
 
-    func setupRemotes(uuid: UUID? = nil) async throws {
-        do {
-            if isSyncingWithRemote {
-                guard let uuid = uuid else {
-                    Logger.appDelegate.error("Could not setupRemotes, uuid is nil")
-                    return
-                }
-                let parseRemote = try await ParseRemote(
+	func setupRemotes(uuid: UUID? = nil) async throws {
+		do {
+			// let historicalStart = Calendar.current.date(byAdding: .year, value: -2, to: Date())!
+			if isSyncingWithRemote {
+				guard let uuid = uuid else {
+					Logger.appDelegate.error("Could not setupRemotes, uuid is nil")
+					return
+				}
+				let parseRemote = try await ParseRemote(
 					uuid: uuid,
 					auto: false,
 					subscribeToRemoteUpdates: true,
 					defaultACL: PCKUtility.getDefaultACL()
 				)
-                parseRemote.parseRemoteDelegate = self
+				parseRemote.parseRemoteDelegate = self
 				self.parseRemote = parseRemote
+
 				let store = OCKStore(
 					name: Constants.iOSParseCareStoreName,
 					type: .onDisk(),
 					remote: parseRemote
 				)
-                sessionDelegate = RemoteSessionDelegate(store: store)
-                self.store = store
-            } else {
-                let store = OCKStore(name: Constants.iOSLocalCareStoreName,
-                                     type: .onDisk(),
-                                     remote: watchRemote)
-                watchRemote.delegate = self
-                sessionDelegate = LocalSessionDelegate(remote: watchRemote, store: store)
-                self.store = store
-            }
+				sessionDelegate = RemoteSessionDelegate(store: store)
+				self.store = store
 
-            // Setup communication with watch
-            WCSession.default.delegate = sessionDelegate
+				/* do {
+					try await store.populateDefaultCarePlansTasksContacts(startDate: historicalStart)
+					Logger.appDelegate.info("Seeded CareKit tasks starting: \(historicalStart)")
+				} catch {
+					Logger.appDelegate.error("Tasks already exist or failed to seed: \(error)")
+				} */
+			} else {
+				let store = OCKStore(name: Constants.iOSLocalCareStoreName,
+									 type: .onDisk(),
+									 remote: watchRemote)
+				watchRemote.delegate = self
+				sessionDelegate = LocalSessionDelegate(remote: watchRemote, store: store)
+				self.store = store
+			}
+
+			// Setup communication with watch
+			WCSession.default.delegate = sessionDelegate
 			WCSession.default.activate()
 
-            healthKitStore = OCKHealthKitPassthroughStore(store: store)
-            let storeCoordinator = OCKStoreCoordinator()
-            storeCoordinator.attach(store: store)
-            storeCoordinator.attach(eventStore: healthKitStore)
-            self.storeCoordinator = storeCoordinator
-        } catch {
-            Logger.appDelegate.error("Could not setup remote: \(error)")
-            throw error
-        }
-    }
+			healthKitStore = OCKHealthKitPassthroughStore(store: store)
+			// try? await healthKitStore.populateDefaultHealthKitTasks(startDate: historicalStart)
+			let storeCoordinator = OCKStoreCoordinator()
+			storeCoordinator.attach(store: store)
+			storeCoordinator.attach(eventStore: healthKitStore)
+			self.storeCoordinator = storeCoordinator
+		} catch {
+			Logger.appDelegate.error("Could not setup remote: \(error)")
+			throw error
+		}
+	}
 }

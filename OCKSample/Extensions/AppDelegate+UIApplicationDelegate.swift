@@ -17,8 +17,9 @@ extension AppDelegate: UIApplicationDelegate {
             if isSyncingWithRemote {
                 do {
                     // Parse-Server setup
-                    // swiftlint:disable:next line_length
-                    try await PCKUtility.configureParse(fileName: Constants.parseConfigFileName) { _, completionHandler in
+                    try await PCKUtility.configureParse(
+                        fileName: Constants.parseConfigFileName
+                    ) { _, completionHandler in
                         completionHandler(.performDefaultHandling, nil)
                     }
                 } catch {
@@ -32,14 +33,33 @@ extension AppDelegate: UIApplicationDelegate {
                     do {
                         let uuid = try await Utility.getRemoteClockUUID()
                         try? await setupRemotes(uuid: uuid)
+                        do {
+                            try await store.populateDefaultCarePlansTasksContacts()
+                            try await healthKitStore.populateDefaultHealthKitTasks()
+                        } catch {
+                            Logger.appDelegate.error("""
+                                Could not populate
+                                signed-in user data stores: \(error)
+                            """)
+                        }
                         parseRemote.automaticallySynchronizes = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            // swiftlint:disable:next line_length
-                            NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.requestSync)))
+                            NotificationCenter.default.post(
+                                .init(name: Notification.Name(rawValue: Constants.requestSync))
+                            )
                         }
                     } catch {
                         Logger.appDelegate.error("User is logged in, but missing remoteId: \(error)")
                         try await setupRemotes()
+                        do {
+                            try await store.populateDefaultCarePlansTasksContacts()
+                            try await healthKitStore.populateDefaultHealthKitTasks()
+                        } catch {
+                            Logger.appDelegate.error("""
+                                Could not populate
+                                signed-in user data stores: \(error)
+                            """)
+                        }
                     }
                 } catch {
                     Logger.appDelegate.error("User is not logged in: \(error)")
@@ -51,10 +71,6 @@ extension AppDelegate: UIApplicationDelegate {
                     try await setupRemotes()
                     try await store.populateDefaultCarePlansTasksContacts()
                     try await healthKitStore.populateDefaultHealthKitTasks()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.requestSync)))
-                        Utility.requestHealthKitPermissions()
-                    }
                 } catch {
                     Logger.appDelegate.error("""
                         Could not populate

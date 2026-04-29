@@ -65,8 +65,10 @@ class LoginViewModel: ObservableObject {
 			// Setup installation to receive push notifications
 			await Utility.updateInstallationWithDeviceToken()
 		} catch {
-			// swiftlint:disable:next line_length
-			Logger.login.error("*** Error logging into Parse Server. If you are still having problems check for help here: https://github.com/netreconlab/parse-hipaa#getting-started ***")
+			Logger.login.error("""
+				*** Error logging into Parse Server. If you are still having problems, check for help here:
+				https://github.com/netreconlab/parse-hipaa#getting-started ***
+				""")
 			Logger.login.error("Parse error: \(String(describing: error))")
 		}
 	}

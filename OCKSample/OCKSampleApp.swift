@@ -14,12 +14,20 @@ import CareKit
 struct OCKSampleApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.careKitStyle) var style
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
             MainView()
                 .environment(\.appDelegate, appDelegate)
                 .careKitStyle(style)
+                .onChange(of: scenePhase) {
+                    if scenePhase == .active {
+                        Task {
+                            await StreakManager.shared.initializeStreak()
+                        }
+                    }
+                }
         }
     }
 }

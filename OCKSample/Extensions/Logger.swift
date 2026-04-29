@@ -25,4 +25,10 @@ extension Logger {
     static let ockStore = Logger(subsystem: subsystem, category: "OCKStore+Extension")
     static let ockHealthKitPassthroughStore = Logger(subsystem: subsystem,
                                                      category: "OCKHealthKitPassthroughStore+Extension")
+    static let myContact = Logger(subsystem: subsystem, category: "MyContact")
+    static let careKitTask = Logger(subsystem: subsystem, category: "CareKitTask")
+    static let myCustomCardView = Logger(subsystem: subsystem, category: "MyCustomCardView")
+    static let twoButtonCardView = Logger(subsystem: subsystem, category: "TwoButtonCardView")
+    static let streak = Logger(subsystem: subsystem, category: "Streak")
+    static let badge = Logger(subsystem: subsystem, category: "Badge")
 }
