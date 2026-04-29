@@ -463,6 +463,14 @@ final class CareViewController: OCKDailyPageViewController, @unchecked Sendable 
 
 				return [card]
 
+			case .heartRate:
+				let card = EventQueryView<HeartRateCardView>(
+					query: query
+				)
+				.formattedHostingController()
+
+				return [card]
+
 			default:
 				return nil
 			}

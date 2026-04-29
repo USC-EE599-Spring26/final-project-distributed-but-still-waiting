@@ -281,7 +281,7 @@ extension OCKStore {
 		)
 		heartRate.instructions = String(localized: "HEART_RATE_INSTRUCTIONS")
 		heartRate.asset = "heart.fill"
-		heartRate.card = .numericProgress
+		heartRate.card = .heartRate
 		heartRate.priority = 23
 		heartRate.impactsAdherence = false
 
