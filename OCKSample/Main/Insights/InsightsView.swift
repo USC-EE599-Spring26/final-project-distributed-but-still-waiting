@@ -18,7 +18,6 @@ struct InsightsView: View {
 	@State var intervalSelected = 0 // Default to week since chart isn't working for others.
 	@State var chartInterval = DateInterval()
 	@State var period: PeriodComponent = .day
-	@State var configurations: [CKEDataSeriesConfiguration] = []
 	@State var sortedTaskIDs: [String: Int] = [:]
 
 	var body: some View {
@@ -27,112 +26,8 @@ struct InsightsView: View {
 				.padding()
 			ScrollView {
 				VStack {
-					InsightsCustomCardView(
-						subtitle: subtitle,
-						intervalSelected: intervalSelected,
-						dateInterval: $chartInterval
-					)
-
-					// This is for loop is useful when you want a chart for
-					// for every task which may not always be the case.
 					ForEach(orderedEvents) { event in
-						let eventResult = event.result
-						let dataStrategy = determineDataStrategy(for: eventResult.task.id)
-						if eventResult.task.id != TaskID.lexapro
-							&& eventResult.task.id != TaskID.depression {
-
-							// dynamic gradient colors
-							let meanGradientStart = Color(TintColorFlipKey.defaultValue)
-							let meanGradientEnd = Color.accentColor
-
-							// Can add muliple plots on a single
-							// chart by adding multiple configurations.
-							let meanConfiguration = CKEDataSeriesConfiguration(
-								taskID: eventResult.task.id,
-								dataStrategy: dataStrategy,
-								mark: .bar,
-								legendTitle: String(localized: "AVERAGE"),
-								showMarkWhenHighlighted: true,
-								showMeanMark: false,
-								showMedianMark: false,
-								color: meanGradientEnd,
-								gradientStartColor: meanGradientStart
-							) { event in
-								event.computeProgress(by: .maxOutcomeValue())
-							}
-
-							let sumConfiguration = CKEDataSeriesConfiguration(
-								taskID: eventResult.task.id,
-								dataStrategy: .sum,
-								mark: .bar,
-								legendTitle: String(localized: "TOTAL"),
-								color: Color(TintColorFlipKey.defaultValue) // Set to app color.
-							) { event in
-								event.computeProgress(by: .maxOutcomeValue())
-							}
-
-							CareKitEssentialChartView(
-								title: eventResult.title,
-								subtitle: subtitle,
-								dateInterval: $chartInterval,
-								period: $period,
-								configurations: [
-									meanConfiguration,
-									sumConfiguration
-								]
-							)
-
-						} else if eventResult.task.id == TaskID.lexapro {
-							// Example of showing depression vs doxlymine
-
-							// dynamic gradient colors
-							let depressionGradientStart = Color(TintColorFlipKey.defaultValue)
-							let depressionGradientEnd = Color.accentColor
-
-							let depressionConfiguration = CKEDataSeriesConfiguration(
-								taskID: TaskID.depression,
-								dataStrategy: .sum,
-								mark: .bar,
-								legendTitle: String(localized: "DEPRESSION"),
-								showMarkWhenHighlighted: true,
-								showMeanMark: true,
-								showMedianMark: false,
-								color: depressionGradientEnd,
-								gradientStartColor: depressionGradientStart,
-								stackingMethod: .unstacked
-							) { event in
-								// This event occurs all-day and can be submitted
-								// multiple times, since we want to understand
-								// the "total" amount of times a patient experiences
-								// depression, we sum the outcomes for each event.
-								event.computeProgress(by: .summingOutcomeValues())
-							}
-
-							let lexaproConfiguration = CKEDataSeriesConfiguration(
-								taskID: eventResult.task.id,
-								dataStrategy: .sum,
-								mark: .bar,
-								legendTitle: String(localized: "LEXAPRO"),
-								color: .gray,
-								gradientStartColor: .gray.opacity(0.3),
-								stackingMethod: .unstacked,
-								symbol: .diamond,
-								interpolation: .catmullRom
-							) { event in
-								event.computeProgress(by: .averagingOutcomeValues())
-							}
-
-							CareKitEssentialChartView(
-								title: String(localized: "DEPRESSION_LEXAPRO_INTAKE"),
-								subtitle: subtitle,
-								dateInterval: $chartInterval,
-								period: $period,
-								configurations: [
-									depressionConfiguration,
-									lexaproConfiguration
-								]
-							)
-						}
+						chartView(for: event.result)
 					}
 				}
 				.padding()
@@ -155,8 +50,286 @@ struct InsightsView: View {
 #endif
 		}
 	}
+}
 
-	private var orderedEvents: [CareStoreFetchedResult<OCKAnyEvent>] {
+private extension InsightsView {
+	@ViewBuilder
+	func chartView(for eventResult: OCKAnyEvent) -> some View {
+		let dataStrategy = determineDataStrategy(for: eventResult.task.id)
+
+		if eventResult.task.id == TaskID.phq9Survey {
+			CareKitEssentialChartView(
+				title: eventResult.title,
+				subtitle: subtitle,
+				dateInterval: $chartInterval,
+				period: $period,
+				configurations: phq9Configurations(for: eventResult.task.id)
+			)
+		} else if eventResult.task.id == TaskID.cbtExercises
+			|| eventResult.task.id == TaskID.energy {
+			CareKitEssentialChartView(
+				title: eventResult.title,
+				subtitle: subtitle,
+				dateInterval: $chartInterval,
+				period: $period,
+				configurations: binaryOutcomeConfigurations(for: eventResult.task.id)
+			)
+		} else if eventResult.task.id == TaskID.sleepResult {
+			CareKitEssentialChartView(
+				title: eventResult.title,
+				subtitle: subtitle,
+				dateInterval: $chartInterval,
+				period: $period,
+				configurations: sleepConfigurations(for: eventResult.task.id)
+			)
+		} else if eventResult.task.id != TaskID.lexapro
+			&& eventResult.task.id != TaskID.depression
+			&& eventResult.task.id != TaskID.phq9Survey {
+			CareKitEssentialChartView(
+				title: eventResult.title,
+				subtitle: subtitle,
+				dateInterval: $chartInterval,
+				period: $period,
+				configurations: defaultConfigurations(
+					for: eventResult.task.id,
+					dataStrategy: dataStrategy
+				)
+			)
+		} else if eventResult.task.id == TaskID.lexapro {
+			CareKitEssentialChartView(
+				title: String(localized: "DEPRESSION_LEXAPRO_INTAKE"),
+				subtitle: subtitle,
+				dateInterval: $chartInterval,
+				period: $period,
+				configurations: depressionAndLexaproConfigurations(
+					for: eventResult.task.id
+				)
+			)
+		}
+	}
+
+	func phq9Configurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
+		let averageConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .mean,
+			kind: PHQ9OutcomeKind.totalScore,
+			mark: .bar,
+			legendTitle: String(localized: "AVERAGE"),
+			showMarkWhenHighlighted: true,
+			showMeanMark: false,
+			showMedianMark: false,
+			color: Color.accentColor,
+			gradientStartColor: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			event.computeProgress(
+				by: .averagingOutcomeValues(
+					kind: PHQ9OutcomeKind.totalScore
+				)
+			)
+		}
+
+		let totalConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .sum,
+			kind: PHQ9OutcomeKind.totalScore,
+			mark: .bar,
+			legendTitle: String(localized: "TOTAL"),
+			color: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			event.computeProgress(
+				by: .summingOutcomeValues(
+					kind: PHQ9OutcomeKind.totalScore
+				)
+			)
+		}
+
+		return [
+			averageConfiguration,
+			totalConfiguration
+		]
+	}
+
+	func binaryOutcomeConfigurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
+		let averageConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .mean,
+			mark: .bar,
+			legendTitle: String(localized: "AVERAGE"),
+			showMarkWhenHighlighted: true,
+			showMeanMark: false,
+			showMedianMark: false,
+			color: Color.accentColor,
+			gradientStartColor: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			binaryOutcomeProgress(
+				for: event,
+				taskID: taskID
+			)
+		}
+
+		let totalConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .sum,
+			mark: .bar,
+			legendTitle: String(localized: "TOTAL"),
+			color: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			binaryOutcomeProgress(
+				for: event,
+				taskID: taskID
+			)
+		}
+
+		return [
+			averageConfiguration,
+			totalConfiguration
+		]
+	}
+
+	func binaryOutcomeProgress(
+		for event: OCKAnyEvent,
+		taskID: String
+	) -> LinearCareTaskProgress {
+		switch taskID {
+		case TaskID.cbtExercises:
+			return LinearCareTaskProgress(
+				value: event.outcome == nil ? 0.0 : 1.0
+			)
+		case TaskID.energy:
+			if let integerValue = event.outcome?.values.first?.integerValue {
+				return LinearCareTaskProgress(
+					value: Double(integerValue)
+				)
+			}
+
+			if let doubleValue = event.outcome?.values.first?.doubleValue {
+				return LinearCareTaskProgress(
+					value: doubleValue
+				)
+			}
+
+			return LinearCareTaskProgress(value: 0.0)
+		default:
+			return LinearCareTaskProgress(value: 0.0)
+		}
+	}
+
+	func sleepConfigurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
+		let averageConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .mean,
+			kind: "sleepHours",
+			mark: .bar,
+			legendTitle: String(localized: "AVERAGE"),
+			showMarkWhenHighlighted: true,
+			showMeanMark: false,
+			showMedianMark: false,
+			color: Color.accentColor,
+			gradientStartColor: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			event.computeProgress(
+				by: .averagingOutcomeValues(kind: "sleepHours")
+			)
+		}
+
+		let totalConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .sum,
+			kind: "sleepHours",
+			mark: .bar,
+			legendTitle: String(localized: "TOTAL"),
+			color: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			event.computeProgress(
+				by: .summingOutcomeValues(kind: "sleepHours")
+			)
+		}
+
+		return [
+			averageConfiguration,
+			totalConfiguration
+		]
+	}
+
+	func defaultConfigurations(
+		for taskID: String,
+		dataStrategy: CKEDataSeriesConfiguration.DataStrategy
+	) -> [CKEDataSeriesConfiguration] {
+		let meanGradientStart = Color(TintColorFlipKey.defaultValue)
+		let meanGradientEnd = Color.accentColor
+
+		let meanConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: dataStrategy,
+			mark: .bar,
+			legendTitle: String(localized: "AVERAGE"),
+			showMarkWhenHighlighted: true,
+			showMeanMark: false,
+			showMedianMark: false,
+			color: meanGradientEnd,
+			gradientStartColor: meanGradientStart
+		) { event in
+			event.computeProgress(by: .maxOutcomeValue())
+		}
+
+		let sumConfiguration = CKEDataSeriesConfiguration(
+			taskID: taskID,
+			dataStrategy: .sum,
+			mark: .bar,
+			legendTitle: String(localized: "TOTAL"),
+			color: Color(TintColorFlipKey.defaultValue)
+		) { event in
+			event.computeProgress(by: .maxOutcomeValue())
+		}
+
+		return [
+			meanConfiguration,
+			sumConfiguration
+		]
+	}
+
+	func depressionAndLexaproConfigurations(
+		for lexaproTaskID: String
+	) -> [CKEDataSeriesConfiguration] {
+		let depressionGradientStart = Color(TintColorFlipKey.defaultValue)
+		let depressionGradientEnd = Color.accentColor
+
+		let depressionConfiguration = CKEDataSeriesConfiguration(
+			taskID: TaskID.depression,
+			dataStrategy: .sum,
+			mark: .bar,
+			legendTitle: String(localized: "DEPRESSION"),
+			showMarkWhenHighlighted: true,
+			showMeanMark: true,
+			showMedianMark: false,
+			color: depressionGradientEnd,
+			gradientStartColor: depressionGradientStart,
+			stackingMethod: .unstacked
+		) { event in
+			event.computeProgress(by: .summingOutcomeValues())
+		}
+
+		let lexaproConfiguration = CKEDataSeriesConfiguration(
+			taskID: lexaproTaskID,
+			dataStrategy: .sum,
+			mark: .bar,
+			legendTitle: String(localized: "LEXAPRO"),
+			color: .gray,
+			gradientStartColor: .gray.opacity(0.3),
+			stackingMethod: .unstacked,
+			symbol: .diamond,
+			interpolation: .catmullRom
+		) { event in
+			event.computeProgress(by: .averagingOutcomeValues())
+		}
+
+		return [
+			depressionConfiguration,
+			lexaproConfiguration
+		]
+	}
+
+	var orderedEvents: [CareStoreFetchedResult<OCKAnyEvent>] {
 		events.latest.sorted(by: { left, right in
 			let leftTaskID = left.result.task.id
 			let rightTaskID = right.result.task.id
@@ -165,7 +338,7 @@ struct InsightsView: View {
 		})
 	}
 
-	private var dateIntervalSegmentView: some View {
+	var dateIntervalSegmentView: some View {
 		Picker(
 			"CHOOSE_DATE_INTERVAL",
 			selection: $intervalSelected.animation()
@@ -186,7 +359,7 @@ struct InsightsView: View {
 		#endif
 	}
 
-	private var subtitle: String {
+	var subtitle: String {
 		switch intervalSelected {
 		case 0:
 			return String(localized: "TODAY")
@@ -201,19 +374,14 @@ struct InsightsView: View {
 		}
 	}
 
-	// Currently only look for events for the last.
-	// We don't need to vary this because it's only
-	// used to find taskID's. The chartInterval will
-	// find all of the needed data for the chart.
-	private var eventQueryInterval: DateInterval {
-		let interval = Calendar.current.dateInterval(
+	var eventQueryInterval: DateInterval {
+		Calendar.current.dateInterval(
 			of: .weekOfYear,
 			for: Date()
 		)!
-		return interval
 	}
 
-	private func determineDataStrategy(for taskID: String) -> CKEDataSeriesConfiguration.DataStrategy {
+	func determineDataStrategy(for taskID: String) -> CKEDataSeriesConfiguration.DataStrategy {
 		switch taskID {
 		case TaskID.steps:
 			return .max
@@ -222,16 +390,13 @@ struct InsightsView: View {
 		}
 	}
 
-	private func setupChartPropertiesForSegmentSelection(_ segmentValue: Int) {
+	func setupChartPropertiesForSegmentSelection(_ segmentValue: Int) {
 		let now = Date()
 		let calendar = Calendar.current
-		// This changes the interval of what will be
-		// shown in the graph.
+
 		switch segmentValue {
 		case 0:
-			let startOfDay = Calendar.current.startOfDay(
-				for: now
-			)
+			let startOfDay = Calendar.current.startOfDay(for: now)
 			let interval = DateInterval(
 				start: startOfDay,
 				end: now
@@ -275,22 +440,17 @@ struct InsightsView: View {
 			)!
 			period = .week
 			chartInterval = DateInterval(start: startDate, end: now)
-
 		}
 	}
 
-	private func computeTaskIDOrder(taskIDs: [String]) -> [String: Int] {
-		// Tie index values to TaskIDs.
-		let sortedTaskIDs = taskIDs.enumerated().reduce(into: [String: Int]()) { taskDictionary, task in
+	func computeTaskIDOrder(taskIDs: [String]) -> [String: Int] {
+		taskIDs.enumerated().reduce(into: [String: Int]()) { taskDictionary, task in
 			taskDictionary[task.element] = task.offset
 		}
-
-		return sortedTaskIDs
 	}
 
 	static func query() -> OCKEventQuery {
-		let query = OCKEventQuery(dateInterval: .init())
-		return query
+		OCKEventQuery(dateInterval: .init())
 	}
 }
 

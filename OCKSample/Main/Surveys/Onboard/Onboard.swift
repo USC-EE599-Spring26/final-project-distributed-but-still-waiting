@@ -112,17 +112,13 @@ extension Onboard {
 
         termsOfServiceStep.showSignatureAfterContent = true
 
-        let healthKitTypesToWrite: Set<HKSampleType> = [
-            .categoryType(forIdentifier: .sleepAnalysis)!
-        ]
-
         let healthKitTypesToRead: Set<HKObjectType> = [
             .categoryType(forIdentifier: .sleepAnalysis)!,
             .quantityType(forIdentifier: .heartRate)!
         ]
 
         let healthKitPermissionType = ORKHealthKitPermissionType(
-            sampleTypesToWrite: healthKitTypesToWrite,
+            sampleTypesToWrite: [],
             objectTypesToRead: healthKitTypesToRead
         )
 
