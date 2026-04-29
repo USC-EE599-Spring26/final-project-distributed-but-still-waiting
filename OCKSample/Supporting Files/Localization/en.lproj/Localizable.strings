@@ -111,6 +111,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "SLEEP" = "Sleep Duration";
 "SLEEP_RESULT" = "Sleep Result";
 "SLEEP_RESULT_INSTRUCTIONS" = "Review your sleep result from HealthKit.";
+"STEPS_INSTRUCTIONS" = "Track your step count from HealthKit.";
+"BEDTIME_CHECKLIST" = "Bedtime Checklist";
+"BEDTIME_CHECKLIST_INSTRUCTIONS" = "Complete your bedtime checklist before going to sleep.";
+"DIM_THE_LIGHTS" = "Dim the lights";
+"NO_SCREENS" = "No screens";
+"TAKE_A_WARM_SHOWER" = "Take a warm shower";
+"READ_FOR_10_MINUTES" = "Read for 10 minutes";
+"MEDITATION" = "Meditation";
 "TASK_DUE" = "Task Due!";
 "ONBOARD" = "Onboard";
 "ONBOARD_INSTRUCTIONS" = "Review and agree to the terms and conditions before getting started.";

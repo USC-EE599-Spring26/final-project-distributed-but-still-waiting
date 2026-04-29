@@ -239,6 +239,35 @@ extension OCKStore {
 		energy.userInfo?[Constants.twoButtonPositiveTitleKey] = "HIGH_ENERGY"
 		energy.userInfo?[Constants.twoButtonNegativeTitleKey] = "LOW_ENERGY"
 
+		let bedtimeChecklistElements = [
+			String(localized: "DIM_THE_LIGHTS"),
+			String(localized: "NO_SCREENS"),
+			String(localized: "TAKE_A_WARM_SHOWER"),
+			String(localized: "READ_FOR_10_MINUTES"),
+			String(localized: "MEDITATION")
+		].map { text in
+			OCKScheduleElement(
+				start: Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: thisMorning) ?? thisMorning,
+				end: nil,
+				interval: DateComponents(day: 1),
+				text: text,
+				targetValues: [],
+				duration: .allDay
+			)
+		}
+		let bedtimeChecklistSchedule = OCKSchedule(composing: bedtimeChecklistElements)
+		var bedtimeChecklist = OCKTask(
+			id: TaskID.bedtimeChecklist,
+			title: String(localized: "BEDTIME_CHECKLIST"),
+			carePlanUUID: carePlanUUIDs[.sleepHealth],
+			schedule: bedtimeChecklistSchedule
+		)
+		bedtimeChecklist.impactsAdherence = true
+		bedtimeChecklist.instructions = String(localized: "BEDTIME_CHECKLIST_INSTRUCTIONS")
+		bedtimeChecklist.card = .checklist
+		bedtimeChecklist.asset = "moon.stars.fill"
+		bedtimeChecklist.priority = 11
+
 		let phq = createPHQSurveyTask(carePlanUUID: carePlanUUIDs[.mentalHealth])
 
 		_ = try await addTasksIfNotPresent(
@@ -247,6 +276,7 @@ extension OCKStore {
 				lexapro,
 				cbtExercises,
 				energy,
+				bedtimeChecklist,
 				phq
 			]
 		)
