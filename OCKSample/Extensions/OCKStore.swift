@@ -188,7 +188,7 @@ extension OCKStore {
 			schedule: cbtExerciseSchedule
 		)
 		cbtExercises.impactsAdherence = true
-		cbtExercises.instructions = String(localized: "CBT_INSTRUCTIONS")
+		cbtExercises.instructions = String(localized: "THOUGH_RECORD_INSTRUCTIONS")
 		cbtExercises.asset = "brain.head.profile"
 		cbtExercises.card = .instruction
 		cbtExercises.priority = 4
@@ -524,8 +524,21 @@ extension OCKStore {
 		rangeOfMotionTask.uiKitSurvey = .rangeOfMotion
 		rangeOfMotionTask.impactsAdherence = true
 
-		return try await addTasksIfNotPresent([stroopTask, rangeOfMotionTask])
-	}
+        var guidedMeditationTask = OCKTask(
+            id: GuidedMeditation.identifier(),
+            title: String(localized: "GUIDED_MEDITATION"),
+            carePlanUUID: carePlanUUID,
+            schedule: rangeOfMotionCheckSchedule
+        )
+        guidedMeditationTask.priority = 20
+        guidedMeditationTask.instructions = String(localized: "TAKE_MOMENT_RELAX")
+        guidedMeditationTask.asset = "wind"
+        guidedMeditationTask.card = .uiKitSurvey
+        guidedMeditationTask.uiKitSurvey = .guidedMeditation
+        guidedMeditationTask.impactsAdherence = true
+
+        return try await addTasksIfNotPresent([stroopTask, rangeOfMotionTask, guidedMeditationTask])
+    }
 
 	private func migrateSleepTaskIfNeeded(
 		sleepTaskID: String

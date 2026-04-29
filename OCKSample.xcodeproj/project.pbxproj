@@ -12,6 +12,9 @@
 		3F0A07CD2FA203220067679F /* Utility+HeartRateSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A07CA2FA203220067679F /* Utility+HeartRateSync.swift */; };
 		3F0A07D62FA2084D0067679F /* HeartRateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A07D52FA2084D0067679F /* HeartRateCardView.swift */; };
 		3F0A07D72FA2084D0067679F /* HeartRateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A07D52FA2084D0067679F /* HeartRateCardView.swift */; };
+		3F0A07D92FA2CE010067679F /* GuidedMeditation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A07D82FA2CDF50067679F /* GuidedMeditation.swift */; };
+		3F0A07DA2FA2CE010067679F /* GuidedMeditation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A07D82FA2CDF50067679F /* GuidedMeditation.swift */; };
+		3F0A07DB2FA2CE010067679F /* GuidedMeditation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A07D82FA2CDF50067679F /* GuidedMeditation.swift */; };
 		3F3935152F75E2FA004180FA /* ResearchKitActiveTask.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF6C81F2F72A0B900C49E6D /* ResearchKitActiveTask.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3F3935852F7DF243004180FA /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935842F7DF241004180FA /* Consent.swift */; };
 		3F3935862F7DF243004180FA /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3935842F7DF241004180FA /* Consent.swift */; };
@@ -408,6 +411,7 @@
 		0520468223C3C1F2004F0F36 /* OCKSample.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OCKSample.xctestplan; sourceTree = "<group>"; };
 		3F0A07CA2FA203220067679F /* Utility+HeartRateSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Utility+HeartRateSync.swift"; sourceTree = "<group>"; };
 		3F0A07D52FA2084D0067679F /* HeartRateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateCardView.swift; sourceTree = "<group>"; };
+		3F0A07D82FA2CDF50067679F /* GuidedMeditation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidedMeditation.swift; sourceTree = "<group>"; };
 		3F3935842F7DF241004180FA /* Consent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consent.swift; sourceTree = "<group>"; };
 		3F3935872F7DF285004180FA /* Onboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard.swift; sourceTree = "<group>"; };
 		3F39358A2F7DF2BB004180FA /* RangeOfMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeOfMotion.swift; sourceTree = "<group>"; };
@@ -603,6 +607,7 @@
 		3F39357B2F7D0602004180FA /* Surveys */ = {
 			isa = PBXGroup;
 			children = (
+				3F0A07D82FA2CDF50067679F /* GuidedMeditation.swift */,
 				3F3935902F7DF2EA004180FA /* Surveyable.swift */,
 				3F39358D2F7DF2D7004180FA /* Survey.swift */,
 				3F72F0002FA25A8F00C0DE01 /* PHQ9Survey.swift */,
@@ -1444,6 +1449,7 @@
 				3F0A07D62FA2084D0067679F /* HeartRateCardView.swift in Sources */,
 				3F39358E2F7DF2D9004180FA /* Survey.swift in Sources */,
 				3FF742E62F7E6C9500F1F171 /* ORKTask+ResearchKit.swift in Sources */,
+				3F0A07D92FA2CE010067679F /* GuidedMeditation.swift in Sources */,
 				3FF6C87F2F72B34900C49E6D /* CardEnabledEnvironmentKey.swift in Sources */,
 				707D29682DCBE68500980253 /* NoHighlightStyle.swift in Sources */,
 				707D29692DCBE68500980253 /* LocalSyncSessionDelegate.swift in Sources */,
@@ -1538,6 +1544,7 @@
 				9144B69D2F5BA8E70011ECC2 /* ManageTasksViewModel.swift in Sources */,
 				9126F15A2F821F86000396FB /* Badge.swift in Sources */,
 				70308886258273D400FFABB6 /* LoginViewModel.swift in Sources */,
+				3F0A07DB2FA2CE010067679F /* GuidedMeditation.swift in Sources */,
 				70F921B127CAC16E00368CEC /* SessionDelegate.swift in Sources */,
 				911AAF6A2F5A282000ADCBCD /* CareKitTaskView.swift in Sources */,
 				3F3935962F7DF33A004180FA /* Onboard.swift in Sources */,
@@ -1587,6 +1594,7 @@
 				7036E4C4256E0A48006E9A3C /* CareView.swift in Sources */,
 				70F921B027CABED600368CEC /* LocalSyncSessionDelegate.swift in Sources */,
 				9126F1202F7F3DB0000396FB /* MyContactViewController.swift in Sources */,
+				3F0A07DA2FA2CE010067679F /* GuidedMeditation.swift in Sources */,
 				70221F2828D7809800971195 /* MainTabView.swift in Sources */,
 				70E3422F2DB06281005124F9 /* NoHighlightStyle.swift in Sources */,
 				3FF6C7942F729BC400C49E6D /* CareTask.swift in Sources */,
