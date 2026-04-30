@@ -20,6 +20,10 @@ enum TaskCardType: CaseIterable, Identifiable {
     case instruction
     case simple
     case healthKitNumeric
+    case custom
+    case twoButton
+    case heartRate
+    case uiKitSurvey
 
     var displayTitle: String {
         switch self {
@@ -33,6 +37,14 @@ enum TaskCardType: CaseIterable, Identifiable {
             return String(localized: "TASK_CARD_SIMPLE")
         case .healthKitNumeric:
             return String(localized: "TASK_CARD_HEALTHKIT_NUMERIC")
+        case .custom:
+            return String(localized: "TASK_CARD_CUSTOM")
+        case .twoButton:
+            return String(localized: "TASK_CARD_TWO_BUTTON")
+        case .heartRate:
+            return String(localized: "TASK_CARD_HEART_RATE")
+        case .uiKitSurvey:
+            return String(localized: "TASK_CARD_UIKIT_SURVEY")
         }
     }
 
@@ -48,6 +60,14 @@ enum TaskCardType: CaseIterable, Identifiable {
             return .simple
         case .healthKitNumeric:
             return CareKitCard.numericProgress
+        case .custom:
+            return .custom
+        case .twoButton:
+            return .twoButton
+        case .heartRate:
+            return .heartRate
+        case .uiKitSurvey:
+            return .uiKitSurvey
         }
     }
 
@@ -63,6 +83,14 @@ enum TaskCardType: CaseIterable, Identifiable {
             return "square.grid.2x2.fill"
         case .healthKitNumeric:
             return "heart.fill"
+        case .custom:
+            return "square.grid.2x2.fill"
+        case .twoButton:
+            return "figure.flexibility"
+        case .heartRate:
+            return "heart.fill"
+        case .uiKitSurvey:
+            return "list.clipboard.fill"
         }
     }
 
@@ -78,9 +106,52 @@ enum TaskCardType: CaseIterable, Identifiable {
             return String(localized: "TASK_INSTRUCTIONS_SIMPLE")
         case .healthKitNumeric:
             return String(localized: "TASK_INSTRUCTIONS_HEALTHKIT_NUMERIC")
+        case .custom:
+            return String(localized: "TASK_INSTRUCTIONS_CUSTOM")
+        case .twoButton:
+            return String(localized: "TASK_INSTRUCTIONS_TWO_BUTTON")
+        case .heartRate:
+            return String(localized: "TASK_INSTRUCTIONS_HEART_RATE")
+        case .uiKitSurvey:
+            return String(localized: "TASK_INSTRUCTIONS_UIKIT_SURVEY")
         }
     }
 
+}
+
+enum SelectableSurveyType: CaseIterable, Identifiable {
+    var id: Self { self }
+
+    case phq9
+    case rangeOfMotion
+    case stroop
+    case guidedMeditation
+
+    var displayTitle: String {
+        switch self {
+        case .phq9:
+            return String(localized: "SURVEY_TYPE_PHQ9")
+        case .rangeOfMotion:
+            return String(localized: "SURVEY_TYPE_RANGE_OF_MOTION")
+        case .stroop:
+            return String(localized: "SURVEY_TYPE_STROOP")
+        case .guidedMeditation:
+            return String(localized: "SURVEY_TYPE_GUIDED_MEDITATION")
+        }
+    }
+
+    var survey: Survey {
+        switch self {
+        case .phq9:
+            return .phq9
+        case .rangeOfMotion:
+            return .rangeOfMotion
+        case .stroop:
+            return .stroop
+        case .guidedMeditation:
+            return .guidedMeditation
+        }
+    }
 }
 
 // ADDED
@@ -261,6 +332,7 @@ enum HealthKitAggregationOption: CaseIterable, Identifiable {
     }
 }
 
+// swiftlint:disable type_body_length
 @MainActor
 class NewTaskViewModel: ObservableObject {
 
@@ -290,6 +362,9 @@ class NewTaskViewModel: ObservableObject {
     }
     @Published var healthKitUnit: HealthKitUnitOption = .count
     @Published var healthKitAggregation: HealthKitAggregationOption = .sum
+    @Published var twoButtonPositiveTitle = ""
+    @Published var twoButtonNegativeTitle = ""
+    @Published var selectedSurveyType: SelectableSurveyType = .phq9
 
     var canAddTask: Bool {
         switch selectedCardType {
@@ -297,7 +372,11 @@ class NewTaskViewModel: ObservableObject {
             return !resolvedTitle.isEmpty && !cleanedChecklistItems.isEmpty
         case .healthKitNumeric:
             return !resolvedTitle.isEmpty
-        case .button, .instruction, .simple:
+        case .twoButton:
+            return !resolvedTitle.isEmpty
+                && !cleanedTwoButtonPositive.isEmpty
+                && !cleanedTwoButtonNegative.isEmpty
+        case .button, .instruction, .simple, .custom, .heartRate, .uiKitSurvey:
             return !resolvedTitle.isEmpty
         }
     }
@@ -335,6 +414,19 @@ class NewTaskViewModel: ObservableObject {
         task.priority = priority
         task.asset = resolvedAsset
         task.impactsAdherence = true
+
+        switch selectedCardType {
+        case .twoButton:
+            if task.userInfo == nil {
+                task.userInfo = [:]
+            }
+            task.userInfo?[Constants.twoButtonPositiveTitleKey] = cleanedTwoButtonPositive
+            task.userInfo?[Constants.twoButtonNegativeTitleKey] = cleanedTwoButtonNegative
+        case .uiKitSurvey:
+            task.uiKitSurvey = selectedSurveyType.survey
+        case .button, .checklist, .instruction, .simple, .healthKitNumeric, .custom, .heartRate:
+            break
+        }
 
         do {
             _ = try await appDelegate.store.addTasksIfNotPresent([task])
@@ -447,6 +539,14 @@ class NewTaskViewModel: ObservableObject {
             .filter { !$0.isEmpty }
     }
 
+    private var cleanedTwoButtonPositive: String {
+        twoButtonPositiveTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var cleanedTwoButtonNegative: String {
+        twoButtonNegativeTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     private var resolvedTitle: String {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -476,11 +576,14 @@ class NewTaskViewModel: ObservableObject {
 
         switch selectedCardType {
         case .checklist:
-            break
-        case .healthKitNumeric:
+            twoButtonPositiveTitle = ""
+            twoButtonNegativeTitle = ""
+        case .twoButton:
             checklistItems = [""]
-        case .button, .instruction, .simple:
+        case .uiKitSurvey, .heartRate, .custom, .button, .instruction, .simple, .healthKitNumeric:
             checklistItems = [""]
+            twoButtonPositiveTitle = ""
+            twoButtonNegativeTitle = ""
         }
     }
 
@@ -523,6 +626,7 @@ class NewTaskViewModel: ObservableObject {
     }
 
 }
+// swiftlint:enable type_body_length
 
 // MODIFIED
 typealias CareKitTaskViewModel = NewTaskViewModel

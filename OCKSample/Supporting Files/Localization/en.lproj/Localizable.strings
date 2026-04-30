@@ -216,8 +216,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "ADD_TASK_HEALTHKIT_QUANTITY" = "Quantity";
 "ADD_TASK_HEALTHKIT_UNIT" = "Unit";
 "ADD_TASK_HEALTHKIT_AGGREGATION" = "Aggregation";
+"ADD_TASK_TWO_BUTTON_SECTION" = "Two-Button Labels";
+"ADD_TASK_TWO_BUTTON_POSITIVE" = "Positive Button";
+"ADD_TASK_TWO_BUTTON_NEGATIVE" = "Negative Button";
+"ADD_TASK_SURVEY_SECTION" = "Survey";
+"ADD_TASK_SURVEY_TYPE" = "Survey Type";
 "ERROR_COMPLETE_REQUIRED_TASK_FIELDS" = "Please complete the required task fields.";
 "ERROR_COMPLETE_REQUIRED_HEALTHKIT_FIELDS" = "Please complete the required HealthKit task fields.";
+"ERROR_COMPLETE_REQUIRED_TWO_BUTTON_FIELDS" = "Please provide both button labels for the two-button card.";
 "ERROR_COULD_NOT_ADD_TASK" = "Could not add task: %@";
 
 // MARK: Task Card Types
@@ -226,11 +232,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "TASK_CARD_INSTRUCTION" = "Instruction";
 "TASK_CARD_SIMPLE" = "Simple";
 "TASK_CARD_HEALTHKIT_NUMERIC" = "HealthKit Numeric Progress";
+"TASK_CARD_CUSTOM" = "Custom";
+"TASK_CARD_TWO_BUTTON" = "Two Button";
+"TASK_CARD_HEART_RATE" = "Heart Rate";
+"TASK_CARD_UIKIT_SURVEY" = "UIKit Survey";
 "TASK_INSTRUCTIONS_BUTTON" = "Tap the button when this task is complete.";
 "TASK_INSTRUCTIONS_CHECKLIST" = "Complete each checklist item for this task.";
 "TASK_INSTRUCTIONS_INSTRUCTION" = "Review the instructions for this task.";
 "TASK_INSTRUCTIONS_SIMPLE" = "Mark this task complete when you are done.";
 "TASK_INSTRUCTIONS_HEALTHKIT_NUMERIC" = "Track this value from HealthKit.";
+"TASK_INSTRUCTIONS_CUSTOM" = "Tap the button to mark this task complete.";
+"TASK_INSTRUCTIONS_TWO_BUTTON" = "Tap the positive button to add to the day's count and the negative button to subtract.";
+"TASK_INSTRUCTIONS_HEART_RATE" = "Your average heart rate from HealthKit will appear here.";
+"TASK_INSTRUCTIONS_UIKIT_SURVEY" = "Complete the survey when prompted.";
+
+// MARK: Survey Types
+"SURVEY_TYPE_PHQ9" = "PHQ-9";
+"SURVEY_TYPE_RANGE_OF_MOTION" = "Range of Motion";
+"SURVEY_TYPE_STROOP" = "Stroop";
+"SURVEY_TYPE_GUIDED_MEDITATION" = "Guided Meditation";
 
 // MARK: HealthKit Task Options
 "HEALTHKIT_QUANTITY_STEP_COUNT" = "Step Count";
