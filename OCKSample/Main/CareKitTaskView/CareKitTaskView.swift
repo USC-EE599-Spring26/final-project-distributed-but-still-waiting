@@ -10,12 +10,12 @@ import SwiftUI
 
 struct CareKitTaskView: View {
     @Environment(\.careStore) var careStore
-	// MARK: Navigation
-	@State var isShowingAlert = false
-	@State var isAddingTask = false
+    // MARK: Navigation
+    @State var isShowingAlert = false
+    @State var isAddingTask = false
 
-	// MARK: View
-	@StateObject var viewModel = NewTaskViewModel()
+    // MARK: View
+    @StateObject var viewModel = NewTaskViewModel()
     private let sfSymbols: [String] = [
         "checkmark.circle.fill",
         "checklist",
@@ -36,10 +36,10 @@ struct CareKitTaskView: View {
         "thermometer"
     ]
 
-	var body: some View {
+    var body: some View {
 
-		NavigationView {
-			Form {
+        NavigationView {
+            Form {
                 Section(String(localized: "ADD_TASK_CARD_SECTION")) {
                     Picker(String(localized: "ADD_TASK_CARD_VIEW"), selection: $viewModel.selectedCardType) {
                         ForEach(TaskCardType.allCases) { item in
@@ -131,12 +131,21 @@ struct CareKitTaskView: View {
         case .healthKitNumeric:
             healthKitFields
             scheduleFields
+        case .custom, .heartRate:
+            scheduleFields
+        case .twoButton:
+            twoButtonFields
+            scheduleFields
+        case .uiKitSurvey:
+            surveyFields
+            scheduleFields
         }
     }
 
     private var showsInstructions: Bool {
         switch viewModel.selectedCardType {
-        case .button, .checklist, .instruction, .simple, .healthKitNumeric:
+        case .button, .checklist, .instruction, .simple, .healthKitNumeric,
+             .custom, .twoButton, .heartRate, .uiKitSurvey:
             return true
         }
     }
@@ -186,6 +195,33 @@ struct CareKitTaskView: View {
                 ForEach(HealthKitAggregationOption.allCases) { aggregation in
                     Text(aggregation.displayTitle)
                         .tag(aggregation)
+                }
+            }
+        }
+    }
+
+    private var twoButtonFields: some View {
+        Section(String(localized: "ADD_TASK_TWO_BUTTON_SECTION")) {
+            TextField(
+                String(localized: "ADD_TASK_TWO_BUTTON_POSITIVE"),
+                text: $viewModel.twoButtonPositiveTitle
+            )
+            TextField(
+                String(localized: "ADD_TASK_TWO_BUTTON_NEGATIVE"),
+                text: $viewModel.twoButtonNegativeTitle
+            )
+        }
+    }
+
+    private var surveyFields: some View {
+        Section(String(localized: "ADD_TASK_SURVEY_SECTION")) {
+            Picker(
+                String(localized: "ADD_TASK_SURVEY_TYPE"),
+                selection: $viewModel.selectedSurveyType
+            ) {
+                ForEach(SelectableSurveyType.allCases) { surveyType in
+                    Text(surveyType.displayTitle)
+                        .tag(surveyType)
                 }
             }
         }
