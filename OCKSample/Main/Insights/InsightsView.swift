@@ -74,7 +74,15 @@ private extension InsightsView {
 				period: $period,
 				configurations: binaryOutcomeConfigurations(for: eventResult.task.id)
 			)
-		} else if eventResult.task.id == TaskID.sleepResult {
+        } else if eventResult.task.id == TaskID.energy {
+            CareKitEssentialChartView(
+                title: eventResult.title,
+                subtitle: subtitle,
+                dateInterval: $chartInterval,
+                period: $period,
+                configurations: energyOutcomeConfigurations(for: eventResult.task.id)
+            )
+        } else if eventResult.task.id == TaskID.sleepResult {
 			CareKitEssentialChartView(
 				title: eventResult.title,
 				subtitle: subtitle,
@@ -213,6 +221,36 @@ private extension InsightsView {
 			return LinearCareTaskProgress(value: 0.0)
 		}
 	}
+
+    func energyOutcomeConfigurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
+        let averageConfiguration = CKEDataSeriesConfiguration(
+            taskID: taskID,
+            dataStrategy: .mean,
+            mark: .bar,
+            legendTitle: String(localized: "AVERAGE"),
+            showMarkWhenHighlighted: true,
+            showMeanMark: false,
+            showMedianMark: false,
+            color: Color.accentColor,
+            gradientStartColor: Color(TintColorFlipKey.defaultValue)
+        ) { event in
+            energyOutcomeProgress(for: event)
+        }
+
+        return [averageConfiguration]
+    }
+
+    func energyOutcomeProgress(for event: OCKAnyEvent) -> LinearCareTaskProgress {
+        if let integerValue = event.outcome?.values.first?.integerValue {
+            return LinearCareTaskProgress(value: Double(integerValue))
+        }
+
+        if let doubleValue = event.outcome?.values.first?.doubleValue {
+            return LinearCareTaskProgress(value: doubleValue)
+        }
+
+        return LinearCareTaskProgress(value: 0.0)
+    }
 
 	func sleepConfigurations(for taskID: String) -> [CKEDataSeriesConfiguration] {
 		let averageConfiguration = CKEDataSeriesConfiguration(
@@ -441,6 +479,8 @@ private extension InsightsView {
 			period = .week
 			chartInterval = DateInterval(start: startDate, end: now)
 		}
+
+        events.query.dateInterval = chartInterval
 	}
 
 	func computeTaskIDOrder(taskIDs: [String]) -> [String: Int] {

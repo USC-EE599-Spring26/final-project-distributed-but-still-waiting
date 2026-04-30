@@ -188,7 +188,7 @@ extension OCKStore {
 			schedule: cbtExerciseSchedule
 		)
 		cbtExercises.impactsAdherence = true
-		cbtExercises.instructions = String(localized: "THOUGH_RECORD_INSTRUCTIONS")
+		cbtExercises.instructions = String(localized: "THOUGHT_RECORD_INSTRUCTIONS")
 		cbtExercises.asset = "brain.head.profile"
 		cbtExercises.card = .instruction
 		cbtExercises.priority = 4
