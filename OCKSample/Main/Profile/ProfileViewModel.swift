@@ -31,11 +31,11 @@ class ProfileViewModel: ObservableObject {
 	@Published var zipcode = ""
 	@Published var country = ""
 	@Published var isShowingSaveAlert = false
-  @Published var allergies = ""
-  @Published var emailAddresses = ""
-  @Published var messagingNumbers = ""
-  @Published var phoneNumbers = ""
-  @Published var otherContactInfo = ""
+    @Published var allergies = ""
+    @Published var emailAddresses = [""]
+    @Published var messagingNumbers = [""]
+    @Published var phoneNumbers = [""]
+    @Published var otherContactInfo = [""]
 	@Published var isPresentingAddTask = false
 	@Published var isPresentingContact = false
 	@Published var isPresentingImagePicker = false
@@ -175,10 +175,17 @@ class ProfileViewModel: ObservableObject {
         self.city = contact.address?.city ?? ""
         self.state = contact.address?.state ?? ""
         self.zipcode = contact.address?.postalCode ?? ""
-        self.emailAddresses = contact.emailAddresses?.first?.value ?? ""
-        self.messagingNumbers = contact.messagingNumbers?.first?.value ?? ""
-        self.phoneNumbers = contact.phoneNumbers?.first?.value ?? ""
-        self.otherContactInfo = contact.otherContactInfo?.first?.value ?? ""
+        self.emailAddresses = contact.emailAddresses?.map { $0.value } ?? [""]
+        if self.emailAddresses.isEmpty { self.emailAddresses = [""] }
+
+        self.messagingNumbers = contact.messagingNumbers?.map { $0.value } ?? [""]
+        if self.messagingNumbers.isEmpty { self.messagingNumbers = [""] }
+
+        self.phoneNumbers = contact.phoneNumbers?.map { $0.value } ?? [""]
+        if self.phoneNumbers.isEmpty { self.phoneNumbers = [""] }
+
+        self.otherContactInfo = contact.otherContactInfo?.map { $0.value } ?? [""]
+        if self.otherContactInfo.isEmpty { self.otherContactInfo = [""] }
 	}
 
 	@MainActor
@@ -286,100 +293,109 @@ class ProfileViewModel: ObservableObject {
 		}
 	}
 
-	@MainActor
-	func saveContact() async throws {
+    @MainActor
+    func saveContact() async throws {
 
-		if var contactToUpdate = contact {
-			// If a current contact was fetched, check to see if any of the fields have changed
+        if var contactToUpdate = contact {
+            // If a current contact was fetched, check to see if any of the fields have changed
 
-			var contactHasBeenUpdated = false
+            var contactHasBeenUpdated = false
 
-			// Since OCKPatient was updated earlier, we should compare against this name
-			if let patientName = patient?.name,
-				contact?.name != patient?.name {
-				contactHasBeenUpdated = true
-				contactToUpdate.name = patientName
-			}
+            // Since OCKPatient was updated earlier, we should compare against this name
+            if let patientName = patient?.name,
+                contact?.name != patient?.name {
+                contactHasBeenUpdated = true
+                contactToUpdate.name = patientName
+            }
 
-			// Create a mutable temp address to compare
-			let potentialAddress = OCKPostalAddress(
-				street: street,
-				city: city,
-				state: state,
-				postalCode: zipcode,
-				country: country
-			)
-			if contact?.address != potentialAddress {
-				contactHasBeenUpdated = true
-				contactToUpdate.address = potentialAddress
-			}
+            // Create a mutable temp address to compare
+            let potentialAddress = OCKPostalAddress(
+                street: street,
+                city: city,
+                state: state,
+                postalCode: zipcode,
+                country: country
+            )
+            if contact?.address != potentialAddress {
+                contactHasBeenUpdated = true
+                contactToUpdate.address = potentialAddress
+            }
+
             // Create a mutable temp email address to compare
-                        let potentialEmail = [OCKLabeledValue(label: "email", value: emailAddresses)]
+            let potentialEmail = emailAddresses
+                .filter { !$0.isEmpty }
+                .map { OCKLabeledValue(label: "email", value: $0) }
 
-                        if contact?.emailAddresses != potentialEmail {
-                            contactHasBeenUpdated = true
-                            contactToUpdate.emailAddresses = potentialEmail
-                        }
+            if contact?.emailAddresses != potentialEmail {
+                contactHasBeenUpdated = true
+                contactToUpdate.emailAddresses = potentialEmail.isEmpty ? nil : potentialEmail
+            }
 
-                        // Create a mutable temp messaging number to compare
-                        let potentialMessaging = [OCKLabeledValue(label: "message", value: messagingNumbers)]
+            // Create a mutable temp messaging number to compare
+            let potentialMessaging = messagingNumbers
+                .filter { !$0.isEmpty }
+                .map { OCKLabeledValue(label: "message", value: $0) }
 
-                        if contact?.messagingNumbers != potentialMessaging {
-                            contactHasBeenUpdated = true
-                            contactToUpdate.messagingNumbers = potentialMessaging
-                        }
+            if contact?.messagingNumbers != potentialMessaging {
+                contactHasBeenUpdated = true
+                contactToUpdate.messagingNumbers = potentialMessaging.isEmpty ? nil : potentialMessaging
+            }
 
-                        // Create a mutable temp phone number to compare
-                        let potentialPhone = [OCKLabeledValue(label: "phone", value: phoneNumbers)]
+            // Create a mutable temp phone number to compare
+            let potentialPhone = phoneNumbers
+                .filter { !$0.isEmpty }
+                .map { OCKLabeledValue(label: "phone", value: $0) }
 
-                        if contact?.phoneNumbers != potentialPhone {
-                            contactHasBeenUpdated = true
-                            contactToUpdate.phoneNumbers = potentialPhone
-                        }
+            if contact?.phoneNumbers != potentialPhone {
+                contactHasBeenUpdated = true
+                contactToUpdate.phoneNumbers = potentialPhone.isEmpty ? nil : potentialPhone
+            }
 
-                        // Create a mutable temp other contact info to compare
-                        let potentialOther = [OCKLabeledValue(label: "other", value: otherContactInfo)]
+            // Create a mutable temp other contact info to compare
+            let potentialOther = otherContactInfo
+                .filter { !$0.isEmpty }
+                .map { OCKLabeledValue(label: "other", value: $0) }
 
-                        if contact?.otherContactInfo != potentialOther {
-                            contactHasBeenUpdated = true
-                            contactToUpdate.otherContactInfo = potentialOther
-                        }
+            if contact?.otherContactInfo != potentialOther {
+                contactHasBeenUpdated = true
+                contactToUpdate.otherContactInfo = potentialOther.isEmpty ? nil : potentialOther
+            }
 
-			if contactHasBeenUpdated {
-				_ = try await AppDelegateKey.defaultValue?.store.updateAnyContact(contactToUpdate)
-				Logger.profile.info("Successfully updated contact")
-			}
+            if contactHasBeenUpdated {
+                _ = try await AppDelegateKey.defaultValue?.store.updateAnyContact(contactToUpdate)
+                Logger.profile.info("Successfully updated contact")
+            }
 
-		} else {
+        } else {
 
-			guard let remoteUUID = (try? await Utility.getRemoteClockUUID())?.uuidString else {
-				Logger.profile.error("The user currently is not logged in")
-				return
-			}
+            guard let remoteUUID = (try? await Utility.getRemoteClockUUID())?.uuidString else {
+                Logger.profile.error("The user currently is not logged in")
+                return
+            }
 
-			guard let patientName = self.patient?.name else {
-				Logger.profile.info("The patient did not have a name.")
-				return
-			}
+            guard let patientName = self.patient?.name else {
+                Logger.profile.info("The patient did not have a name.")
+                return
+            }
 
-			// Added code to create a contact for the respective signed up user
-			let newContact = OCKContact(
-				id: remoteUUID,
-				name: patientName,
-				carePlanUUID: nil
-			)
+            // Added code to create a contact for the respective signed up user
+            let newContact = OCKContact(
+                id: remoteUUID,
+                name: patientName,
+                carePlanUUID: nil
+            )
 
-			_ = try await AppDelegateKey.defaultValue?.store.addAnyContact(newContact)
-			Logger.profile.info("Successfully saved new contact")
-		}
-	}
+            _ = try await AppDelegateKey.defaultValue?.store.addAnyContact(newContact)
+            Logger.profile.info("Successfully saved new contact")
+        }
+    }
 
-	static func queryPatient() -> OCKPatientQuery {
-		OCKPatientQuery(for: Date())
-	}
+    static func queryPatient() -> OCKPatientQuery {
+        OCKPatientQuery(for: Date())
+    }
 
-	static func queryContacts() -> OCKContactQuery {
-		OCKContactQuery(for: Date())
-	}
+    static func queryContacts() -> OCKContactQuery {
+        OCKContactQuery(for: Date())
+    }
 
 }

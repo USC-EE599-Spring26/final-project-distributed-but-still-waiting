@@ -106,15 +106,51 @@ struct ProfileView: View {
                             TextField("Allergies", text: $viewModel.allergies)
                         }
 
-                        Section(header: Text("Contact")) {
+                        Section(header: Text("Address")) {
                             TextField("Street", text: $viewModel.street)
                             TextField("City", text: $viewModel.city)
                             TextField("State", text: $viewModel.state)
                             TextField("Postal code", text: $viewModel.zipcode)
-                            TextField("Email Address", text: $viewModel.emailAddresses)
-                            TextField("Messaging Number", text: $viewModel.messagingNumbers)
-                            TextField("Phone Number", text: $viewModel.phoneNumbers)
-                            TextField("Other Contact Info", text: $viewModel.otherContactInfo)
+                        }
+
+                        Section(header: Text("Email Addresses")) {
+                            ForEach(0..<viewModel.emailAddresses.count, id: \.self) { index in
+                                TextField("Email", text: $viewModel.emailAddresses[index])
+                                    .keyboardType(.emailAddress)
+                                    .autocapitalization(.none)
+                            }
+                            Button("Add Email") {
+                                viewModel.emailAddresses.append("")
+                            }
+                        }
+
+                        Section(header: Text("Phone Numbers")) {
+                            ForEach(0..<viewModel.phoneNumbers.count, id: \.self) { index in
+                                TextField("Phone", text: $viewModel.phoneNumbers[index])
+                                    .keyboardType(.phonePad)
+                            }
+                            Button("Add Phone") {
+                                viewModel.phoneNumbers.append("")
+                            }
+                        }
+
+                        Section(header: Text("Messaging Numbers")) {
+                            ForEach(0..<viewModel.messagingNumbers.count, id: \.self) { index in
+                                TextField("Messaging", text: $viewModel.messagingNumbers[index])
+                                    .keyboardType(.phonePad)
+                            }
+                            Button("Add Messaging Number") {
+                                viewModel.messagingNumbers.append("")
+                            }
+                        }
+
+                        Section(header: Text("Other Contact Info")) {
+                            ForEach(0..<viewModel.otherContactInfo.count, id: \.self) { index in
+                                TextField("Other Info", text: $viewModel.otherContactInfo[index])
+                            }
+                            Button("Add Other Info") {
+                                viewModel.otherContactInfo.append("")
+                            }
                         }
 
                         Section {
