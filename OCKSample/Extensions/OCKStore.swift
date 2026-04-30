@@ -545,7 +545,7 @@ extension OCKStore {
             id: GuidedMeditation.identifier(),
             title: String(localized: "GUIDED_MEDITATION"),
             carePlanUUID: stressReductionCarePlanUUID,
-            schedule: rangeOfMotionCheckSchedule
+            schedule: stroopSchedule
         )
         guidedMeditationTask.priority = 9
         guidedMeditationTask.instructions = String(localized: "TAKE_MOMENT_RELAX")
