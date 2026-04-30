@@ -20,6 +20,11 @@ struct TwoButtonCardView: CareKitEssentialView {
 
     let event: OCKAnyEvent
 
+    @State private var isPositiveFlashing = false
+    @State private var isNegativeFlashing = false
+
+    private static let flashDuration: TimeInterval = 0.15
+
     var body: some View {
         CardView {
             VStack(alignment: .leading) {
@@ -32,14 +37,15 @@ struct TwoButtonCardView: CareKitEssentialView {
                 VStack(alignment: .center) {
                     HStack(alignment: .center, spacing: 12) {
                         Button(action: {
-                            saveSelectedValue(isPositive: true)
+                            flashPositive()
+                            updateValue(by: 1)
                         }) {
                             RectangularCompletionView(
-                                isComplete: isPositiveSelected
+                                isComplete: isPositiveFlashing
                             ) {
                                 Spacer()
                                 Text(positiveButtonText)
-                                    .foregroundColor(positiveForegroundColor)
+                                    .foregroundColor(isPositiveFlashing ? .accentColor : .white)
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                 Spacer()
@@ -48,14 +54,15 @@ struct TwoButtonCardView: CareKitEssentialView {
                         .buttonStyle(NoHighlightStyle())
 
                         Button(action: {
-                            saveSelectedValue(isPositive: false)
+                            flashNegative()
+                            updateValue(by: -1)
                         }) {
                             RectangularCompletionView(
-                                isComplete: isNegativeSelected
+                                isComplete: isNegativeFlashing
                             ) {
                                 Spacer()
                                 Text(negativeButtonText)
-                                    .foregroundColor(negativeForegroundColor)
+                                    .foregroundColor(isNegativeFlashing ? .accentColor : .white)
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                 Spacer()
@@ -81,16 +88,8 @@ struct TwoButtonCardView: CareKitEssentialView {
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var savedButtonValue: Int? {
-        event.outcome?.values.first?.integerValue
-    }
-
-    private var isPositiveSelected: Bool {
-        savedButtonValue == 1
-    }
-
-    private var isNegativeSelected: Bool {
-        savedButtonValue == 0
+    private var currentValue: Int {
+        event.outcome?.values.first?.integerValue ?? 0
     }
 
     private var positiveButtonText: LocalizedStringKey {
@@ -99,14 +98,6 @@ struct TwoButtonCardView: CareKitEssentialView {
 
     private var negativeButtonText: LocalizedStringKey {
         LocalizedStringKey(negativeButtonTitleKey)
-    }
-
-    private var positiveForegroundColor: Color {
-        isPositiveSelected && !isNegativeSelected ? .accentColor : .white
-    }
-
-    private var negativeForegroundColor: Color {
-        isNegativeSelected && !isPositiveSelected ? .accentColor : .white
     }
 
     private var positiveButtonTitleKey: String {
@@ -122,30 +113,45 @@ struct TwoButtonCardView: CareKitEssentialView {
         return userInfo?[key] ?? defaultValue
     }
 
-    private func saveSelectedValue(isPositive: Bool) {
+    private func flashPositive() {
+        withAnimation(.easeOut(duration: 0.08)) {
+            isPositiveFlashing = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.flashDuration) {
+            withAnimation(.easeIn(duration: 0.12)) {
+                isPositiveFlashing = false
+            }
+        }
+    }
+
+    private func flashNegative() {
+        withAnimation(.easeOut(duration: 0.08)) {
+            isNegativeFlashing = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.flashDuration) {
+            withAnimation(.easeIn(duration: 0.12)) {
+                isNegativeFlashing = false
+            }
+        }
+    }
+
+    private func updateValue(by delta: Int) {
+        let proposedValue = currentValue + delta
+        let newValue = max(0, proposedValue)
+
+        guard newValue != currentValue else {
+            return
+        }
+
         Task {
             do {
-                guard event.isComplete else {
-                    let selectedValue = isPositive ? 1 : 0
-                    let newOutcomeValue = OCKOutcomeValue(selectedValue)
-                    let newValues = savedButtonValue == selectedValue ? [] : [newOutcomeValue]
-                    let updatedOutcome = try await saveOutcomeValues(
-                        newValues,
-                        event: event
-                    )
-                    Logger.twoButtonCardView.info(
-                        "Updated event by setting outcome values: \(updatedOutcome.values)"
-                    )
-                    return
-                }
-
+                let newOutcomeValue = OCKOutcomeValue(newValue)
                 let updatedOutcome = try await saveOutcomeValues(
-                    [],
+                    [newOutcomeValue],
                     event: event
                 )
-
                 Logger.twoButtonCardView.info(
-                    "Updated event by removing outcome values: \(updatedOutcome.values)"
+                    "Updated event value to: \(updatedOutcome.values)"
                 )
             } catch {
                 Logger.twoButtonCardView.error(

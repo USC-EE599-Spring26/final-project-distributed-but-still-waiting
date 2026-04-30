@@ -323,3 +323,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // MARK: Links
 "GET_HELP_NOW" = "Get Help Now";
+
+// MARK: Guided Meditation
+"GUIDED_MEDITATION" = "Guided Meditation";
+"GUIDED_MEDITATION_INSTRUCTION" = "Find a quiet place, sit comfortably, and focus on your breathing. You will meditate for 1 minute.";
+"MEDITATING" = "Meditating";
+"NAMASTE" = "Namaste";
+"MEDITATION_COMPLETED" = "You have completed your meditation session. Great job!";
+"TAKE_MOMENT_RELAX" = "Take a moment to relax and breathe.";
+
+// MARK: CBT Thought Record
+"THOUGHT_RECORD" = "Thought Record";
+"THOUGHT_RECORD_INSTRUCTIONS" = "Identify a negative thought, challenge it, and replace it with a balanced, rational thought.";

@@ -15,6 +15,7 @@ enum Survey: String, CaseIterable, Identifiable {
     case phq9 = "PHQ-9"
     case rangeOfMotion = "Range of Motion"
     case stroop = "Stroop"
+    case guidedMeditation = "Guided Meditation"
 
     func type() -> Surveyable {
         switch self {
@@ -26,6 +27,8 @@ enum Survey: String, CaseIterable, Identifiable {
             return RangeOfMotion()
         case .stroop:
             return Stroop()
+        case .guidedMeditation:
+            return GuidedMeditation()
         }
     }
 }
