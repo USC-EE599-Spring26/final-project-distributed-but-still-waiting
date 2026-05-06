@@ -175,6 +175,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "ANSWER_NOT_DIFFICULT" = "Not Difficult";
 "TRACK_DEPRESSION" = "Track your depression";
 "DEPRESSION_INSTRUCTIONS" = "Tap the button below anytime you are sad or feel that you do not belong";
+"PANIC_ATTACK" = "Panic Attack Log";
+"PANIC_ATTACK_INSTRUCTIONS" = "Tap the button to log a panic attack when it occurs";
 "QUALITY_OF_LIFE" = "Quality of Life";
 "QUALITY_OF_LIFE_TIME" = "Since using the app, have you felt more flexible in managing your time?";
 "QUALITY_OF_LIFE_STRESS" = "How would you score your stress level?";

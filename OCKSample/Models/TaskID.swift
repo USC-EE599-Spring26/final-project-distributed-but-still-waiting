@@ -26,6 +26,7 @@ enum TaskID {
     static let stroop = "stroop-task"
     static let heartRate = "heartRate"
     static let guidedMeditation = "guidedMeditation"
+    static let panicAttack = "panicAttack"
 
     static var ordered: [String] {
         orderedObjective + orderedSubjective
@@ -37,7 +38,7 @@ enum TaskID {
 
     static var orderedSubjective: [String] {
         [ Self.doxylamine, Self.kegels, Self.energy, Self.nausea, Self.phq9Survey, Self.cbtExercises, Self.lexapro,
-          Self.depression, Self.bedtimeChecklist, Self.guidedMeditation]
+          Self.depression, Self.bedtimeChecklist, Self.guidedMeditation, Self.panicAttack]
     }
 
     static var orderedWatchOS: [String] {

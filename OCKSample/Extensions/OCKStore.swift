@@ -321,6 +321,31 @@ extension OCKStore {
         // Sleep Health Care Plan — evening wind-down routine.
         bedtimeChecklist.priority = 6
 
+        let panicAttackSchedule = OCKSchedule(
+            composing: [
+                OCKScheduleElement(
+                    start: thisMorning,
+                    end: nil,
+                    interval: DateComponents(day: 1),
+                    text: String(localized: "ANYTIME_DURING_DAY"),
+                    targetValues: [],
+                    duration: .allDay
+                )
+            ]
+        )
+
+        var panicAttack = OCKTask(
+            id: TaskID.panicAttack,
+            title: String(localized: "PANIC_ATTACK"),
+            carePlanUUID: carePlanUUIDs[.mentalHealth],
+            schedule: panicAttackSchedule
+        )
+        panicAttack.impactsAdherence = false
+        panicAttack.instructions = String(localized: "PANIC_ATTACK_INSTRUCTIONS")
+        panicAttack.asset = "exclamationmark.triangle.fill"
+        panicAttack.card = .button
+        panicAttack.priority = 12
+
         let phq = createPHQSurveyTask(
             carePlanUUID: carePlanUUIDs[.mentalHealth],
             startDate: startDate
@@ -339,7 +364,8 @@ extension OCKStore {
                 sleepResult,
                 heartRate,
                 bedtimeChecklist,
-                phq
+                phq,
+                panicAttack
             ]
         )
 
