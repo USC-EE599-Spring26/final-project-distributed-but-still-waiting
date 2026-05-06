@@ -9,88 +9,89 @@
 import Foundation
 import CareKit
 import CareKitStore
+import HealthKit
 import ParseCareKit
 import ParseSwift
 import os.log
 
 class Utility {
 
-    static func convertNonSendableDictionaryToSendable(_ dictionary: [String: Any]) -> [String: String] {
+	static func convertNonSendableDictionaryToSendable(_ dictionary: [String: Any]) -> [String: String] {
 		let sendableDictionary: [String: String] = dictionary.reduce(into: [:]) {
 			$0[$1.key] = $1.value as? String
 		}
 		return sendableDictionary
 	}
 
-    static func prepareSyncMessageForWatch() -> [String: String] {
-        var returnMessage = [String: String]()
-        returnMessage[Constants.requestSync] = "new messages on Remote"
-        return returnMessage
-    }
+	static func prepareSyncMessageForWatch() -> [String: String] {
+		var returnMessage = [String: String]()
+		returnMessage[Constants.requestSync] = "new messages on Remote"
+		return returnMessage
+	}
 
-    static func getUserSessionForWatch() async throws -> [String: String] {
-        var returnMessage = [String: String]()
-        returnMessage[Constants.parseUserSessionTokenKey] = try await User.sessionToken()
-        return returnMessage
-    }
+	static func getUserSessionForWatch() async throws -> [String: String] {
+		var returnMessage = [String: String]()
+		returnMessage[Constants.parseUserSessionTokenKey] = try await User.sessionToken()
+		return returnMessage
+	}
 
-    static func getRemoteClockUUID() async throws -> UUID {
-        guard let user = try? await User.current(),
-            let lastUserTypeSelected = user.lastTypeSelected,
-            let remoteClockUUID = user.userTypeUUIDs?[lastUserTypeSelected] else {
-            throw AppError.remoteClockIDNotAvailable
-        }
-        return remoteClockUUID
-    }
+	static func getRemoteClockUUID() async throws -> UUID {
+		guard let user = try? await User.current(),
+			let lastUserTypeSelected = user.lastTypeSelected,
+			let remoteClockUUID = user.userTypeUUIDs?[lastUserTypeSelected] else {
+			throw AppError.remoteClockIDNotAvailable
+		}
+		return remoteClockUUID
+	}
 
-    static func setDefaultACL() async throws {
-        var defaultACL = ParseACL()
-        defaultACL.publicRead = false
-        defaultACL.publicWrite = false
-        _ = try await ParseACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
-    }
+	static func setDefaultACL() async throws {
+		var defaultACL = ParseACL()
+		defaultACL.publicRead = false
+		defaultACL.publicWrite = false
+		_ = try await ParseACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
+	}
 
-    @MainActor
-    static func setupRemoteAfterLogin() async throws {
-        let remoteUUID = try await Utility.getRemoteClockUUID()
-        do {
-            try await setDefaultACL()
-        } catch {
-            Logger.utility.error("Could not set defaultACL: \(error)")
-        }
+	@MainActor
+	static func setupRemoteAfterLogin() async throws {
+		let remoteUUID = try await Utility.getRemoteClockUUID()
+		do {
+			try await setDefaultACL()
+		} catch {
+			Logger.utility.error("Could not set defaultACL: \(error)")
+		}
 
-        guard let appDelegate = AppDelegateKey.defaultValue else {
-            Logger.utility.error("Could not setup remotes, AppDelegate is nil")
-            return
-        }
-        try await appDelegate.setupRemotes(uuid: remoteUUID)
-        appDelegate.parseRemote.automaticallySynchronizes = true
-        return
-    }
+		guard let appDelegate = AppDelegateKey.defaultValue else {
+			Logger.utility.error("Could not setup remotes, AppDelegate is nil")
+			return
+		}
+		try await appDelegate.setupRemotes(uuid: remoteUUID)
+		appDelegate.parseRemote.automaticallySynchronizes = true
+		return
+	}
 
-    static func updateInstallationWithDeviceToken(_ deviceToken: Data? = nil) async {
-        guard let keychainInstallation = try? await Installation.current() else {
-            Logger.utility.debug("""
-                Attempted to update installation,
-                but no current installation is available
-            """)
-            return
-        }
-        var isUpdatingInstallationMutable = true
-        var currentInstallation = Installation()
-        if keychainInstallation.objectId != nil {
-            currentInstallation = keychainInstallation.mergeable
-            if let deviceToken = deviceToken {
-                currentInstallation.setDeviceToken(deviceToken)
-            }
-        } else {
-            currentInstallation = keychainInstallation
-            currentInstallation.user = try? await User.current()
-            currentInstallation.channels = [InstallationChannel.global.rawValue]
-            isUpdatingInstallationMutable = false
-        }
-        let installation = currentInstallation
-        let isUpdatingInstallation = isUpdatingInstallationMutable
+	static func updateInstallationWithDeviceToken(_ deviceToken: Data? = nil) async {
+		guard let keychainInstallation = try? await Installation.current() else {
+			Logger.utility.debug("""
+				Attempted to update installation,
+				but no current installation is available
+			""")
+			return
+		}
+		var isUpdatingInstallationMutable = true
+		var currentInstallation = Installation()
+		if keychainInstallation.objectId != nil {
+			currentInstallation = keychainInstallation.mergeable
+			if let deviceToken = deviceToken {
+				currentInstallation.setDeviceToken(deviceToken)
+			}
+		} else {
+			currentInstallation = keychainInstallation
+			currentInstallation.user = try? await User.current()
+			currentInstallation.channels = [InstallationChannel.global.rawValue]
+			isUpdatingInstallationMutable = false
+		}
+		let installation = currentInstallation
+		let isUpdatingInstallation = isUpdatingInstallationMutable
 		do {
 			if isUpdatingInstallation {
 				let updatedInstallation = try await installation.save()
@@ -108,93 +109,93 @@ class Utility {
 				Could not update installation: \(error)
 			""")
 		}
-    }
+	}
 
-    static func createPreviewStore() -> OCKStore {
-        let store = OCKStore(name: Constants.noCareStoreName, type: .inMemory)
-        let patientId = "preview"
-        Task {
-            do {
-                // If patient exists, assume store is already populated
-                _ = try await store.fetchPatient(withID: patientId)
-            } catch {
-                var patient = OCKPatient(
+	static func createPreviewStore() -> OCKStore {
+		let store = OCKStore(name: Constants.noCareStoreName, type: .inMemory)
+		let patientId = "preview"
+		Task {
+			do {
+				// If patient exists, assume store is already populated
+				_ = try await store.fetchPatient(withID: patientId)
+			} catch {
+				var patient = OCKPatient(
 					id: patientId,
 					givenName: "Preview",
 					familyName: "Patient"
 				)
-                patient.birthday = Calendar.current.date(
+				patient.birthday = Calendar.current.date(
 					byAdding: .year,
 					value: -20,
 					to: Date()
 				)
-                _ = try? await store.addPatient(patient)
+				_ = try? await store.addPatient(patient)
 				let startDate = Calendar.current.date(
 					byAdding: .day,
 					value: -30,
 					to: Date()
 				)!
-                try? await store.populateDefaultCarePlansTasksContacts(
+				try? await store.populateDefaultCarePlansTasksContacts(
 					startDate: startDate
 				)
 				try? await store.populateSampleOutcomes(
 					startDate: startDate
 				)
-            }
-        }
-        return store
-    }
+			}
+		}
+		return store
+	}
 
-    static func clearDeviceOnFirstRun(storeName: String? = nil) async {
-        // Clear items out of the Keychain on app first run.
-        if UserDefaults.standard.object(forKey: Constants.appName) == nil {
+	static func clearDeviceOnFirstRun(storeName: String? = nil) async {
+		// Clear items out of the Keychain on app first run.
+		if UserDefaults.standard.object(forKey: Constants.appName) == nil {
 
-            if let storeName = storeName {
-                let store = OCKStore(name: storeName, type: .onDisk())
-                do {
-                    try store.delete()
-                } catch {
-                    Logger.utility.error("""
-                        Could not delete OCKStore with name \"\(storeName)\" because of error: \(error)
-                    """)
-                }
-            } else {
-                let localStore: OCKStore!
-                let parseStore: OCKStore!
+			if let storeName = storeName {
+				let store = OCKStore(name: storeName, type: .onDisk())
+				do {
+					try store.delete()
+				} catch {
+					Logger.utility.error("""
+						Could not delete OCKStore with name \"\(storeName)\" because of error: \(error)
+					""")
+				}
+			} else {
+				let localStore: OCKStore!
+				let parseStore: OCKStore!
 
-                #if os(watchOS)
-                localStore = OCKStore(name: Constants.watchOSLocalCareStoreName,
-                                      type: .onDisk())
-                parseStore = OCKStore(name: Constants.watchOSParseCareStoreName,
-                                      type: .onDisk())
-                #else
-                localStore = OCKStore(name: Constants.iOSLocalCareStoreName,
-                                      type: .onDisk())
-                parseStore = OCKStore(name: Constants.iOSParseCareStoreName,
-                                      type: .onDisk())
-                #endif
+				#if os(watchOS)
+				localStore = OCKStore(name: Constants.watchOSLocalCareStoreName,
+									  type: .onDisk())
+				parseStore = OCKStore(name: Constants.watchOSParseCareStoreName,
+									  type: .onDisk())
+				#else
+				localStore = OCKStore(name: Constants.iOSLocalCareStoreName,
+									  type: .onDisk())
+				parseStore = OCKStore(name: Constants.iOSParseCareStoreName,
+									  type: .onDisk())
+				#endif
 
-                do {
-                    try localStore.delete()
-                } catch {
-                    Logger.utility.error("Could not delete local OCKStore because of error: \(error)")
-                }
-                do {
-                    try parseStore.delete()
-                } catch {
-                    Logger.utility.error("Could not delete parse OCKStore because of error: \(error)")
-                }
-            }
+				do {
+					try localStore.delete()
+				} catch {
+					Logger.utility.error("Could not delete local OCKStore because of error: \(error)")
+				}
+				do {
+					try parseStore.delete()
+				} catch {
+					Logger.utility.error("Could not delete parse OCKStore because of error: \(error)")
+				}
+			}
 
-            // This is no longer the first run
-            UserDefaults.standard.setValue(String(Constants.appName),
-                                           forKey: Constants.appName)
-            UserDefaults.standard.synchronize()
-            if isSyncingWithRemote {
-                try? await User.logout()
-            }
-        }
-    }
+			// This is no longer the first run
+			UserDefaults.standard.setValue(String(Constants.appName),
+										   forKey: Constants.appName)
+			UserDefaults.standard.synchronize()
+			if isSyncingWithRemote {
+				try? await User.logout()
+			}
+		}
+	}
 
 	@MainActor
 	static func logoutAndResetAppState() async {
@@ -207,19 +208,55 @@ class Utility {
 		PCKUtility.removeCache()
 	}
 
-    #if os(iOS) || os(visionOS)
+	@MainActor
+	class func checkIfOnboardingIsComplete() async -> Bool {
+		guard let store = AppDelegateKey.defaultValue?.store else {
+			Logger.feed.error("CareKit store could not be unwrapped")
+			return false
+		}
+		try? await store.synchronize()
+		var query = OCKOutcomeQuery()
+		query.taskIDs = [Onboard.identifier()]
+		do {
+			let outcomes = try await store.fetchAnyOutcomes(query: query)
+			return !outcomes.isEmpty
+		} catch {
+			return false
+		}
+	}
+
+	#if os(iOS) || os(visionOS)
 	@MainActor
 	static func requestHealthKitPermissions() {
 		AppDelegateKey.defaultValue?.healthKitStore.requestHealthKitPermissionsForAllTasksInStore { error in
-            guard let error = error else {
-                DispatchQueue.main.async {
-                    // swiftlint:disable:next line_length
-                    NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission)))
-                }
-                return
-            }
-            Logger.utility.error("Error requesting HealthKit permissions: \(error)")
-        }
-    }
-    #endif
+			if let error {
+				Logger.utility.error("Error requesting HealthKit permissions: \(error)")
+			}
+
+			guard let sleepType = HKObjectType.categoryType(
+				forIdentifier: .sleepAnalysis
+			) else {
+				DispatchQueue.main.async {
+					NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission)))
+				}
+				return
+			}
+
+			HKHealthStore().requestAuthorization(
+				toShare: [],
+				read: Set<HKObjectType>([sleepType])
+			) { _, sleepError in
+				if let sleepError {
+					Logger.utility.error("Error requesting sleep permissions: \(sleepError)")
+				}
+				Task {
+					await Utility.syncSleepHours()
+				}
+				DispatchQueue.main.async {
+					NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission)))
+				}
+			}
+		}
+	}
+	#endif
 }

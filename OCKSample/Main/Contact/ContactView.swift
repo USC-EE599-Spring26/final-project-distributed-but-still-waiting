@@ -7,45 +7,67 @@
 //
 
 import CareKit
+import CareKitEssentials
 import CareKitStore
 import os.log
 import SwiftUI
 import UIKit
 
 struct ContactView: UIViewControllerRepresentable {
-    @Environment(\.careStore) var careStore
+	@Environment(\.careStore) var careStore
+	@CareStoreFetchRequest(query: query()) private var contacts
 
-    func makeUIViewController(context: Context) -> some UIViewController {
-        let viewController = createViewController()
-        return UINavigationController(rootViewController: viewController)
-    }
+	func makeUIViewController(context: Context) -> some UIViewController {
+		let viewController = createViewController()
+		let navigationController = UINavigationController(
+			rootViewController: viewController
+		)
+		return navigationController
+	}
 
-    func updateUIViewController(_ uiViewController: UIViewControllerType,
-                                context: Context) {
-        guard let navigationController = uiViewController as? UINavigationController else {
-            Logger.feed.error("ContactView should have been a UINavigationController")
-            return
-        }
-        navigationController.setViewControllers([createViewController()], animated: false)
-    }
+	func updateUIViewController(
+		_ uiViewController: UIViewControllerType,
+		context: Context
+	) {
+		guard let navigationController = uiViewController as? UINavigationController else {
+			Logger.contact.error("ContactView should have been a UINavigationController")
+			return
+		}
+		navigationController.setViewControllers([createViewController()], animated: false)
+	}
 
-    func createViewController() -> UIViewController {
-        #if os(iOS)
-        return OCKContactsListViewController(
-            store: careStore,
-            contactViewSynchronizer: OCKDetailedContactViewSynchronizer()
-        )
-        #else
-        return UIViewController()
-        #endif
-    }
+	func createViewController() -> UIViewController {
+		#if os(iOS)
+		let currentContacts = contacts.latest
+		let viewController = CustomContactViewController(
+			store: careStore,
+			contacts: currentContacts,
+			viewSynchronizer: OCKSimpleContactViewSynchronizer()
+		)
+		return viewController
+		#else
+		return UIViewController()
+		#endif
+	}
+
+	static func query() -> OCKContactQuery {
+		let query = OCKContactQuery(for: Date())
+		// BAKER: Appears to be a bug in CareKit, commenting these out for now
+		/*query.sortDescriptors.append(
+			.familyName(ascending: true)
+		)
+		query.sortDescriptors.append(
+			.givenName(ascending: true)
+		) */
+		return query
+	}
 }
 
 struct ContactView_Previews: PreviewProvider {
 
-    static var previews: some View {
-        ContactView()
-            .environment(\.careStore, Utility.createPreviewStore())
+	static var previews: some View {
+		ContactView()
+			.environment(\.careStore, Utility.createPreviewStore())
 			.careKitStyle(Styler())
-    }
+	}
 }
