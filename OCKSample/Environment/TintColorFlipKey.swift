@@ -12,9 +12,14 @@ import SwiftUI
 struct TintColorFlipKey: EnvironmentKey {
     static var defaultValue: UIColor {
         #if os(iOS) || os(visionOS)
-        return UIColor { $0.userInterfaceStyle == .light ? #colorLiteral(red: 1, green: 0.8, blue: 0.1176470593, alpha: 1) : #colorLiteral(red: 0.6000000238, green: 0.1058823541, blue: 0.1176470593, alpha: 1) }
+        return UIColor { traitCollection in
+            if traitCollection.userInterfaceStyle == .light {
+                return #colorLiteral(red: 0.74, green: 0.87, blue: 0.99, alpha: 1)
+            }
+            return #colorLiteral(red: 0.22, green: 0.29, blue: 0.35, alpha: 1)
+        }
         #else
-        return #colorLiteral(red: 1, green: 0.8, blue: 0.1176470593, alpha: 1)
+        return #colorLiteral(red: 0.74, green: 0.87, blue: 0.99, alpha: 1)
         #endif
     }
 }

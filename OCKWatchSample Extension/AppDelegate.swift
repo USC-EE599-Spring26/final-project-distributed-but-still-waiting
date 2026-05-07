@@ -90,8 +90,9 @@ final class AppDelegate: NSObject, WKApplicationDelegate, ObservableObject {
             if isSyncingWithRemote {
                 do {
                     // Parse-server setup
-                    // swiftlint:disable:next line_length
-                    try await PCKUtility.configureParse(fileName: Constants.parseConfigFileName) { _, completionHandler in
+                    try await PCKUtility.configureParse(
+                        fileName: Constants.parseConfigFileName
+                    ) { _, completionHandler in
                         completionHandler(.performDefaultHandling, nil)
                     }
                     await Utility.clearDeviceOnFirstRun()
@@ -210,19 +211,19 @@ final class AppDelegate: NSObject, WKApplicationDelegate, ObservableObject {
     }
 
     func applicationDidBecomeActive() {
-        // swiftlint:disable:next line_length
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // Restart any tasks that were paused while the application was inactive. If the application was previously in
+        // the background, optionally refresh the user interface.
     }
 
     func applicationWillResignActive() {
-        // swiftlint:disable:next line_length
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types
+        // of temporary interruptions or when the user quits and the application begins moving to the background.
         // Use this method to pause ongoing tasks, disable timers, etc.
     }
 
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
-        // swiftlint:disable:next line_length
-        // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
+        // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a
+        // set, so loop through and process each one.
         for task in backgroundTasks {
             // Use a switch statement to check the task type
             switch task {

@@ -5,10 +5,10 @@
 //  Created by Corey Baker on 10/16/21.
 //  Copyright © 2021 Network Reconnaissance Lab. All rights reserved.
 //
-
 import Foundation
 import CareKit
 import CareKitStore
+import HealthKit
 import ParseCareKit
 import ParseSwift
 import os.log
@@ -16,11 +16,11 @@ import os.log
 class Utility {
 
     static func convertNonSendableDictionaryToSendable(_ dictionary: [String: Any]) -> [String: String] {
-		let sendableDictionary: [String: String] = dictionary.reduce(into: [:]) {
-			$0[$1.key] = $1.value as? String
-		}
-		return sendableDictionary
-	}
+        let sendableDictionary: [String: String] = dictionary.reduce(into: [:]) {
+            $0[$1.key] = $1.value as? String
+        }
+        return sendableDictionary
+    }
 
     static func prepareSyncMessageForWatch() -> [String: String] {
         var returnMessage = [String: String]()
@@ -91,23 +91,23 @@ class Utility {
         }
         let installation = currentInstallation
         let isUpdatingInstallation = isUpdatingInstallationMutable
-		do {
-			if isUpdatingInstallation {
-				let updatedInstallation = try await installation.save()
-				Logger.utility.info("""
-					Updated installation: \(updatedInstallation, privacy: .private)
-				""")
-			} else {
-				let updatedInstallation = try await installation.create()
-				Logger.utility.info("""
-					Created installation: \(updatedInstallation, privacy: .private)
-				""")
-			}
-		} catch {
-			Logger.utility.error("""
-				Could not update installation: \(error)
-			""")
-		}
+        do {
+            if isUpdatingInstallation {
+                let updatedInstallation = try await installation.save()
+                Logger.utility.info("""
+                    Updated installation: \(updatedInstallation, privacy: .private)
+                """)
+            } else {
+                let updatedInstallation = try await installation.create()
+                Logger.utility.info("""
+                    Created installation: \(updatedInstallation, privacy: .private)
+                """)
+            }
+        } catch {
+            Logger.utility.error("""
+                Could not update installation: \(error)
+            """)
+        }
     }
 
     static func createPreviewStore() -> OCKStore {
@@ -119,27 +119,27 @@ class Utility {
                 _ = try await store.fetchPatient(withID: patientId)
             } catch {
                 var patient = OCKPatient(
-					id: patientId,
-					givenName: "Preview",
-					familyName: "Patient"
-				)
+                    id: patientId,
+                    givenName: "Preview",
+                    familyName: "Patient"
+                )
                 patient.birthday = Calendar.current.date(
-					byAdding: .year,
-					value: -20,
-					to: Date()
-				)
+                    byAdding: .year,
+                    value: -20,
+                    to: Date()
+                )
                 _ = try? await store.addPatient(patient)
-				let startDate = Calendar.current.date(
-					byAdding: .day,
-					value: -30,
-					to: Date()
-				)!
+                let startDate = Calendar.current.date(
+                    byAdding: .day,
+                    value: -30,
+                    to: Date()
+                )!
                 try? await store.populateDefaultCarePlansTasksContacts(
-					startDate: startDate
-				)
-				try? await store.populateSampleOutcomes(
-					startDate: startDate
-				)
+                    startDate: startDate
+                )
+                try? await store.populateSampleOutcomes(
+                    startDate: startDate
+                )
             }
         }
         return store
@@ -196,29 +196,124 @@ class Utility {
         }
     }
 
-	@MainActor
-	static func logoutAndResetAppState() async {
-		do {
-			try await User.logout()
-		} catch {
-			Logger.utility.error("Error logging out: \(error)")
-		}
-		AppDelegateKey.defaultValue?.resetAppToInitialState()
-		PCKUtility.removeCache()
-	}
+    @MainActor
+    static func logoutAndResetAppState() async {
+        do {
+            try await User.logout()
+        } catch {
+            Logger.utility.error("Error logging out: \(error)")
+        }
+        AppDelegateKey.defaultValue?.resetAppToInitialState()
+        PCKUtility.removeCache()
+    }
 
+    @MainActor
+    class func checkIfOnboardingIsComplete() async -> Bool {
+        guard let store = AppDelegateKey.defaultValue?.store else {
+            Logger.feed.error("CareKit store could not be unwrapped")
+            return false
+        }
+        try? await store.synchronize()
+        var query = OCKOutcomeQuery()
+        query.taskIDs = [Onboard.identifier()]
+        do {
+            let outcomes = try await store.fetchAnyOutcomes(query: query)
+            return !outcomes.isEmpty
+        } catch {
+            return false
+        }
+    }
+
+}
+
+extension Utility {
     #if os(iOS) || os(visionOS)
-	@MainActor
-	static func requestHealthKitPermissions() {
-		AppDelegateKey.defaultValue?.healthKitStore.requestHealthKitPermissionsForAllTasksInStore { error in
-            guard let error = error else {
+    @MainActor
+    static func requestHealthKitPermissions() {
+        AppDelegateKey.defaultValue?.healthKitStore.requestHealthKitPermissionsForAllTasksInStore { error in
+            if let error {
+                Logger.utility.error("Error requesting HealthKit permissions: \(error)")
+            }
+
+            guard let sleepType = HKObjectType.categoryType(
+                forIdentifier: .sleepAnalysis
+            ) else {
                 DispatchQueue.main.async {
-                    // swiftlint:disable:next line_length
-                    NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission)))
+                    NotificationCenter.default.post(
+                        .init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission))
+                    )
                 }
                 return
             }
-            Logger.utility.error("Error requesting HealthKit permissions: \(error)")
+
+            HKHealthStore().requestAuthorization(
+                toShare: [],
+                read: Set<HKObjectType>([sleepType])
+            ) { _, sleepError in
+                if let sleepError {
+                    Logger.utility.error("Error requesting sleep permissions: \(sleepError)")
+                }
+                Task {
+                    await Utility.syncSleepHours()
+                }
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(
+                        .init(name: Notification.Name(rawValue: Constants.finishedAskingForPermission))
+                    )
+                }
+            }
+        }
+    }
+
+    @MainActor
+    static func startObservingHealthKit() {
+        guard HKHealthStore.isHealthDataAvailable() else { return }
+        let healthStore = HKHealthStore()
+
+        // Heart Rate
+        if let hrType = HKObjectType.quantityType(forIdentifier: .heartRate) {
+            healthStore.enableBackgroundDelivery(for: hrType, frequency: .immediate) { _, error in
+                if let error {
+                    Logger.utility.error("Failed to enable background delivery for heart rate: \(error)")
+                }
+            }
+
+            let hrQuery = HKObserverQuery(sampleType: hrType, predicate: nil) { _, completionHandler, _ in
+                let sendableHandler = unsafeBitCast(completionHandler, to: (@Sendable () -> Void).self)
+                Task {
+                    await Utility.syncHeartRate()
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(
+                            .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
+                        )
+                    }
+                    sendableHandler()
+                }
+            }
+            healthStore.execute(hrQuery)
+        }
+
+        // Sleep
+        if let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) {
+            healthStore.enableBackgroundDelivery(for: sleepType, frequency: .immediate) { _, error in
+                if let error {
+                    Logger.utility.error("Failed to enable background delivery for sleep: \(error)")
+                }
+            }
+
+            let sleepQuery = HKObserverQuery(sampleType: sleepType, predicate: nil) { _, completionHandler, _ in
+                let sendableHandler = unsafeBitCast(completionHandler, to: (@Sendable () -> Void).self)
+                Task {
+                    await Utility.syncSleepHours()
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(
+                            .init(name: Notification.Name(rawValue: Constants.shouldRefreshView))
+                        )
+                    }
+                    sendableHandler()
+                }
+            }
+            healthStore.execute(sleepQuery)
         }
     }
     #endif

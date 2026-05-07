@@ -12,12 +12,12 @@ import CareKitUI
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject private var appDelegate: AppDelegate
-    @StateObject private var loginViewModel = LoginViewModel()
-    @State private var storeCoordinator = OCKStoreCoordinator()
+	@EnvironmentObject private var appDelegate: AppDelegate
+	@StateObject private var loginViewModel = LoginViewModel()
+	@State private var storeCoordinator = OCKStoreCoordinator()
 	@State private var isLoggedIn: Bool?
 
-    var body: some View {
+	var body: some View {
 		Group {
 			if let isLoggedIn {
 				if isLoggedIn {
@@ -38,22 +38,22 @@ struct MainView: View {
 		.task {
 			await loginViewModel.checkStatus()
 		}
-        .environment(\.careStore, storeCoordinator)
+		.environment(\.careStore, storeCoordinator)
 		.onReceive(appDelegate.$storeCoordinator) { newStoreCoordinator in
 			guard storeCoordinator !== newStoreCoordinator else { return }
 			storeCoordinator = newStoreCoordinator
 		}
 		.onReceive(loginViewModel.isLoggedIn.publisher) { currentStatus in
 			isLoggedIn = currentStatus
-        }
-    }
+		}
+	}
 }
 
 struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-            .environment(\.appDelegate, AppDelegate())
-            .environment(\.careStore, Utility.createPreviewStore())
+	static var previews: some View {
+		MainView()
+			.environment(\.appDelegate, AppDelegate())
+			.environment(\.careStore, Utility.createPreviewStore())
 			.careKitStyle(Styler())
-    }
+	}
 }

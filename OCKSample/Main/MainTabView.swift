@@ -5,30 +5,30 @@
 //  Created by Corey Baker on 9/18/22.
 //  Copyright © 2022 Network Reconnaissance Lab. All rights reserved.
 //
-// swiftlint:disable:next line_length
-// This was built using tutorial: https://www.hackingwithswift.com/books/ios-swiftui/creating-tabs-with-tabview-and-tabitem
+// This was built using the Hacking with Swift tutorial for creating tabs with TabView and tabItem.
 
 import CareKitStore
 import CareKitUI
 import SwiftUI
+import os.log
 
 struct MainTabView: View {
-    @ObservedObject var loginViewModel: LoginViewModel
-    @State private var selectedTab = 0
+	@ObservedObject var loginViewModel: LoginViewModel
+	@State private var selectedTab = 0
 
-    var body: some View {
-        TabView(selection: $selectedTab) {
-            CareView()
-                .tabItem {
-                    if selectedTab == 0 {
-                        Image(systemName: "chart.line.text.clipboard")
-                            .renderingMode(.template)
-                    } else {
+	var body: some View {
+		TabView(selection: $selectedTab) {
+			CareView()
+				.tabItem {
+					if selectedTab == 0 {
+						Image(systemName: "chart.line.text.clipboard")
+							.renderingMode(.template)
+					} else {
 						Image(systemName: "chart.line.text.clipboard.fill")
-                            .renderingMode(.template)
-                    }
-                }
-                .tag(0)
+							.renderingMode(.template)
+					}
+				}
+				.tag(0)
 
 			InsightsView()
 				.tabItem {
@@ -65,15 +65,18 @@ struct MainTabView: View {
 					}
 				}
 				.tag(3)
+		}
+        .onChange(of: selectedTab) {
+            Logger.appDelegate.debug("MainTabView switched to tab: \(selectedTab, privacy: .public)")
         }
-    }
+	}
 }
 
 struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainTabView(loginViewModel: .init())
+	static var previews: some View {
+		MainTabView(loginViewModel: .init())
 			.environment(\.appDelegate, AppDelegate())
-            .environment(\.careStore, Utility.createPreviewStore())
+			.environment(\.careStore, Utility.createPreviewStore())
 			.careKitStyle(Styler())
-    }
+	}
 }
