@@ -79,6 +79,7 @@ extension AppDelegate: UIApplicationDelegate {
                 }
             }
         }
+        Utility.startObservingHealthKit()
         return true
     }
 
